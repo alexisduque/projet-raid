@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel>
+<schema name="public" protected="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<database name="gps-collect">
+</database>
+
+<table name="person">
+	<schema name="public"/>
+	<position x="322.75" y="5.49999"/>
+	<column name="id">
+		<type name="smallint"/>
+	</column>
+	<column name="firstname">
+		<type name="varchar" length="32"/>
+	</column>
+	<column name="lastname">
+		<type name="varchar" length="32"/>
+	</column>
+	<column name="blood_group">
+		<type name="varchar" length="4"/>
+	</column>
+	<column name="phone">
+		<type name="varchar" length="16"/>
+	</column>
+	<constraint name="pk5" type="pk-constr" factor="10" table="public.person">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="team">
+	<schema name="public"/>
+	<position x="896" y="16"/>
+	<column name="id">
+		<type name="smallint"/>
+	</column>
+	<column name="pseudo">
+		<type name="varchar" length="16"/>
+	</column>
+	<column name="name">
+		<type name="varchar" length="32"/>
+	</column>
+	<column name="company">
+		<type name="varchar" length="32"/>
+	</column>
+	<constraint name="pk" type="pk-constr" factor="10" table="public.team">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="role">
+	<schema name="public"/>
+	<position x="882" y="275"/>
+	<column name="id">
+		<type name="smallint"/>
+	</column>
+	<column name="name">
+		<type name="varchar" length="16"/>
+	</column>
+	<constraint name="pk3" type="pk-constr" factor="10" table="public.role">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="tracker" gen-alter-cmds="true">
+	<schema name="public"/>
+	<position x="350" y="273"/>
+	<column name="id">
+		<type name="smallint"/>
+	</column>
+	<column name="manufacturer">
+		<type name="varchar" length="32"/>
+	</column>
+	<column name="model">
+		<type name="varchar" length="32"/>
+	</column>
+<constraint name="pk4" type="pk-constr" factor="10" table="public.tracker">
+	<columns names="id" ref-type="src-columns"/>
+</constraint>
+</table>
+
+<table name="sim">
+	<schema name="public"/>
+	<position x="68" y="22"/>
+	<column name="id">
+		<type name="smallint"/>
+	</column>
+	<column name="imsi">
+		<type name="varchar" length="16"/>
+	</column>
+	<column name="phone">
+		<type name="varchar" length="16"/>
+	</column>
+	<column name="operator">
+		<type name="varchar" length="32"/>
+	</column>
+	<column name="model">
+		<type name="varchar" length="16"/>
+	</column>
+	<constraint name="pk6" type="pk-constr" factor="10" table="public.sim">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="location">
+	<schema name="public"/>
+	<position x="855" y="397"/>
+	<column name="tracker">
+		<type name="public.tracker"/>
+	</column>
+	<column name="latitude">
+		<type name="double precision"/>
+	</column>
+	<column name="longitude">
+		<type name="double precision"/>
+	</column>
+	<column name="altitude">
+		<type name="double precision"/>
+	</column>
+	<column name="speed">
+		<type name="smallint"/>
+	</column>
+	<column name="heading">
+		<type name="smallint"/>
+	</column>
+	<column name="time">
+		<type name="date"/>
+	</column>
+</table>
+
+<table name="poi">
+	<schema name="public"/>
+	<position x="303.5" y="487.5"/>
+	<column name="id">
+		<type name="smallint"/>
+	</column>
+	<column name="name">
+		<type name="varchar" length="32"/>
+	</column>
+	<column name="latitude">
+		<type name="double precision"/>
+	</column>
+	<column name="longitude">
+		<type name="double precision"/>
+	</column>
+	<column name="altitude">
+		<type name="double precision"/>
+	</column>
+	<constraint name="pk2" type="pk-constr" factor="10" table="public.poi">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="path">
+	<schema name="public"/>
+	<position x="42.5" y="342.25"/>
+	<column name="id">
+		<type name="smallint"/>
+	</column>
+	<column name="name">
+		<type name="varchar" length="32"/>
+	</column>
+	<column name="description">
+		<type name="varchar" length="128"/>
+	</column>
+	<constraint name="pk1" type="pk-constr" factor="10" table="public.path">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="tracker_has_many_location" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="7" constr-indexes="0"
+	 src-table="public.tracker"
+	 dst-table="public.location"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="team_has_many_person" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="5" constr-indexes="1"
+	 src-table="public.team"
+	 dst-table="public.person"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="path_has_many_poi" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="5" constr-indexes="1"
+	 src-table="public.path"
+	 dst-table="public.poi"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="tracker_has_one_person" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="3" constr-indexes="1,2"
+	 src-table="public.person"
+	 dst-table="public.tracker"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="person_has_one_role" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="6" constr-indexes="2,3"
+	 src-table="public.role"
+	 dst-table="public.person"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="tracker_has_one_sim" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="4" constr-indexes="3,4"
+	 src-table="public.sim"
+	 dst-table="public.tracker"
+	 src-required="false" dst-required="false"/>
+
+</dbmodel>
