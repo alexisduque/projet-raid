@@ -1,4 +1,4 @@
-package insa.tc;
+package fr.insa.iso.gps.gps_positions;
 
 import java.io.IOException;
 import java.io.PrintWriter;

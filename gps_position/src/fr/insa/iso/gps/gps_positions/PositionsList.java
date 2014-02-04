@@ -1,4 +1,4 @@
-package insa.tc;
+package fr.insa.iso.gps.gps_positions;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -102,7 +102,7 @@ public class PositionsList extends HttpServlet {
 				out.println("</tr>");
 			}
 			out.println("</table>"+ "<br/>");
-			out.println ( "Requête exécutée: " + sql + "<br/>" );
+			out.println ( "Requï¿½te exï¿½cutï¿½e: " + sql + "<br/>" );
 			gMessage = "";
         } catch (Exception e) {
             gMessage = new String( e.getMessage());
