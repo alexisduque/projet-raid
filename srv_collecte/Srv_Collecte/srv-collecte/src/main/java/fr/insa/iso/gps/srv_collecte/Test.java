@@ -36,7 +36,8 @@ import java.util.logging.LogRecord;
 
 public class Test {
 	//public static OracleDataBase n_DataBase;
-	public static MySQLDataBase n_DataBase;
+	//public static MySQLDataBase n_DataBase;
+	public static PostgreSQLDataBase n_DataBase;
 	public static GeoTrackerService n_Service;
 	public static String[] n_Ids;
 	public static String n_user = "";
@@ -56,7 +57,8 @@ public class Test {
 	public static void TestDb()
 	{
 		//n_DataBase = new OracleDataBase();
-		n_DataBase = new MySQLDataBase();
+		n_DataBase = new PostgreSQLDataBase();
+		//n_DataBase = new MySQLDataBase();
 		n_Service = new GeoTrackerService();
 		// user and pass are optional temporary
 		n_DataBase.setUserName(n_user);
