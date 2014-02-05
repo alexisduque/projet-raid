@@ -36,6 +36,7 @@ public class PositionsList extends HttpServlet {
 		// TODO Auto-generated method stub
         String gMessage = null;
         boolean gdebugf = false;
+	  	boolean gidf = false;
         /* variables pour la base de donnees */
     	Connection m_Connection;
     	Statement m_Statement;
@@ -46,7 +47,10 @@ public class PositionsList extends HttpServlet {
     	String m_UserName;
     	String m_Password;
     	String m_Url;
+	  	String m_id = request.getParameter("IdVehicule");
 
+	  	if (m_id != null)
+	  		gidf = true;
         PrintWriter out = response.getWriter();
         response.setContentType("text/html");
         out.println("<HTML>");
@@ -74,10 +78,18 @@ public class PositionsList extends HttpServlet {
 			m_Statement = m_Connection.createStatement();
             /* Variable Requete SQL */
             String sql = null;
+            String url = new String("=");
             /* defaut message */
             gMessage = ":KO(invalid parameters)";
-            sql =
-    new String("select ID, HEADING, SPEED, LONGITUDE, LATITUDE , ALTITUDE, NBSAT, TIME_STP from GPS_POSITIONS order by ID, TIME_STP DESC" );
+            if (gidf == true)
+            	sql =
+            	new String("select ID, HEADING, SPEED, LONGITUDE, LATITUDE , ALTITUDE, NBSAT, TIME_STP from GPS_POSITIONS "+ 
+            "where id = '" +m_id+"' "+ "order by TIME_STP DESC" );
+            
+            else
+            	sql =
+                new String("select ID, HEADING, SPEED, LONGITUDE, LATITUDE , ALTITUDE, NBSAT, TIME_STP from GPS_POSITIONS "+ 
+                       " order by ID, TIME_STP DESC" );
             if (gdebugf)
              out.println("<p>" + sql);
          	ResultSet rs = m_Statement.executeQuery(sql);
@@ -97,12 +109,20 @@ public class PositionsList extends HttpServlet {
 				out.println("<tr>");
 				for (int c=1; c <= noCols; c++) {
 					String el = rs.getString(c);
+					// colonne 4 longitude, colonne 5 latitude
+					url = url +  rs.getString(5) + ","+rs.getString(4);
 					out.println("<td> " + el + " </td>");
+					if (c < noCols)
+						url = url +"|";
 				}
 				out.println("</tr>");
 			}
 			out.println("</table>"+ "<br/>");
-			out.println ( "Requ�te ex�cut�e: " + sql + "<br/>" );
+			//out.println ( "Requ�te ex�cut�e: " + sql + "<br/>" );
+			// url vers gmap_api.html avec les points dans url
+			url = "gmap_api.html?"+url;
+			//out.println ( "url: " + url + "<br/>" );
+			out.println("<a href=\""+url+"\">Acc&eacute;s carte GMAP</a>");
 			gMessage = "";
         } catch (Exception e) {
             gMessage = new String( e.getMessage());
@@ -116,6 +136,7 @@ public class PositionsList extends HttpServlet {
                 // il faudrait traiter cette exception...
             }
             out.println("<p>"+gMessage+"</p>")  ;  
+            out.println("<img src=\"images/insaLyon.png\" width=\"128\" high=\"128\" />");
             out.println("</BODY>");
             out.println("</HTML>");
             

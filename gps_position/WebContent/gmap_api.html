@@ -1,0 +1,86 @@
+<html>
+   <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+      <title>Itin&eacute;raire des positions GPS</title>
+      
+	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyCgf8bgoZhwDVpvKvZ9YEXks33MmhOinDc" type="text/javascript"></script>    
+	<script type="text/javascript">
+         
+		function load()
+		
+		{
+		    // on passe en parametre a l'url une string contenant une liste des points Latitude et Longitude
+		    // on utilise le . decimal pour les valeurs et la virgule pour separer la longitude de la latitude
+		    // le | pour separer les points
+			var url=document.URL.split('=');
+			var param=url[1];
+			var couples=param.split('|');
+			map = new GMap2(document.getElementById("map_canvas"));
+       		map.addControl(new GLargeMapControl());
+			map.addControl(new GMapTypeControl());
+			map.setCenter(new GLatLng(44.786406, 4.880495), 13);
+			// create a local search control and add it to your map
+			//var lsc = new google.maps.LocalSearch(); 
+			//map.addControl(new google.maps.LocalSearch());
+
+			var tabLatLong=new Array(couples.length);
+			
+			// Create a base icon for all of our markers that specifies the
+			// shadow, icon dimensions, etc.
+			var baseIcon = new GIcon();
+			baseIcon.shadow = "images/shadow50.png";
+			baseIcon.iconSize = new GSize(20, 34);
+			baseIcon.shadowSize = new GSize(37, 34);
+			baseIcon.iconAnchor = new GPoint(9, 34);
+			baseIcon.infoWindowAnchor = new GPoint(9, 2);
+			baseIcon.infoShadowAnchor = new GPoint(18, 25);
+			// Create a lettered icon for the departure point using our icon class
+			var letterD = String.fromCharCode("D".charCodeAt(0) );
+			var letteredIconD = new GIcon(baseIcon);
+			letteredIconD.image = "images/green_Marker" + letterD + ".png";
+			// Set up our GMarkerOptions object
+			markerOptionsD = { icon:letteredIconD };	
+			// Create a lettered icon for the arrival point using our icon class
+			var letterA = String.fromCharCode("A".charCodeAt(0) );
+			var letteredIconA = new GIcon(baseIcon);
+			letteredIconA.image = "images/red_Marker" + letterA + ".png";
+			// Set up our GMarkerOptions object
+			markerOptionsA = { icon:letteredIconA };		
+			// Create a lettered icon for the current point using our icon class
+			var letterC = String.fromCharCode("C".charCodeAt(0) );
+			var letteredIconC = new GIcon(baseIcon);
+			letteredIconC.image = "images/paleblue_Marker" + letterC + ".png";
+			// Set up our GMarkerOptions object
+			markerOptionsC = { icon:letteredIconC };		
+			
+			// Creation of all points passed within URL, all points are separated by '|' and lat long by ','
+			for (i=0;i<couples.length;i++)
+			{
+				LatLong=couples[i].split(',');
+				tabLatLong[i]=new GLatLng(LatLong[0],LatLong[1]);
+			}
+			if (couples.length > 1) {			
+				map.addOverlay(new GMarker(tabLatLong[0], markerOptionsD));
+				map.addOverlay(new GMarker(tabLatLong[(couples.length)-1], markerOptionsA));
+			} else {
+				map.addOverlay(new GMarker(tabLatLong[0], markerOptionsC));
+			}
+			var polyline =new GPolyline(tabLatLong,"#ff0000",6);
+			map.addOverlay(polyline);
+			var bounds = new GLatLngBounds();		
+				for (j = 0; j < tabLatLong.length; j ++)
+					bounds.extend(tabLatLong[j]);
+			map.setCenter(bounds.getCenter());
+			map.setZoom(map.getBoundsZoomLevel(bounds));
+        }  
+            
+      
+      </script>
+   </head>
+   
+   <!-- Lancement automatique du script javascript aprs le chargement de la page -->
+   <body onload="load();">
+		<div id="map_canvas" style="width:800px; height:500px"></div>
+   </body>
+   <img src="images/insaLyon.png" width="128" high="128" />
+</html>
