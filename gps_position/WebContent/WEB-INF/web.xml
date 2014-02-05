@@ -13,7 +13,7 @@
     <description></description>
     <display-name>PositionsUpload</display-name>
     <servlet-name>PositionsUpload</servlet-name>
-    <servlet-class>fr.insa.iso.gps.gps_positions.PositionsUpload</servlet-class>
+    <servlet-class>insa.tc.PositionsUpload</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>PositionsUpload</servlet-name>
