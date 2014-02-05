@@ -17,8 +17,6 @@
 
 package fr.insa.iso.gps.srv_collecte;
 
-
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.io.FileInputStream;
@@ -47,13 +45,13 @@ public class Test {
 	public static void main (String[] args) {
 		System.out.println("Test>>begin");
 		TestLogger();
-//		TestSplit();
+		//		TestSplit();
 		TestDb();
-//		TestString();
+		//		TestString();
 	}
-/*
- * Methodes pour les tests
- */
+	/*
+	 * Methodes pour les tests
+	 */
 	public static void TestDb()
 	{
 		//n_DataBase = new OracleDataBase();
@@ -66,8 +64,9 @@ public class Test {
 		System.out.println("Test>>trying to connect to database");
 		if (n_DataBase.Connect())
 		{
-			String requestCount = "SELECT count(*) FROM tracker";
-			String sql = "SELECT tracker_id FROM tracker order by tracker_id asc";
+			String requestCount = "SELECT count(*) FROM gps_positions";
+			//String requestCount = "SELECT count(*) FROM tracker";
+			String sql = "SELECT id FROM gps_positions group by id order by id asc";
 			// 356307040837709,20120703180105,4.8801632,45.7867008,0,0,193.0,6,0
 			// IMEI, DateString, Longitude, Latitude, Speed, Heading,Altitude, nbSat, Event
 			//String sqlpos = "SELECT EPILOTE_IDT || ',' || TO_CHAR(TIME_STP,\'YYYYMMDDHH24MISS\') || ',' || REPLACE(TO_CHAR(longitude),\',\',\'.\') || ',' || REPLACE(TO_CHAR(latitude),\',\',\'.\')  || ',' || speed || ',' || heading || ',' || altitude || ',' || nbsat || ',' || 0 FROM gps_positions WHERE epilote_idt = \'1000000001\' ORDER BY TIME_STP ASC"; 
@@ -76,10 +75,10 @@ public class Test {
 
 			try {
 				rs.next();
-                                // c est le resultat du count donc un entier
-				System.out.println(rs.getInt(1)+" trackers");
+				// c est le resultat du count donc un entier
+				System.out.println(rs.getInt(1)+" positions");
 				n_Ids = new String[rs.getInt(1)];
- 				
+
 				rs = n_DataBase.Requete(sql);
 				int i=0;
 				System.out.println("liste des trackers");
@@ -89,14 +88,13 @@ public class Test {
 					System.out.println("id:"+n_Ids[i]);
 					i++;
 				}
-				// recherche des positions pour le premier tracker
-				String dateMin = "2008-03-29 02:00";
-				String dateMax = "2008-03-29 23:00";
-                        	String sqlpos = "SELECT EPILOTE_IDT, TIME_STP, Latitude, Longitude, Speed FROM gps_positions where epilote_idt=\'"+n_Ids[0]+"\'  AND time_stp BETWEEN \'"+dateMin+"\'  AND  \'"+dateMax+"\' ORDER BY time_stp asc";
+				// Affiche les 30 dernières positons
+
+				String sqlpos = "select ID, HEADING, SPEED, LONGITUDE, LATITUDE , ALTITUDE, NBSAT, TIME_STP from GPS_POSITIONS order by ID, TIME_STP DESC";
 
 				rs = n_DataBase.Requete(sqlpos);
 				i=0;
-				System.out.println("un extrait de la liste des positions du 1er tracker");
+				System.out.println("un extrait de la liste des positions");
 				while(rs.next())
 				{
 					// on va obtenir une string avec le format que on lit sur une trame Nomadic
@@ -104,7 +102,7 @@ public class Test {
 					double lon = rs.getDouble(4);
 					int speed = rs.getInt(5);
 					System.out.println(rs.getString(1)+" ["+rs.getString(2)+"] ("+
-						lat+" "+lon+" "+speed+")");
+							lat+" "+lon+" "+speed+")");
 					if (i > 10)
 						break;
 					i++;
@@ -129,7 +127,7 @@ public class Test {
 			System.out.println(pos.length+" positions");
 			for (int i = 0;i < pos.length-2;i++) 
 				System.out.println( pos[i].getId()+","+pos[i].getDateString());
-		 	*/	
+			 */	
 			n_DataBase.Close();
 
 		} else {
@@ -146,61 +144,61 @@ public class Test {
 		for (int i = 0;i < param.length;i++) {
 			System.out.println(param[i]);
 		}
-		
+
 	}
 	public static void TestLogger()
 	{
-	    	FileHandler fh;
+		FileHandler fh;
 		//String fileLog = "geotracker.log";
-                Properties props = new Properties();
-                try {
-                        // le fichier de proprietes doit se trouve a la racine du package ws
-                        props.load(new FileInputStream("geotracker.properties"));
-                        n_log = props.getProperty("LOG");
-                } catch (IOException e) {
-                        e.printStackTrace();
-                        System.out.println("impossible de trouver le fichier properties");
-                }
+		Properties props = new Properties();
+		try {
+			// le fichier de proprietes doit se trouve a la racine du package ws
+			props.load(new FileInputStream("src/main/resources/geotracker.properties"));
+			n_log = props.getProperty("LOG");
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("impossible de trouver le fichier properties");
+		}
 
 		// pour stopper les logs sur la console ou les parents
 		logger.setUseParentHandlers(false);
 		// pour acepter tous les niveaux
-      		logger.setLevel(Level.ALL);
+		logger.setLevel(Level.ALL);
 		try {
 			// le log sera ecrit sous la racine du package
-      			fh = new FileHandler(n_log, true);
+			fh = new FileHandler(n_log, true);
 			System.out.println("le logger est stocke dans "+ n_log);
 			// on implemente son propre formatter sur le handle du fichier de log
 			fh.setFormatter(new Formatter() {
-      				public String format(LogRecord record) {
+				public String format(LogRecord record) {
 					SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
 					long mil = record.getMillis();
 					Date resultdate = new Date(mil);
-        				return resultdate +" " 
+					return resultdate +" " 
 					+ record.getLevel() + " "
-            				+ record.getSourceClassName() + " "
-            				+ record.getSourceMethodName() + " "
-            				+ record.getMessage() + "\n";
-      				}
-    			});
+					+ record.getSourceClassName() + " "
+					+ record.getSourceMethodName() + " "
+					+ record.getMessage() + "\n";
+				}
+			});
 			// et on affecte ce formatter au logger
-      			logger.addHandler(fh);
-/*
+			logger.addHandler(fh);
+			/*
 			// SimpleFormatter genere des messages sous forme texte
       			SimpleFormatter formatter = new SimpleFormatter();
 			// on choisit le mode log texte et non XML
       			fh.setFormatter(formatter);
-*/
+			 */
 			// exemples de messages de log
-      			logger.log(Level.WARNING,"attention ceci est un message ");
-      			logger.log(Level.INFO,"ceci est un message d information");
-      			logger.log(Level.SEVERE,"ceci est une erreur critique");
+			logger.log(Level.WARNING,"attention ceci est un message ");
+			logger.log(Level.INFO,"ceci est un message d information");
+			logger.log(Level.SEVERE,"ceci est une erreur critique");
 			System.out.println("le log a ete mis a jour");
-    		} catch (SecurityException e) {
-      			e.printStackTrace();
-    		} catch (IOException e) {
-      			e.printStackTrace();
-    		}
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	public static void TestString()
 	{
@@ -218,9 +216,9 @@ public class Test {
 
 		System.out.println("sans format:"+longitude+":"+latitude+":"+altitude);
 		System.out.println("avec format GPS:"+String.format("%.6f",longitude)+":"+
-			String.format("%.6f",latitude)+":"+
-			String.format("%.1f",altitude));
-		
+				String.format("%.6f",latitude)+":"+
+				String.format("%.1f",altitude));
+
 	}
 
 }

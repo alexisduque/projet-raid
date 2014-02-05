@@ -51,8 +51,7 @@ class CollectClient extends Thread
 	private CollectServer _socketServ; // pour utilisation des methodes de la classe principale
 	private int _numClient=0; // contiendra le numero de device gere par ce thread (commence a 0)
 	private String _id_Device = null; // chaque device est identifie par un ID de device transmis dans les reponses ou dans la 1ere trame
-	//private OracleDataBase n_DataBase;
-	private MySQLDataBase n_DataBase;
+	private PostgreSQLDataBase n_DataBase;
 	private GeoTrackerService n_Service;
 	private String n_user = "";
 	private String n_pass = "";
@@ -101,8 +100,7 @@ class CollectClient extends Thread
 	//	logger = Logger.getLogger(ws.CollectClient.class.getName());
 		logger.log(Level.WARNING,"connexion nouveau client "+_numClient);
 		/*Creation de la connexion BD*/
-		//n_DataBase = new OracleDataBase();
-		n_DataBase = new MySQLDataBase();
+		n_DataBase = new PostgreSQLDataBase();
 		//n_DataBase.setLogger();
 		// user and pass are optional temporary
 		n_DataBase.setUserName(n_user);

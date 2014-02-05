@@ -40,7 +40,7 @@ import java.io.IOException;
 public class GeoTrackerService {
 
 //	private OracleDataBase m_DataBase;
-	private MySQLDataBase m_DataBase;
+	private PostgreSQLDataBase m_DataBase;
 
 	private String m_Release = "hello geotracker! release is 3.0.1 (c) Ph. Isorce";
 	private String[] m_Names = new String[2];
@@ -99,8 +99,7 @@ CREATE TABLE `gps_positions` (
 
 	public String[] getIds(String user, String pass){
 
-//		m_DataBase = new OracleDataBase();
-		m_DataBase = new MySQLDataBase();
+		m_DataBase = new PostgreSQLDataBase();
 		// user and pass are optional temporary
 		m_DataBase.setUserName(user);
 		m_DataBase.setPassword(pass);
@@ -148,7 +147,7 @@ CREATE TABLE `gps_positions` (
 		/* Oracle 
 		m_DataBase = new OracleDataBase();		
 		*/
-		m_DataBase = new MySQLDataBase();		
+		m_DataBase = new PostgreSQLDataBase();		
 		if(m_DataBase.Connect())
 		{
 			String sql = "SELECT * FROM gps_positions " +
@@ -178,7 +177,7 @@ CREATE TABLE `gps_positions` (
 	public SpeedLog getMaxSpeed(String id){
 		SpeedLog maxSpeed = new SpeedLog();
 		//m_DataBase = new OracleDataBase();
-		m_DataBase = new MySQLDataBase();
+		m_DataBase = new PostgreSQLDataBase();
 		if(m_DataBase.Connect())
 		{
 			String sql = "SELECT * FROM gps_positions " +
@@ -209,7 +208,7 @@ CREATE TABLE `gps_positions` (
 		//
 		List<PositionLog> listPos = new ArrayList<PositionLog>();
 		//m_DataBase = new OracleDataBase();
-		m_DataBase = new MySQLDataBase();
+		m_DataBase = new PostgreSQLDataBase();
 		if(m_DataBase.Connect())
 		{
 /* Oracle
@@ -278,14 +277,12 @@ CREATE TABLE `gps_positions` (
 	} 
 
 
-	//public OracleDataBase getDataBase(){
-	public MySQLDataBase getDataBase(){
+	public PostgreSQLDataBase getDataBase(){
 		return m_DataBase;
 	}
 
-	//public void setDataBase(OracleDataBase db){
-	public void setDataBase(MySQLDataBase db){
-		this.m_DataBase = db;
+	public void setDataBase(PostgreSQLDataBase n_DataBase){
+		this.m_DataBase = n_DataBase;
 	}
 
 	private boolean IsSamePosition(PositionLog position1, PositionLog position2){
@@ -384,7 +381,7 @@ CREATE TABLE `gps_positions` (
 		if (m_DataBase.Connect()) {			
 			/*Requete SQL de type Update*/
 			String sql = 
-					"insert into GPS_POSITIONS (EPILOTE_IDT, HEADING, SPEED, ALTITUDE , LATITUDE, LONGITUDE, NBSAT, TIME_STP) values (" + 
+					"insert into GPS_POSITIONS (ID, HEADING, SPEED, LONGITUDE, LATITUDE , ALTITUDE, NBSAT, TIME_STP ) values (" + 
 					"'"+ gpsId + "'" + "," + gpsHeading + "," +gpsSpeed + "," +  gpsAltitude + "," +             
 					gpsLatitude + "," + gpsLongitude + "," + gpsNbsat +  
 							", TO_DATE('"+ gpsDateD + "', 'DD/MM/YYYY:HH24:MI:SS'))";
@@ -403,14 +400,11 @@ CREATE TABLE `gps_positions` (
 		return result;
 	}	
 	
-	//private OracleDataBase getM_DataBase() {
-	private MySQLDataBase getM_DataBase() {
+	private PostgreSQLDataBase getM_DataBase() {
 		return m_DataBase;
 	}
 
-
-	//private void setM_DataBase(OracleDataBase dataBase) {
-	private void setM_DataBase(MySQLDataBase dataBase) {
+	private void setM_DataBase(PostgreSQLDataBase dataBase) {
 		m_DataBase = dataBase;
 	}
 

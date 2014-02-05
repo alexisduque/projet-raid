@@ -29,39 +29,34 @@ public class PostgreSQLDataBase{
 	private String m_UserName;
 	private String m_Password;
 	private String m_Url;
-        private static Logger logger = Logger.getLogger(CollectServer.class.getName());
-        private static String n_log = "";
-        private static String l_log = ""; // recevra le niveau du logger
+	private static Logger logger = Logger.getLogger(CollectServer.class.getName());
+	private static String n_log = "";
+	private static String l_log = ""; // recevra le niveau du logger
 
-	
+
 	public void PostgreSQLDatabase() {
 	}
-	
+
 	public boolean Connect(){
-		//m_Url =  "jdbc:oracle:thin:@" + getAddress() + ":" +
-		//			getPort() + ":" + getCompte();
-		m_Url =  "jdbc:postgresql://localhost:3306/test";
-		m_Driver = "org.postgresql.Driver";
-		m_UserName = "postgres";
-		m_Password = "";
-               Properties props = new Properties();
-                try {
-                        // le fichier de proprietes doit se trouve a la racine du package ws
-                        props.load(new FileInputStream("geotracker.properties"));
-                        m_Url = props.getProperty("URL");
-                        m_Driver = props.getProperty("DRIVER");
-                        m_UserName = props.getProperty("USERNAME");
-                        m_Password = props.getProperty("PASSWORD");
-                } catch (IOException e) {
-                        e.printStackTrace();
-                        System.out.println("OracleDatabase: impossible de trouver le fichier properties");
-                }
+
+		Properties props = new Properties();
+		try {
+			// le fichier de proprietes doit se trouve a la racine du package ws
+			props.load(new FileInputStream("src/main/resources/geotracker.properties"));
+			m_Url = props.getProperty("URL");
+			m_Driver = props.getProperty("DRIVER");
+			m_UserName = props.getProperty("USERNAME");
+			m_Password = props.getProperty("PASSWORD");
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("OracleDatabase: impossible de trouver le fichier properties");
+		}
 
 		try
 		{
-                       logger.log(Level.INFO,"user="+m_UserName+" pass="+m_Password);
-                        logger.log(Level.INFO,"url="+m_Url);
-                        logger.log(Level.INFO,"driver="+m_Driver);
+			logger.log(Level.INFO,"user="+m_UserName+" pass="+m_Password);
+			logger.log(Level.INFO,"url="+m_Url);
+			logger.log(Level.INFO,"driver="+m_Driver);
 
 			System.out.println("user="+m_UserName+" pass="+m_Password);
 			//Class.forName(getDriver());
@@ -71,7 +66,7 @@ public class PostgreSQLDataBase{
 			m_Connection = DriverManager.getConnection(m_Url, m_UserName, m_Password);
 			m_Statement = m_Connection.createStatement();
 			return true;
-			}
+		}
 		catch(SQLException ex){
 			System.out.println(ex.getMessage().toString());
 			return false;
@@ -81,7 +76,7 @@ public class PostgreSQLDataBase{
 			return false;
 		}
 	}
-	
+
 	public boolean Close()
 	{
 		try	{
@@ -92,7 +87,7 @@ public class PostgreSQLDataBase{
 			return false;
 		} 
 	}
-	
+
 	public ResultSet Requete(String req)
 	{
 		ResultSet rs=null;	
@@ -104,72 +99,72 @@ public class PostgreSQLDataBase{
 			return rs;
 		}
 	} 
-        public int Update(String req)
-        {
-                try {
-                        m_Statement.executeUpdate(req);
-                        return 0;
-                } catch(SQLException ex){
-                        return 1;
-                }
-        }
-	
+	public int Update(String req)
+	{
+		try {
+			m_Statement.executeUpdate(req);
+			return 0;
+		} catch(SQLException ex){
+			return 1;
+		}
+	}
+
 	public String getDriver(){
 		return m_Driver;
 	}
-	
+
 	public void setDriver(String driver){
 		this.m_Driver = driver;
 	} 
-	
+
 	public String getUserName() {
 		return m_UserName;
 	}
-	
+
 	public void setUserName(String userName){
 		this.m_UserName=userName;
 	}
-	
+
 	public String getPassword() {
 		return m_Password;
 	}
-	
+
 	public void setPassword(String pass){
 		this.m_Password=pass;
 	}
-	
+
 	public String getAddress() {
 		return m_Address;
 	}
-	
+
 	public void setAddress(String address){
 		this.m_Address=address;
 	}
-	
+
 	public String getPort() {
 		return m_Port;
 	}
-	
+
 	public void setPort(String port){
 		this.m_Port=port;
 	}
-	
+
 	public String getCompte() {
 		return m_Compte;
 	}
-	
+
 	public void setCompte(String compte){
 		this.m_Compte=compte;
 	}
-	
+
 	public String getUrl() {
 		return m_Url;
 	}
-	
+
 	public void setUrl(String url){
 		this.m_Url=url;
 	}
-	
+
 	private boolean isClosed(){
 		try {
 			return m_Connection.isClosed();
@@ -237,5 +232,5 @@ public class PostgreSQLDataBase{
 	public void setM_UserName(String userName) {
 		m_UserName = userName;
 	}
-	
+
 }
