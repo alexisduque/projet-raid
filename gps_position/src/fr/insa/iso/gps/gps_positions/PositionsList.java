@@ -37,6 +37,7 @@ public class PositionsList extends HttpServlet {
         String gMessage = null;
         boolean gdebugf = false;
 	  	boolean gidf = false;
+	  	boolean gmaxf = false;
         /* variables pour la base de donnees */
     	Connection m_Connection;
     	Statement m_Statement;
@@ -48,9 +49,16 @@ public class PositionsList extends HttpServlet {
     	String m_Password;
     	String m_Url;
 	  	String m_id = request.getParameter("IdVehicule");
+	  	String m_max = request.getParameter("MaxPositions");
+	  	int m_count = 0;
 
 	  	if (m_id != null)
 	  		gidf = true;
+	  	if (m_max != null) {
+	  		gmaxf = true;
+	  		m_count = Integer.parseInt(m_max);
+	  	}
+
         PrintWriter out = response.getWriter();
         response.setContentType("text/html");
         out.println("<HTML>");
@@ -105,6 +113,7 @@ public class PositionsList extends HttpServlet {
 				out.println("<th> " + el + " </th>");
 			}
 			out.println("</tr>");
+			int i_count = 0;
 			while (rs.next()) {
 				out.println("<tr>");
 				for (int c=1; c <= noCols; c++) {
@@ -114,15 +123,20 @@ public class PositionsList extends HttpServlet {
 					out.println("<td> " + el + " </td>");
 					if (c < noCols)
 						url = url +"|";
+					
 				}
 				out.println("</tr>");
+				i_count++;
+				if (i_count >= m_count)
+					break;
 			}
 			out.println("</table>"+ "<br/>");
-			//out.println ( "Requ�te ex�cut�e: " + sql + "<br/>" );
+			//out.println ( "Requête exécutée: " + sql + "<br/>" );
 			// url vers gmap_api.html avec les points dans url
 			url = "gmap_api.html?"+url;
 			//out.println ( "url: " + url + "<br/>" );
 			out.println("<a href=\""+url+"\">Acc&eacute;s carte GMAP</a>");
+			out.println("</br><a href=\""+"geoportail.html"+"\">Acc&eacute;s carte GeoPortail</a>");
 			gMessage = "";
         } catch (Exception e) {
             gMessage = new String( e.getMessage());
