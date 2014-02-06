@@ -348,16 +348,19 @@ CREATE TABLE `gps_positions` (
 		gpsId = new String(params[0]);
 		gpsDate = params[1];
 		// gpsDate
+		// AAAAMMJJHHMMSS on doit la convertir en 'DD/MM/YYYY:HH24:MI:SS'
 		gpsDateD = new String("");
-// Pour MySQL
-		// AAAAMMDDHHMMSS on doit la convertir en 'YYYY-MM-DD:HH24:MI:SS'
 		if (gpsDate.length() == 14) {
-			gpsDateD = new String(gpsDate.substring(0,4)+"-"+gpsDate.substring(4,6)+"-"+
-					gpsDate.substring(6,8)+":"+gpsDate.substring(8,10)+":"+
-					gpsDate.substring(10,12)+":"+gpsDate.substring(12,14));
-			logger.log(Level.INFO,">>"+gpsDateD);
-		} else
-			gpsDateD = new String(dateFormatO.format(dateS));   
+            gpsDateD =
+                    new String(gpsDate.substring(6, 8) + "/" + gpsDate.substring(4,
+                                                                             6) +
+                               "/" + gpsDate.substring(0, 4) + ":" +
+                               gpsDate.substring(8, 10) + ":" +
+                               gpsDate.substring(10, 12) + ":" +
+                               gpsDate.substring(12, 14));
+            //System.out.println(">>"+gDateD);
+        } else
+            gpsDateD = new String(dateFormatO.format(dateS));
 		// autres parametres
 		gpsLongitude = Double.parseDouble(params[2]);
 		gpsLatitude = Double.parseDouble(params[3]);
@@ -383,8 +386,7 @@ CREATE TABLE `gps_positions` (
 			String sql = 
 					"insert into GPS_POSITIONS (ID, HEADING, SPEED, LONGITUDE, LATITUDE , ALTITUDE, NBSAT, TIME_STP ) values (" + 
 					"'"+ gpsId + "'" + "," + gpsHeading + "," +gpsSpeed + "," +  gpsAltitude + "," +             
-					gpsLatitude + "," + gpsLongitude + "," + gpsNbsat +  
-							", TO_DATE('"+ gpsDateD + "', 'DD/MM/YYYY:HH24:MI:SS'))";
+					gpsLatitude + "," + gpsLongitude + "," + gpsNbsat + "," + "'"+gpsDateD+"')";
 
 				logger.log(Level.INFO,"SQL:"+sql+":END:");
 				//result = m_DataBase.Update(sql);

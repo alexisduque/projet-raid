@@ -49,7 +49,7 @@ public class CollectServer
 		try {
 			Integer port;
 			if(args.length<=0) 
-				port=new Integer("42400"); // si pas d'arguments : port 42500 par defaut
+				port=new Integer("2947"); // si pas d'arguments : port 42500 par defaut
 			else 
 				port = new Integer(args[0]); // sinon il s'agit du numero de port passe en argument
 
