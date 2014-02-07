@@ -59,7 +59,7 @@ public class GPSNomadic extends GPSDevice {
 				// le parsing du message est fait dans cette methode 
 				String st = new String(mVector.elementAt(i));
 				// on va extraire l ID de la trame sur 10 caracteres	
-				sId =  byteArrayToString(bufferData,0,9);
+				sId =  byteArrayToString(bufferData,0,10);
 				logger.log(Level.INFO,""+_numClient+" (hexa) :"+st.length()+":"+sId.getBytes());
 				logger.log(Level.WARNING,""+_numClient+" ID :"+st.length()+":"+sId.getBytes());
 				logger.log(Level.INFO,""+_numClient+" insere :"+st);
