@@ -3,20 +3,18 @@
           <head>
             <title>INSA Lyon TC - API GeoPortail</title>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-            <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
-                <style type="text/css"><!--/*--><![CDATA[/*><!--*/
-            div#viewerDiv {
-                width:800px;
-                height:600px;
-                background-color:white;
-                background-image:url(http://api.ign.fr/geoportail/api/js/latest/theme/geoportal/img/loading.gif);
-                background-position:center center;
-                background-repeat:no-repeat;
-            }
-            /*]]>*/--></style>
+  	<link rel="StyleSheet" type="text/css" href="style.css">
                 <script type="text/javascript" src="http://api.ign.fr/geoportail/api/js/latest/Geoportal.js"><!-- --></script>
           </head>
           <body>
+          <img src="images/ImageChappeNord.png" alt="INSA LYON TC" width="800" height="120" />
+			<h3> Exemple de page Geoportail</h3>
+		<ul id="tabnav">
+     		<li class="active"><a href="index.html">Accueil</a></li>
+     		<li><a href="geotest.html">Global Map</a></li>
+     		<li><a href="FindPositions.jsp">Tracker</a></li>
+     		<li><a href="index.html">List</a></li>
+		</ul>
             <div id="viewerDiv"></div>
             <script type="text/javascript"><!--//--><![CDATA[//><!--
             	var iv= null;

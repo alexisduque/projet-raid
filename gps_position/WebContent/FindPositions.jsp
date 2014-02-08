@@ -5,14 +5,23 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Recherche du tracker</title>
+<link rel="StyleSheet" type="text/css" href="style.css">
+
 </head>
 <body>
 			<% String url="plist"; %>
+			<img src="images/ImageChappeNord.png" alt="INSA LYON TC" width="800" height="120" />
 			<h3>Recherche des positions GPS d'un Tracker </h3>
+			<ul id="tabnav">
+     		<li class="active"><a href="index.html">Accueil</a></li>
+     		<li><a href="geotest.html">Global Map</a></li>
+     		<li><a href="FindPositions.jsp">Tracker</a></li>
+     		<li><a href="plist">List</a></li>
+			</ul>
 			<form action="<%= url %>" name="DatesJsp" method="get">
 			<table align="center">
 				<tr>
-					<td align="right">ID du v&eacute;hicule</td>
+					<td align="right">ID du Tracker</td>
 					<td><input type="text" size="10" name="IdVehicule" value="2000000001"></td>
 				</tr>
 				<tr>
@@ -34,14 +43,8 @@
 					<td align="right">Nombre max de positions</td>
 					<td><input type="text" size="10" name="MaxPositions" value="10"></td>
 				</tr>
-				<tr>
-					<td align="right">Pour faire seulement un test</td>
-					<td align="left"> cochez le bouton vrai</td>
-				</tr>
-				<tr>
-					<td>Vrai<input type="radio" name="Test" value="vrai" checked></td>
-					<td>Faux<input type="radio" name="Test" value="faux"></td>
-				</tr>
+
+
 				<tr>
 					<td><br>
 					    <input type="submit" value="Valider">			
@@ -49,29 +52,8 @@
 				</tr>
 			</table>
 			</form>
-			  <% 
-			  	String idvehicule = request.getParameter("IdVehicule");
-			    String firstdate = request.getParameter("DateDebut");
-			  	String lastdate = request.getParameter("DateFin");
-			  	String maxpositions = request.getParameter("MaxPositions");
-			  %>
-			  	<hr>
-			    Vous avez saisi les options suivantes :
-			    <ul>
-			  <% 
-			  	if (idvehicule != null)
-			       	out.println("<li>" + idvehicule);
-			  	if (firstdate != null)
-			       	out.println("<li>" + firstdate);
-			  	if (lastdate != null)
-			      	out.println("<li>" + lastdate);   
-			  	if (maxpositions != null)
-			      	out.println("<li>" + maxpositions);   
-			   %>
 			   </ul>
-			<%
 
-	%>
-		 <img src="images/insaLyon.png" width="128" high="128" />	
+		<hr> <img src="images/insaLyon.png" width="128" />	
 </body>
 </html>
