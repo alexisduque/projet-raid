@@ -385,8 +385,8 @@ CREATE TABLE `gps_positions` (
 			/*Requete SQL de type Update*/
 			String sql = 
 					"insert into GPS_POSITIONS (ID, HEADING, SPEED, LONGITUDE, LATITUDE , ALTITUDE, NBSAT, TIME_STP ) values (" + 
-					"'"+ gpsId + "'" + "," + gpsHeading + "," +gpsSpeed + "," +  gpsAltitude + "," +             
-					gpsLatitude + "," + gpsLongitude + "," + gpsNbsat + "," + "'"+gpsDateD+"')";
+					"'"+ gpsId + "'" + "," + gpsHeading + "," +gpsSpeed + "," +  gpsLongitude + "," +             
+					gpsLatitude + "," + gpsAltitude + "," + gpsNbsat + "," + "'"+gpsDateD+"')";
 
 				logger.log(Level.INFO,"SQL:"+sql+":END:");
 				//result = m_DataBase.Update(sql);
