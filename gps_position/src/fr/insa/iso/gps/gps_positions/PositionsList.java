@@ -61,10 +61,17 @@ public class PositionsList extends HttpServlet {
 
         PrintWriter out = response.getWriter();
         response.setContentType("text/html");
-        out.println("<HTML>");
-        out.println("<HEAD><TITLE> INSA TC - GPS Positions Listing </TITLE></HEAD>");
-        out.println("<BODY>");
-
+        out.println("<html>");
+        out.println("<head><title> INSA TC - GPS Positions Listing </title>" +
+        		"<link rel=\"StyleSheet\" type=\"text/css\" href=\"style.css\"></head>");
+        out.println("<body>");
+        out.println("<img src=\"images/ImageChappeNord.png\" alt=\"INSA LYON TC\" width=\"800\"  />");
+		out.println("<ul id=\"tabnav\">"+
+ 		"<li class=\"active\"><a href=\"index.html\">Accueil</a></li>"+
+ 		"<li><a href=\"geotest.html\">Global Map</a></li>"+
+ 		"<li><a href=\"FindPositions.jsp\">Tracker</a></li>"+
+ 		"<li><a href=\"plist\">List</a></li>"+
+		"</ul>\"");
 
         /*Creation de la connexion BD*/
 		m_Url =  "jdbc:postgresql://gps-iso.insa-lyon.fr:5432/geoloc";
@@ -131,11 +138,11 @@ public class PositionsList extends HttpServlet {
 					break;
 			}
 			out.println("</table>"+ "<br/>");
-			//out.println ( "Requête exécutée: " + sql + "<br/>" );
+			//out.println ( "Requ�te ex�cut�e: " + sql + "<br/>" );
 			// url vers gmap_api.html avec les points dans url
 			url = "gmap_api.html?"+url;
 			//out.println ( "url: " + url + "<br/>" );
-			out.println("<a href=\""+url+"\">Acc&eacute;s carte GMAP</a>");
+			out.println("<hr><a href=\""+url+"\">Acc&eacute;s carte GMAP</a>");
 			out.println("</br><a href=\""+"geoportail.html"+"\">Acc&eacute;s carte GeoPortail</a>");
 			gMessage = "";
         } catch (Exception e) {
@@ -150,9 +157,9 @@ public class PositionsList extends HttpServlet {
                 // il faudrait traiter cette exception...
             }
             out.println("<p>"+gMessage+"</p>")  ;  
-            out.println("<img src=\"images/insaLyon.png\" width=\"128\" high=\"128\" />");
-            out.println("</BODY>");
-            out.println("</HTML>");
+            out.println("<hr><img src=\"images/insaLyon.png\" width=\"128\" />");
+            out.println("</body>");
+            out.println("</html>");
             
         }
 	}

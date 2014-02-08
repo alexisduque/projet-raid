@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Page web de test - API Geoportail - Tuto GpsPasSion</title>
+<!-- IE8 compatibility mode -->
+<!--[if IE 8]>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+<![endif]-->
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <script type="text/javascript" src="http://api.ign.fr/geoportail/api?v=1.0beta4&key=1o7ote26hh59idex0pmrixpx&instance=viewer&">
+  <!-- --></script>
+
+  <script type="text/javascript">
+    <!--
+    // the viewer variable is declared by the API through the instance parameter
+    viewer= null;
+    var kbControl= null;
+
+    function initGeoportalMap() {
+        geoportalLoadviewer("viewerDiv", "normal", 'FXX', null, null);
+        if (!viewer) {
+            OpenLayers.Console.error(OpenLayers.i18n('new.instance.failed'));
+            return;
+        }
+        viewer.addGeoportalLayers(['ORTHOIMAGERY.ORTHOPHOTOS:WMSC'],{visibility:false});
+        viewer.addGeoportalLayers(['GEOGRAPHICALGRIDSYSTEMS.MAPS:WMSC'],{opacity:0.8});
+		viewer.openLayersPanel(false);
+		viewer.openToolsPanel(false);
+		viewer.setInformationPanelVisibility(false);
+        viewer.getMap().addControl(new OpenLayers.Control.LoadingPanel());
+		kbControl= viewer.getMap().getControlsByClass(OpenLayers.Control.KeyboardDefaults.prototype.CLASS_NAME)[0];
+
+		// Ajout de la couche KML 1
+		viewer.getMap().addLayer("KML", "Mon parcours 1", "mon_parcours_1.kml", {minZoomLevel:3, maxZoomLevel:16, originators:[{logo:'Nom de mon logo', pictureUrl: 'mon_logo.gif', url: 'http://www.mon_site_web.fr/'}]});
+
+		// Ajout de la couche KML 2
+		// viewer.getMap().addLayer("KML", "Mon parcours 2", "mon_parcours_2.kml", {minZoomLevel:3, maxZoomLevel:16, originators:[{logo:'Nom de mon logo', pictureUrl: 'mon_logo.gif', url: 'http://www.mon_site_web.fr/'}]});
+
+		// Ajout de la couche KML 3
+		// viewer.getMap().addLayer("KML", "Mon parcours 3", "mon_parcours_3.kml", {minZoomLevel:3, maxZoomLevel:16, originators:[{logo:'Nom de mon logo', pictureUrl: 'mon_logo.gif', url: 'http://www.mon_site_web.fr/'}]});
+ 		
+		// Coordonnees GPS de centrage
+		viewer.getMap().setCenterAtLonLat(7.21903,48.66222,13);
+    }
+	--></script>
+    <style type="text/css">
+    <!--
+    .gpToolBoxClass .gpControlLabelClass {
+        background-color: #58a3d7;
+    }
+	/* Geoportal.Control.LayerSwitcher : */
+	.gpControlLayerSwitcher .gpControlLabelClass {
+		background-color: #58a3d7;
+		color: #FFFFFF;
+	}
+	.gpLayerNameGroupDivClass{
+		background-color: #f3f3f3;
+	}
+	.gpControlBasicLayerToolbar{
+		background-color: #58a3d7;
+	}
+    .gpToolBoxClass .gpToolBoxContentContainer div.gpToolBoxContent {
+        background-color: #f3f3f3;
+    }
+    .gpToolBoxClass .gpControlLabelClass center {
+        color: #FFFFFF;
+    }
+    .gpControlNavToolbar {
+        background-color: #f3f3f3;
+    }
+    .gpZoomBarClass {
+        background-color: #f3f3f3;
+    }
+    .gpMainMap {
+        border:3px solid #58a3d7 !important;
+    }
+	.gpControlInformation {
+        background: #58a3d7 none !important;
+    }
+    .gpLong, .gpLat {
+        background-color:#58a3d7!important;
+    }
+    .gpSelectProjections, .gpSelectUnits {
+        background-color:#58a3d7!important;
+    }
+      -->
+    </style>
+  </head>
+<body style='width:100%;height:100%;border:0;margin:0;background:url(mon_image_de_fond.jpg) no-repeat;'>
+    <div id="viewerDiv" style="width:800px;height:600px;"></div>
+  </body>
+</html>
