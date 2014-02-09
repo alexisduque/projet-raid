@@ -35,14 +35,14 @@ public class PostgreSQLDataBase{
 		Properties props = new Properties();
 		try {
 			// le fichier de proprietes doit se trouve a la racine du package ws
-			props.load(new FileInputStream("src/main/resources/geotracker.properties"));
+			props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("geotracker.properties"));
 			m_Url = props.getProperty("URL");
 			m_Driver = props.getProperty("DRIVER");
 			m_UserName = props.getProperty("USERNAME");
 			m_Password = props.getProperty("PASSWORD");
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.out.println("OracleDatabase: impossible de trouver le fichier properties");
+			System.out.println("PostgreSQLDatabase: impossible de trouver le fichier properties");
 		}
 
 		try
