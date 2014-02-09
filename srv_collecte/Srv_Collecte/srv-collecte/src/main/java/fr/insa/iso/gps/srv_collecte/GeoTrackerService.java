@@ -24,22 +24,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.text.SimpleDateFormat;
-import java.util.Properties;
-import java.util.logging.FileHandler;
 import java.util.logging.Logger;
-import java.util.logging.Formatter;
-import java.util.logging.SimpleFormatter;
-import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.io.FileInputStream;
-import java.io.PrintWriter;
-import java.io.IOException;
 
 public class GeoTrackerService {
 
-//	private OracleDataBase m_DataBase;
+	//	private OracleDataBase m_DataBase;
 	private PostgreSQLDataBase m_DataBase;
 
 	private String m_Release = "hello geotracker! release is 3.0.1 (c) Ph. Isorce";
@@ -48,9 +38,9 @@ public class GeoTrackerService {
 	private String[] m_Ids;
 	private static Logger logger = Logger.getLogger(CollectServer.class.getName());
 	private static String n_log = "";
-        private static String l_log = ""; // recevra le niveau du logger
-	
-/* Oracle
+	private static String l_log = ""; // recevra le niveau du logger
+
+	/* Oracle
 
 SQL> desc gps_positions
  Name                                      Null?    Type
@@ -68,11 +58,11 @@ SQL> desc gps_positions
 
 	 */	
 
-/*
- * MySQL
- *
- * deux tables :
- *
+	/*
+	 * MySQL
+	 *
+	 * deux tables :
+	 *
 CREATE TABLE `tracker` (
   `tracker_id` varchar(30) NOT NULL,
   PRIMARY KEY (`tracker_id`)
@@ -92,7 +82,7 @@ CREATE TABLE `gps_positions` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1$$
 
 
-*/
+	 */
 
 
 	//------------ WEB SERVICE METHODS ---------------
@@ -146,7 +136,7 @@ CREATE TABLE `gps_positions` (
 		lastPositionLog.setId(id);
 		/* Oracle 
 		m_DataBase = new OracleDataBase();		
-		*/
+		 */
 		m_DataBase = new PostgreSQLDataBase();		
 		if(m_DataBase.Connect())
 		{
@@ -211,17 +201,17 @@ CREATE TABLE `gps_positions` (
 		m_DataBase = new PostgreSQLDataBase();
 		if(m_DataBase.Connect())
 		{
-/* Oracle
+			/* Oracle
 			String sql = "SELECT * FROM gps_positions " +
 					"where idt=\'" + id + "\' AND time_stp BETWEEN to_timestamp(\'" +
 					minDate + "\', \'DD/MM/YYYY:HH24:MI:SS\') AND to_timestamp(\'" + maxDate
 					+ "\', \'DD/MM/YYYY:HH24:MI:SS\') ORDER BY time_stp asc";
-*/
-/* MySQL */
-                 String sql = "SELECT count(*) FROM gps_positions " +
-                                        "where idt=\'" + id + "\' AND time_stp BETWEEN '" +
-                                        minDate + "\' AND \'" + maxDate
-                                        + "\' ORDER BY time_stp asc";
+			 */
+			/* MySQL */
+			String sql = "SELECT count(*) FROM gps_positions " +
+					"where idt=\'" + id + "\' AND time_stp BETWEEN '" +
+					minDate + "\' AND \'" + maxDate
+					+ "\' ORDER BY time_stp asc";
 
 			ResultSet rs = m_DataBase.Requete(sql);
 			int i=0;
@@ -335,10 +325,10 @@ CREATE TABLE `gps_positions` (
 		logger.log(Level.INFO,"date : "+ dateFormat.format(dateS));
 		logger.log(Level.INFO,"traitement insertionPosition:"+message);
 		/* on va parcourir la liste des parametres du message recu
-		 
+
 			pour un NS90 : 1000000001,20120607205431,4.881658,45.780070,0,270,227,4,2
 			pour un NS10 : 2000000001,20120630065053,4.882276,45.780171,0,0,0,6,2,0.0,0,0.01,0.01,0
-		*/
+		 */
 		String[] params = message.split(",");
 		if ((params.length != NB_PARAMS_NS10) && (params.length != NB_PARAMS_NS90)) {
 			logger.log(Level.SEVERE,"message contains "+params.length);
@@ -351,16 +341,16 @@ CREATE TABLE `gps_positions` (
 		// AAAAMMJJHHMMSS on doit la convertir en 'DD/MM/YYYY:HH24:MI:SS'
 		gpsDateD = new String("");
 		if (gpsDate.length() == 14) {
-            gpsDateD =
-                    new String(gpsDate.substring(6, 8) + "/" + gpsDate.substring(4,
-                                                                             6) +
-                               "/" + gpsDate.substring(0, 4) + ":" +
-                               gpsDate.substring(8, 10) + ":" +
-                               gpsDate.substring(10, 12) + ":" +
-                               gpsDate.substring(12, 14));
-            //System.out.println(">>"+gDateD);
-        } else
-            gpsDateD = new String(dateFormatO.format(dateS));
+			gpsDateD =
+					new String(gpsDate.substring(6, 8) + "/" + gpsDate.substring(4,
+							6) +
+							"/" + gpsDate.substring(0, 4) + ":" +
+							gpsDate.substring(8, 10) + ":" +
+							gpsDate.substring(10, 12) + ":" +
+							gpsDate.substring(12, 14));
+			//System.out.println(">>"+gDateD);
+		} else
+			gpsDateD = new String(dateFormatO.format(dateS));
 		// autres parametres
 		gpsLongitude = Double.parseDouble(params[2]);
 		gpsLatitude = Double.parseDouble(params[3]);
@@ -374,12 +364,12 @@ CREATE TABLE `gps_positions` (
 			logger.log(Level.WARNING,"GPS position not valid < "+gpsNbsat+ " satellite(s) :"+message);
 			return ERROR_POS;			
 		}
-/*
+		/*
 		if (gpsEvent != EVENT_GPS) {
 			System.out.println("event other than GPS position = "+gpsEvent+ "event :"+message);
 			return ERROR_POS;			
 		}
-*/
+		 */
 		m_DataBase = this.getDataBase(); 
 		if (m_DataBase.Connect()) {			
 			/*Requete SQL de type Update*/
@@ -388,20 +378,20 @@ CREATE TABLE `gps_positions` (
 					"'"+ gpsId + "'" + "," + gpsHeading + "," +gpsSpeed + "," +  gpsAltitude + "," +             
 					gpsLatitude + "," + gpsLongitude + "," + gpsNbsat + "," + "'"+gpsDateD+"')";
 
-				logger.log(Level.INFO,"SQL:"+sql+":END:");
-				//result = m_DataBase.Update(sql);
-				result = m_DataBase.Update(sql);
-				if (result == 0)
-					logger.log(Level.INFO,"Status = OK");
-				else
-					logger.log(Level.WARNING,"Status = NOK");
-				m_DataBase.Close();
+			logger.log(Level.INFO,"SQL:"+sql+":END:");
+			//result = m_DataBase.Update(sql);
+			result = m_DataBase.Update(sql);
+			if (result == 0)
+				logger.log(Level.INFO,"Status = OK");
+			else
+				logger.log(Level.WARNING,"Status = NOK");
+			m_DataBase.Close();
 		} else {
 			logger.log(Level.WARNING,"disable to connect to database");
-	  	}
+		}
 		return result;
 	}	
-	
+
 	private PostgreSQLDataBase getM_DataBase() {
 		return m_DataBase;
 	}

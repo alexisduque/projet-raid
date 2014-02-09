@@ -8,15 +8,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.FileHandler;
 import java.util.logging.Logger;
-import java.util.logging.Formatter;
-import java.util.logging.SimpleFormatter;
-import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
-
-
 
 public class PostgreSQLDataBase{
 
@@ -42,14 +35,14 @@ public class PostgreSQLDataBase{
 		Properties props = new Properties();
 		try {
 			// le fichier de proprietes doit se trouve a la racine du package ws
-			props.load(new FileInputStream("src/main/resources/geotracker.properties"));
+			props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("geotracker.properties"));
 			m_Url = props.getProperty("URL");
 			m_Driver = props.getProperty("DRIVER");
 			m_UserName = props.getProperty("USERNAME");
 			m_Password = props.getProperty("PASSWORD");
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.out.println("OracleDatabase: impossible de trouver le fichier properties");
+			System.out.println("PostgreSQLDatabase: impossible de trouver le fichier properties");
 		}
 
 		try

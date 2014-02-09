@@ -209,7 +209,7 @@ class CollectClient extends Thread
                 Properties props = new Properties();
                 try {
                         // le fichier de proprietes doit se trouve a la racine du package ws
-                        props.load(new FileInputStream("geotracker.properties"));
+                        props.load(new FileInputStream("/geotracker.properties"));
                         n_log = props.getProperty("LOG");
                 } catch (IOException e) {
                         e.printStackTrace();
