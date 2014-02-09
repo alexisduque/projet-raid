@@ -1,4 +1,14 @@
 #!/bin/bash
+#
+# Mets à jours les sources depuis le dépot .git
+# Package avec Maven
+# Copie le jar dans le home
+# Lance le serveur en arrière plan avec nohup
+#
+#  !!! Prévoir d'ajouter sa clé ssh à bitbucket pour le pull !!!
+#
+#
+
 cd ~
 if [ -f srv*.jar ]
 then
@@ -12,6 +22,11 @@ then
     mkdir logs;
 fi
 
+if [ ! -d projet-raid ]
+then
+	echo 'Clone du repo';
+    git clone git@bitbucket.org:teamtcprojetraid/projet-raid.git;
+fi
 cd projet-raid
 echo 'Pulling repo ...'
 git pull
