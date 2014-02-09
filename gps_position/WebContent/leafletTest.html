@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+<link rel="stylesheet" href="./leafletTest.css" />
+<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+
+<script src="js/Label.js"></script>
+<script src="js/BaseMarkerMethods.js"></script>
+<script src="js/Marker.Label.js"></script>
+<script src="js/CircleMarker.Label.js"></script>
+<script src="js/Path.Label.js"></script>
+<script src="js/Map.Label.js"></script>
+<script src="js/FeatureGroup.Label.js"></script>
+</head>
+<body>
+<div id="messages"></div>
+<div id="map"></div>
+<script type="text/javascript">
+//Your IGN Géoportail Api Key
+var ignApiKey = "039dzrv50i1j8f7ad3wg1b2y"; //039dzrv50i1j8f7ad3wg1b2y ou 1n0k1kdcpneae443vb3n9y2z
+
+//set up the map
+map = new L.Map('map');
+
+// Openstreet Map Layer
+var osmUrl="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+var osmAttrib='Map data © OpenStreetMap contributors';
+var osm = new L.TileLayer(osmUrl, {minZoom: 3, maxZoom: 18, attribution: osmAttrib});	
+
+//IGN Topo Scan Express Standard
+var scanWmtsUrl	= "http://gpp3-wxs.ign.fr/"+ignApiKey + "/wmts?LAYER=GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN-EXPRESS.STANDARD&EXCEPTIONS=text/xml&FORMAT=image/jpeg&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&STYLE=normal&TILEMATRIXSET=PM&&TILEMATRIX={z}&TILECOL={x}&TILEROW={y}" ;
+var SCAN25= new L.tileLayer(scanWmtsUrl, {attribution: '&copy; <a href="http://www.ign.fr/">IGN</a>'});
+
+map.setView([45.761430,4.849951], 6);
+map.addLayer(osm);
+
+function onEachFeature(feature, layer) {
+    // does this feature have a property named popupContent?
+    if (feature.properties && feature.properties.name) {
+        layer.bindLabel(feature.properties.name,{ noHide: true });
+    }
+}
+function pointToLayer (feature, latlng) {
+	if (feature.geometry.type=="Point"){
+		return L.circleMarker(latlng, {
+			radius: 5,
+			fillColor: "#00008A",
+			color: "#000",
+			weight: 1,
+			opacity: 1,
+			fillOpacity: 0.8
+		});	
+	}
+
+}
+
+//L.geoJson(trace,{
+//	onEachFeature: onEachFeature,
+//	pointToLayer: pointToLayer
+//}).addTo(map);
+
+</script>
+  <script type="text/javascript">
+    var webSocket = 
+      new WebSocket('ws://localhost:8080/GPSPositions/websocketgpsbis');
+
+    webSocket.onerror = function(event) {
+      onError(event)
+    };
+
+    webSocket.onopen = function(event) {
+      onOpen(event)
+    };
+
+    webSocket.onmessage = function(event) {
+      onMessage(event)
+    };
+
+    function onMessage(event) {
+        document.getElementById('messages').innerHTML 
+        = event.data;
+        var geoJsonMessage = eval('(' + event.data + ')');
+      L.geoJson(geoJsonMessage,{
+    		onEachFeature: onEachFeature,
+    		pointToLayer: pointToLayer
+    	}).addTo(map);
+    }
+
+    function onOpen(event) {
+      document.getElementById('messages').innerHTML 
+        = 'Connection established';
+      webSocket.send('hello');
+    }
+
+    function onError(event) {
+      alert(event.data);
+    }
+
+
+
+  </script>
+</body>
+</html>
