@@ -49,12 +49,12 @@ public class CollectServer
 			else 
 				port = new Integer(args[0]); // sinon il s'agit du numero de port passe en argument
 
-			new CollectCLI(socketServ); // lance le thread de gestion des commandes
-
 			ServerSocket ss = new ServerSocket(port.intValue()); // ouverture d'un socket serveur sur port
       			logger.log(Level.WARNING,"starting on port "+port);
 			printWelcome(port);
-		
+
+			new CollectCLI(socketServ); // lance le thread de gestion des commandes
+
 			while (true) // attente en boucle de connexion (bloquant sur ss.accept)
 			{
 				Socket sc = ss.accept(); // un client se connecte, un nouveau thread client est lance
@@ -189,16 +189,16 @@ public class CollectServer
 
 	public static void setLogger()
 	{
-	    	FileHandler fh;
-                Properties props = new Properties();
-                try {
-                        // le fichier de proprietes doit se trouve a la racine du package ws
-                        props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("geotracker.properties"));
-                        n_log = props.getProperty("LOG");
-                } catch (IOException e) {
-                        e.printStackTrace();
-                        System.out.println("impossible de trouver le fichier properties");
-                }
+	    FileHandler fh;
+        Properties props = new Properties();
+        try {
+            // le fichier de proprietes doit se trouve a la racine du package ws
+            props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("geotracker.properties"));
+            n_log = props.getProperty("LOG");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("impossible de trouver le fichier properties");
+        }
 
 		// pour stopper les logs sur la console ou les parents
 		logger.setUseParentHandlers(false);

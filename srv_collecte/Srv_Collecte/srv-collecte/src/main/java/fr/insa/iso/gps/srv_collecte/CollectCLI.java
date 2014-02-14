@@ -13,6 +13,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.Formatter;
+import java.util.logging.SimpleFormatter;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.*;
 import java.net.*;
 
@@ -21,16 +28,18 @@ import java.net.*;
 class CollectCLI implements Runnable
 {	
 	CollectServer _socketServ; // pour utilisation des methodes de la classe principale
-	int port; // port d'ecoute du CLI
+	int portCLI; // port d'ecoute du CLI
 	BufferedReader _in; // pour gestion du flux d'entree (celui de la console)
 	String _strCommande=""; // contiendra la commande tapee au clavier
 	Thread _t; // contiendra le thread
 	Integer[] _clients;
+	public static Logger logger = Logger.getLogger(CollectServer.class.getName());
+
 	//** Constructeur : initialise les variables necessaires **
 	CollectCLI(CollectServer socketServ)
 	{
 		_socketServ = socketServ; // passage de local en global
-		this.port = 2948;
+		this.portCLI = 2948;
 		_t = new Thread(this); // instanciation du thread
 		_t.start(); // demarrage du thread, la fonction run() est ici lancee
 	}
@@ -41,17 +50,19 @@ class CollectCLI implements Runnable
 		Socket sockCLI;
 		try
 		{
-			ServerSocket socketEcoute =  new ServerSocket(port);
-			System.out.println 
-			  ("CLI(" + Thread.currentThread()  + ") attend une connection sur " + port );
+			ServerSocket socketEcoute =  new ServerSocket(portCLI);
+			System.out.println("----------------------------------------");
+			System.out.println("CLI(" + Thread.currentThread() + ")");
+			System.out.println("----------------------------------------");
+			System.out.println("Demarre sur le port : "+ portCLI);
 
 		    while (true)
 		    {
 				Socket sc = socketEcoute.accept(); // un client se connecte, un nouveau thread client est lance
-      			//logger.log(Level.WARNING,"nouveau client");
-      			//logger.log(Level.INFO,"timeout actif");
+      			logger.log(Level.WARNING,"Nouveau client CLI");
+      			logger.log(Level.INFO,"timeout actif");
 				sc.setSoTimeout(180*1000);
-				CLI_TCP_Thread _clientCLI = new CLI_TCP_Thread(sc);
+				CLI_TCP_Thread _clientCLI = new CLI_TCP_Thread(sc, _socketServ);
 				_clientCLI.start();
 		    }
 		}
@@ -59,26 +70,53 @@ class CollectCLI implements Runnable
 		{
 		  e.printStackTrace();
 		}
-	      
-		try
-		{
+	}
 
-			// si aucune commande n'est tappee, on ne fait rien (bloquant sur _in.readLine())
-			while ((_strCommande=_in.readLine())!=null)
-			{
+}
+
+class CLI_TCP_Thread extends Thread
+{
+  Socket sockThread;
+  String name;
+  CollectServer _socketServ;
+
+  public CLI_TCP_Thread (Socket Le_Socket, CollectServer collectServer)
+    {
+      this.sockThread = Le_Socket;
+      this.name ="CollectServer CLI";
+      this._socketServ = collectServer;
+    }
+  
+  public void run()
+    {
+    	try 
+		{
+			PrintWriter output  = new PrintWriter(sockThread.getOutputStream());
+        	InputStreamReader input = new InputStreamReader(sockThread.getInputStream());
+	 		BufferedReader binput   = new BufferedReader(input);
+	  
+	  		String _strCommande;
+
+	  		while ((_strCommande = binput.readLine()) != null)
+	   		{
+	      		output.print("-> ");
+	      		output.println(_strCommande);
+	      		output.flush();
+	  			System.out.println ("CLI(" + Thread.currentThread() + ") a recu :"  + _strCommande);
+
 				if (_strCommande.equalsIgnoreCase("quit")) // commande "quit" detectee ...
 					System.exit(0); // ... on ferme alors le serveur pas bon
 				else if(_strCommande.equalsIgnoreCase("total")) // commande "total" detectee ...
 				{
 					// ... on affiche le nombre de clients actuellement connectes
-					System.out.println("Nombre de devices connectes : "+_socketServ.getNbClients());
-					System.out.println("---------------------------------");
+					output.println(this.name + "-> : Nombre de devices connectes : "+_socketServ.getNbClients());
+					output.println(this.name + "-> : ---------------------------------");
 				}
 				else if(_strCommande.equalsIgnoreCase("list")) // commande "list" detectee ...
 				{
 					// ... on affiche les infos des clients actuellement connectes
-					System.out.println("Nombre de devices connectes : "+_socketServ.getNbClients());
-					System.out.println("---------------------------------");
+					output.println(this.name + "-> :Nombre de devices connectes : "+_socketServ.getNbClients());
+					output.println(this.name + "-> :---------------------------------");
 					_socketServ.listAllClients();
 				}
 				else if(_strCommande.equalsIgnoreCase("getinfo")) // commande "getinfo" detectee ...
@@ -203,49 +241,17 @@ class CollectCLI implements Runnable
 					// ... on deconnecte les clients actuellement connectes
 					_socketServ.delAllClients();
 					// ... on affiche le nombre de clients actuellement connectes
-					System.out.println("Nombre de devices connectes : "+_socketServ.getNbClients());
-					System.out.println("---------------------------------");
+					output.println(this.name + "-> :Nombre de devices connectes : "+_socketServ.getNbClients());
+					output.println(this.name + "-> :---------------------------------");
 				}
 				else
 				{
-					_socketServ.printCommandes();
+					printCommandes(output);
 				}
-				System.out.flush(); // on affiche tout ce qui est en attente dans le flux
+				output.flush();
+				//System.out.flush(); // on affiche tout ce qui est en attente dans le flux
 			}
-		}
-		catch (IOException e) {
-			System.out.println(e.toString());
-		}
-	}
 
-}
-
-class CLI_TCP_Thread extends Thread
-{
-  Socket sockThread;
-
-  public CLI_TCP_Thread (Socket Le_Socket)
-    {
-      this.sockThread = Le_Socket;
-    }
-  
-  public void run()
-    {
-    	try 
-		{
-			PrintWriter output  = new PrintWriter(sockThread.getOutputStream());
-        	InputStreamReader input = new InputStreamReader(sockThread.getInputStream());
-	 		BufferedReader binput   = new BufferedReader(input);
-	  
-	  		String temp;
-
-	  		while ((temp = binput.readLine()) != null)
-	   		{
-	      		output.print(this.getName() + " repond -> ");
-	      		output.println(temp);
-	      		output.flush();
-	  			System.out.println ("Serveur CLI(" + Thread.currentThread() + ") a recu :"  + temp);
-	    	}	
 		}
       	catch (Exception e)
 		{
@@ -256,11 +262,37 @@ class CLI_TCP_Thread extends Thread
 	  		try 
 	    	{
 			    sockThread.close();
-				System.out.println ("Fils Serveur " + Thread.currentThread()  + " : Fin !!! ");
+				System.out.println ("CLI" + Thread.currentThread()  + " : Logout !!! ");
 	  		} 
 	  		catch (IOException e)
 	    	{
 	    	}
 		}
     }
+
+    public void printCommandes(PrintWriter output)
+	{		
+		output.println("--------------------------------------------------");
+		output.println("Liste des commandes possibles:");
+		output.println("getinfo: \t Obtenir les indentifiants");
+		output.println("getlocation: \t Obtenir la position GPS");
+		output.println("getsim: \t Obtenir les parametres SIM ");
+		output.println("getimei: \t Obtenir les parametres IMEI");
+		output.println("getradio: \t Obtenir les parametres 2G/3G");
+		output.println("getversion: \t Obtenir la version du firmware");
+		output.println("setconf: \t Configurer les parametres TCP");
+		output.println("getconf: \t Obtenir les parametres TCP");
+		output.println("settrack: \t Configurer le suivi rapide (30s et 100m) GPS");
+		output.println("setnav: \t Configurer le suivi lent (120s) GPS");
+		output.println("gettrack: \t Obtenir les parametres du tracking GPS");
+		output.println("resettrack: \t Arret du tracking GPS");
+		output.println("setevent: \t Configurer le geofencing GPS");
+		output.println("resetevent: \t Arret du geofencing GPS");
+		output.println("clearbuffer: \t Vider le buffer des donnees GPS");
+		output.println("disconnect: \t Fermer les connexions TCP");
+		output.println("list: \t\t Liste les devices connectes");
+		output.println("total: \t\t Nombre de devices connectes");
+		output.println("quit: \t\t Quitter");
+		output.println("--------------------------------------------------");
+	}
 }
