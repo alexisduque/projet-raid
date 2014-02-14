@@ -61,9 +61,9 @@ class CollectClient extends Thread
 	private int deviceType = 0; // 0 -> device nomadic 1-> device teltonika 
 	private GPSNomadic nClient;
 	private GPSTeltonika tClient;
-        private static FileHandler fh;
-        private static String n_log = ""; // recevra le nom du fichier du log
-        private static String l_log = ""; // recevra le niveau du logger
+    private static FileHandler fh;
+    private static String n_log = ""; // recevra le nom du fichier du log
+    private static String l_log = ""; // recevra le niveau du logger
   	public static Logger logger = Logger.getLogger(CollectServer.class.getName());
 
 
