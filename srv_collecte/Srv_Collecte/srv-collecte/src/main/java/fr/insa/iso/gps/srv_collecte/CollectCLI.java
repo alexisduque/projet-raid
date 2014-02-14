@@ -260,7 +260,8 @@ class CLI_TCP_Thread extends Thread
 				}
 				else
 				{
-					printCommandes(output);
+					output.println(this.name + "-> Commande Inconnue !!");
+					//printCommandes(output);
 				}
 				output.flush();
 				//System.out.flush(); // on affiche tout ce qui est en attente dans le flux
