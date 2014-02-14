@@ -79,7 +79,7 @@ class CLI_TCP_Thread extends Thread
   Socket sockThread;
   String name;
   CollectServer _socketServ;
-
+  public PrintWriter output;
   public CLI_TCP_Thread (Socket Le_Socket, CollectServer collectServer)
     {
       this.sockThread = Le_Socket;
@@ -91,7 +91,7 @@ class CLI_TCP_Thread extends Thread
     {
     	try 
 		{
-			PrintWriter output  = new PrintWriter(sockThread.getOutputStream());
+			output  = new PrintWriter(sockThread.getOutputStream());
         	InputStreamReader input = new InputStreamReader(sockThread.getInputStream());
 	 		BufferedReader binput   = new BufferedReader(input);
 	  
@@ -109,15 +109,13 @@ class CLI_TCP_Thread extends Thread
 				else if(_strCommande.equalsIgnoreCase("total")) // commande "total" detectee ...
 				{
 					// ... on affiche le nombre de clients actuellement connectes
-					output.println(this.name + "-> : Nombre de devices connectes : "+_socketServ.getNbClients());
-					output.println(this.name + "-> : ---------------------------------");
+					output.println(this.name + "-> Nombre de devices connectes : "+_socketServ.getNbClients());
 				}
 				else if(_strCommande.equalsIgnoreCase("list")) // commande "list" detectee ...
 				{
 					// ... on affiche les infos des clients actuellement connectes
-					output.println(this.name + "-> :Nombre de devices connectes : "+_socketServ.getNbClients());
-					output.println(this.name + "-> :---------------------------------");
-					_socketServ.listAllClients();
+					output.println(this.name + "-> Nombre de devices connectes : "+_socketServ.getNbClients());
+					_socketServ.listAllClients(output);
 				}
 				else if(_strCommande.equalsIgnoreCase("getinfo")) // commande "getinfo" detectee ...
 				{
@@ -125,6 +123,7 @@ class CLI_TCP_Thread extends Thread
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux devices actuellement connectes
 					_socketServ.sendAll("$WP+UNCFG=0000,?","\r\n"+charCur[0]);
+					output.println(this.name + "-> $WP+UNCFG=0000,?");
 					//_socketServ.sendAll("1001 ophone getstatus","\r\n"+charCur[0]);
 				}
 				else if(_strCommande.equalsIgnoreCase("getlocation")) // commande "getlocation" detectee ...
@@ -133,6 +132,8 @@ class CLI_TCP_Thread extends Thread
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
 					_socketServ.sendAll("$WP+GETLOCATION=0000","\r\n"+charCur[0]);
+					output.println(this.name + "-> $WP+GETLOCATION=0000");
+
 					//_socketServ.sendAll("getgps","\r\n"+charCur[0]);
 				}
 				else if(_strCommande.equalsIgnoreCase("setconf")) // commande "setconf" detectee ...
@@ -141,6 +142,7 @@ class CLI_TCP_Thread extends Thread
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
 					_socketServ.sendAll("$WP+COMMTYPE=0000,4,,,Free,,,62.39.82.98,42400,0,212.27.40.241","\r\n"+charCur[0]);
+					output.println(this.name + "-> $WP+COMMTYPE=0000,4,,,Free,,,62.39.82.98,42400,0,212.27.40.241");
 				}
 				else if(_strCommande.equalsIgnoreCase("getconf")) // commande "getconf" detectee ...
 				{
@@ -148,6 +150,7 @@ class CLI_TCP_Thread extends Thread
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
 					_socketServ.sendAll("$WP+COMMTYPE=0000,?","\r\n"+charCur[0]);
+					output.println(this.name + "-> $WP+COMMTYPE=0000,?");
 					//_socketServ.sendAll("getstatus","\r\n"+charCur[0]);
 				}
 				else if(_strCommande.equalsIgnoreCase("setevent")) // commande "setevent" detectee ...
@@ -156,6 +159,7 @@ class CLI_TCP_Thread extends Thread
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
 					_socketServ.sendAll("$WP+SETEVT=0000,50,1,4.882023,45.780110,500,2,2","\r\n"+charCur[0]);
+					output.println(this.name + "-> $WP+SETEVT=0000,50,1,4.882023,45.780110,500,2,2");
 				}
 				else if(_strCommande.equalsIgnoreCase("resetevent")) // commande "resetevent" detectee ...
 				{
@@ -163,6 +167,7 @@ class CLI_TCP_Thread extends Thread
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
 					_socketServ.sendAll("$WP+CLREVT=0000,50","\r\n"+charCur[0]);
+					output.println(this.name + "-> $WP+CLREVT=0000,50");
 				}
 				else if(_strCommande.equalsIgnoreCase("clearbuffer")) // commande "clearbuffer" detectee ...
 				{
@@ -171,6 +176,7 @@ class CLI_TCP_Thread extends Thread
 					// ... on envoie le message aux clients actuellement connectes
 					// on va vider le buffer de la pile des positions enregistres dans device
 					_socketServ.sendAll("$WP+QBCLR=0000","\r\n"+charCur[0]);
+					output.println(this.name + "-> $WP+QBCLR=0000");
 				}
 				else if(_strCommande.equalsIgnoreCase("settrack")) // commande "settrack" detectee ...
 				{
@@ -180,6 +186,7 @@ class CLI_TCP_Thread extends Thread
 					// si le signal GPS est valide et si la distance a change de 10m
 					// le device envoie sa position en continu toutes les 120s
 					_socketServ.sendAll("$WP+TRACK=0000,3,30,100,0,0,4,15","\r\n"+charCur[0]);
+					output.println(this.name + "-> $WP+TRACK=0000,3,30,100,0,0,4,15");
 				}
 				else if(_strCommande.equalsIgnoreCase("setnav")) // commande "setnav" detectee ...
 				{
@@ -189,6 +196,7 @@ class CLI_TCP_Thread extends Thread
 					// si le signal GPS est valide et si la distance a change de 10m
 					// le device envoie sa position en continu toutes les 120s
 					_socketServ.sendAll("$WP+TRACK=0000,1,120,100,0,0,4,0","\r\n"+charCur[0]);
+					output.println(this.name + "-> $WP+TRACK=0000,1,120,100,0,0,4,0");
 				}
 				else if(_strCommande.equalsIgnoreCase("gettrack")) // commande "gettrack" detectee ...
 				{
@@ -196,6 +204,7 @@ class CLI_TCP_Thread extends Thread
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
 					_socketServ.sendAll("$WP+TRACK=0000,?","\r\n"+charCur[0]);
+					output.println(this.name + "-> $WP+TRACK=0000,?");
 				}
 				else if(_strCommande.equalsIgnoreCase("resettrack")) // commande "resettrack" detectee ...
 				{
@@ -203,6 +212,7 @@ class CLI_TCP_Thread extends Thread
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
 					_socketServ.sendAll("$WP+TRACK=0000,0","\r\n"+charCur[0]);
+					output.println(this.name + "-> $WP+TRACK=0000,0");
 				}
 				else if(_strCommande.equalsIgnoreCase("getsim")) // commande "getsim" detectee ...
 				{
@@ -211,6 +221,7 @@ class CLI_TCP_Thread extends Thread
 					// ... on envoie le message aux clients actuellement connectes
 					_socketServ.sendAll("$WP+SIMID=0000,?","\r\n"+charCur[0]);
 				//	_socketServ.sendAll("getsim","\r\n"+charCur[0]);
+					output.println(this.name + "-> :$WP+SIMID=0000,?");
 				}
 				else if(_strCommande.equalsIgnoreCase("getimei")) // commande "getimei" detectee ...
 				{
@@ -219,6 +230,7 @@ class CLI_TCP_Thread extends Thread
 					// ... on envoie le message aux clients actuellement connectes
 					_socketServ.sendAll("$WP+IMEI=0000,?","\r\n"+charCur[0]);
 					//_socketServ.sendAll("getimei","\r\n"+charCur[0]);
+					output.println(this.name + "-> $WP+IMEI=0000,?");
 				}
 				else if(_strCommande.equalsIgnoreCase("getradio")) // commande "getradio" detectee ...
 				{
@@ -227,6 +239,7 @@ class CLI_TCP_Thread extends Thread
 					// ... on envoie le message aux clients actuellement connectes
 					_socketServ.sendAll("$WP+GSMINFO=0000,?","\r\n"+charCur[0]);
 					//_socketServ.sendAll("1001 ophone getops","\r\n"+charCur[0]);
+					output.println(this.name + "-> $WP+GSMINFO=0000,?");
 				}
 				else if(_strCommande.equalsIgnoreCase("getversion")) // commande "getversion" detectee ...
 				{
@@ -234,6 +247,7 @@ class CLI_TCP_Thread extends Thread
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
 					_socketServ.sendAll("$WP+VER","\r\n"+charCur[0]);
+					output.println(this.name + "-> $WP+VER");
 					//_socketServ.sendAll("1001 ophone getops","\r\n"+charCur[0]);
 				}
 				else if(_strCommande.equalsIgnoreCase("disconnect")) // commande "getradio" detectee ...

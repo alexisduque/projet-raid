@@ -78,31 +78,6 @@ public class CollectServer
 		System.out.println("----------------------------------------");
 		System.out.println("Demarre sur le port : "+port.toString());
 	}
-	synchronized public void printCommandes()
-	{		
-		System.out.println("--------------------------------------------------");
-		System.out.println("Liste des commandes possibles:");
-		System.out.println("getinfo: \t Obtenir les indentifiants");
-		System.out.println("getlocation: \t Obtenir la position GPS");
-		System.out.println("getsim: \t Obtenir les parametres SIM ");
-		System.out.println("getimei: \t Obtenir les parametres IMEI");
-		System.out.println("getradio: \t Obtenir les parametres 2G/3G");
-		System.out.println("getversion: \t Obtenir la version du firmware");
-		System.out.println("setconf: \t Configurer les parametres TCP");
-		System.out.println("getconf: \t Obtenir les parametres TCP");
-		System.out.println("settrack: \t Configurer le suivi rapide (30s et 100m) GPS");
-		System.out.println("setnav: \t Configurer le suivi lent (120s) GPS");
-		System.out.println("gettrack: \t Obtenir les parametres du tracking GPS");
-		System.out.println("resettrack: \t Arret du tracking GPS");
-		System.out.println("setevent: \t Configurer le geofencing GPS");
-		System.out.println("resetevent: \t Arret du geofencing GPS");
-		System.out.println("clearbuffer: \t Vider le buffer des donnees GPS");
-		System.out.println("disconnect: \t Fermer les connexions TCP");
-		System.out.println("list: \t\t Liste les devices connectes");
-		System.out.println("total: \t\t Nombre de devices connectes");
-		System.out.println("quit: \t\t Quitter");
-		System.out.println("--------------------------------------------------");
-	}
 
 	//** Methode : envoie le message GETLOCATION a tous les clients **
 	synchronized public void sendAll(String message,String sLast)
@@ -148,15 +123,15 @@ public class CollectServer
       			logger.log(Level.INFO,"met a jour client:"+sid);
 		}
 	}
-	synchronized public void listAllClients()
+	synchronized public void listAllClients(PrintWriter output)
 	{
 		
 		for (int i = 0;i < _nbClients;i++) {
 			if (_sockClients.elementAt(i).getSocket() != null) { 
 				if (_sockClients.elementAt(i).getType() == 0)
-					System.out.println("rg:"+i+", id:"+_sockClients.elementAt(i).getId()+", type:nomadic") ;
+					output.println("rg:"+i+", id:"+_sockClients.elementAt(i).getId()+", type:nomadic") ;
 				else
-					System.out.println("rg:"+i+", id:"+_sockClients.elementAt(i).getId()+", type:teltonika") ;
+					output.println("rg:"+i+", id:"+_sockClients.elementAt(i).getId()+", type:teltonika") ;
 			}
 			// on affiche les infos du client sur la console
 		}

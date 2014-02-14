@@ -53,7 +53,7 @@ class CollectConsole implements Runnable
 					// ... on affiche les infos des clients actuellement connectes
 					System.out.println("Nombre de devices connectes : "+_socketServ.getNbClients());
 					System.out.println("---------------------------------");
-					_socketServ.listAllClients();
+					//_socketServ.listAllClients();
 				}
 				else if(_strCommande.equalsIgnoreCase("getinfo")) // commande "getinfo" detectee ...
 				{
@@ -182,7 +182,7 @@ class CollectConsole implements Runnable
 				}
 				else
 				{
-					_socketServ.printCommandes();
+					//_socketServ.printCommandes();
 				}
 				System.out.flush(); // on affiche tout ce qui est en attente dans le flux
 			}
