@@ -32,10 +32,10 @@ public class CollectServer
 	private Vector<PrintWriter> _tabClients = new Vector<PrintWriter>(); // contiendra tous les flux de sortie vers les clients
 	private Vector<CClient> _sockClients = new Vector<CClient>();
 	private int _nbClients=0; // nombre total de clients connectes
-        public static Logger logger = Logger.getLogger(CollectServer.class.getName());
+    public static Logger logger = Logger.getLogger(CollectServer.class.getName());
 	private static FileHandler fh;
-        private static String n_log = ""; // recevra le nom du fichier du log
-        private static String l_log = ""; // recevra le niveau du logger
+    private static String n_log = ""; // recevra le nom du fichier du log
+    private static String l_log = ""; // recevra le niveau du logger
 
 	//** Methode : la premiere methode executee, elle attend les connections **
 	public static void main(String args[]) 
@@ -49,8 +49,8 @@ public class CollectServer
 			else 
 				port = new Integer(args[0]); // sinon il s'agit du numero de port passe en argument
 
-			new CollectConsole(socketServ); // lance le thread de gestion des commandes
-			// on pourrait creer objet OracleDataBase ici et commun a tous les thread RAF
+			new CollectCLI(socketServ); // lance le thread de gestion des commandes
+
 			ServerSocket ss = new ServerSocket(port.intValue()); // ouverture d'un socket serveur sur port
       			logger.log(Level.WARNING,"starting on port "+port);
 			printWelcome(port);
