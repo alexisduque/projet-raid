@@ -17,15 +17,19 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+import org.junit.Ignore;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+import org.junit.Before;
 
 /**
  * Unit test for simple App.
  */
+@RunWith(JUnit4.class)
 public class AppTest 
-extends TestCase
 {
     public static Properties props = new Properties();
     public static InputStream properties;
@@ -34,55 +38,54 @@ extends TestCase
     public static String passwd;
     public static String user;
     public static String log;
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
+    @Before
+    public void setup(){
+
+        try {
+            properties = Thread.currentThread().getContextClassLoader().getResourceAsStream("geotracker.properties");
+            props.load(properties);
+            url = props.getProperty("URL");
+            driver = props.getProperty("DRIVER");
+            user = props.getProperty("USERNAME");
+            passwd = props.getProperty("PASSWORD");
+            log = props.getProperty("LOG");
+        }
+        catch (IOException | NullPointerException e) {
+            fail("Impossible d'acceder au fichie properties");
+        }
     }
 
     /**
      * Config File Test :-)
-     * @throws IOException
      *  
      */
+    @Test
     public void testProperties() throws IOException
     {
         
-        assertNotNull("Impossible d'acceder au fichier de configuration",properties = Thread.currentThread().getContextClassLoader().getResourceAsStream("geotracker.properties"));
-        props.load(properties);
-        assertNotNull("Fichier de config incorrect", url = props.getProperty("URL"));
-        assertNotNull("Fichier de config incorrect", driver = props.getProperty("DRIVER"));
-        assertNotNull("Fichier de config incorrect", user = props.getProperty("USERNAME"));
-        assertNotNull("Fichier de config incorrect", passwd = props.getProperty("PASSWORD"));
-        assertNotNull("Fichier de config incorrect", log = props.getProperty("LOG"));
+        assertNotNull("Impossible d'acceder au fichier de configuration",properties);
+        assertNotNull("Fichier de config incorrect", url);
+        assertNotNull("Fichier de config incorrect", driver);
+        assertNotNull("Fichier de config incorrect", user);
+        assertNotNull("Fichier de config incorrect", passwd);
+        assertNotNull("Fichier de config incorrect", log);
     }
 
     /**
      * Log File Test :-)
-     * @throws IOException
      *  
      */
+    @Test
     public void testLog() throws IOException
     {
         FileHandler fh;
-        assertNotNull("Fichier de config incorrect", log);
+        assertNotNull("Fichier de config incorrect " + log, log = props.getProperty("LOG"));
         try {
              fh = new FileHandler(log);
              fh.close();
         } catch (SecurityException | IOException e) {
-            fail("Impossible d'ecrire le fichier de log");
+            fail("Impossible d'ecrire le fichier de log : " + log);
         }
     }
     
@@ -92,11 +95,12 @@ extends TestCase
      * @throws IOException
      *  
      */
-    public static void testDatabase() throws ClassNotFoundException, SQLException
+    @Test
+    public void testDatabase() throws ClassNotFoundException, SQLException
     {
         Connection m_Connection;
         PostgreSQLDataBase n_DataBase = new PostgreSQLDataBase();
-        assertNotNull("Driver JDBC introuvble", Class.forName(props.getProperty("DRIVER")));
+        assertNotNull("Driver JDBC introuvble" + driver, Class.forName(driver));
         assertNotNull(m_Connection = DriverManager.getConnection(url, user, passwd));
         assertNotNull(m_Connection.createStatement());
         
