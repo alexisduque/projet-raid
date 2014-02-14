@@ -82,7 +82,7 @@ public class AppTest
         FileHandler fh;
         assertNotNull("Fichier de config incorrect " + log, log = props.getProperty("LOG"));
         try {
-             fh = new FileHandler(log);
+             fh = new FileHandler("%h/"+log, true);
              fh.close();
         } catch (SecurityException | IOException e) {
             fail("Impossible d'ecrire le fichier de log : " + log);
