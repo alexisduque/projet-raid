@@ -144,8 +144,13 @@ class CollectClient extends Thread
 					// on ajoute le type du device et son id
 					// a la table des clients du serveur
 					_socketServ.updateClient(_numClient, deviceType, _id_Device); // on met a jour le client de la liste
-					n_Service.insertPosition(nClient.getMessage());
-
+					//si le message commence par $0K(message du GPS) on redirige vers CLI
+					if (nCLient.getMessage().startsWtih("$") {
+						_socketServ.
+						nClient.getMessage();
+					} else {
+						n_Service.insertPosition(nClient.getMessage());
+					}
 					continue;
 				}
 				// traitement specifique pour les devices teltonika
