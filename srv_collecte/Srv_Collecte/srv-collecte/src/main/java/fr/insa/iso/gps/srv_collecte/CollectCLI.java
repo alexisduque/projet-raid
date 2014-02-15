@@ -52,14 +52,14 @@ class CollectCLI implements Runnable
 		{
 			ServerSocket socketEcoute =  new ServerSocket(portCLI);
 			System.out.println("----------------------------------------");
-			System.out.println("CLI(" + Thread.currentThread() + ")");
+			System.out.println("Attend client CLI sur le port : "+ portCLI);
 			System.out.println("----------------------------------------");
-			System.out.println("Demarre sur le port : "+ portCLI);
-
+			logger.log(Level.WARNING,"Attente client CLI sur le port: " + portCLI);
 		    while (true)
 		    {
 				Socket sc = socketEcoute.accept(); // un client se connecte, un nouveau thread client est lance
       			logger.log(Level.WARNING,"Nouveau client CLI");
+      			logger.log(Level.INFO,"IP client CLI: " +sc.getRemoteSocketAddress());
       			logger.log(Level.INFO,"timeout actif");
 				sc.setSoTimeout(180*1000);
 				CLI_TCP_Thread _clientCLI = new CLI_TCP_Thread(sc, _socketServ);
@@ -76,18 +76,19 @@ class CollectCLI implements Runnable
 
 class CLI_TCP_Thread extends Thread
 {
-  Socket sockThread;
-  String name;
-  CollectServer _socketServ;
-  public PrintWriter output;
-  public CLI_TCP_Thread (Socket Le_Socket, CollectServer collectServer)
+  	Socket sockThread;
+  	String name;
+ 	CollectServer _socketServ;
+  	public PrintWriter output;
+	public static Logger logger = Logger.getLogger(CollectServer.class.getName());
+  	public CLI_TCP_Thread (Socket Le_Socket, CollectServer collectServer)
     {
       this.sockThread = Le_Socket;
       this.name ="CollectServer CLI";
       this._socketServ = collectServer;
     }
   
-  public void run()
+  	public void run()
     {
     	try 
 		{
@@ -99,26 +100,33 @@ class CLI_TCP_Thread extends Thread
 
 	  		while ((_strCommande = binput.readLine()) != null)
 	   		{
-	      		output.print("-> ");
-	      		output.println(_strCommande);
+	      		//output.print("-> ");
+	      		//output.println(_strCommande);
 	      		output.flush();
-	  			System.out.println ("CLI(" + Thread.currentThread() + ") a recu :"  + _strCommande);
+	  			//System.out.println ("CLI(" + Thread.currentThread() + ") a recu :"  + _strCommande);
+	  			logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") a recu : "  + _strCommande);
 
 				if (_strCommande.equalsIgnoreCase("quit")) // commande "quit" detectee ...
+				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde quit detectée:");
 					System.exit(0); // ... on ferme alors le serveur pas bon
+				}
 				else if(_strCommande.equalsIgnoreCase("total")) // commande "total" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde total detectée:");
 					// ... on affiche le nombre de clients actuellement connectes
 					output.println(this.name + "-> Nombre de devices connectes : "+_socketServ.getNbClients());
 				}
 				else if(_strCommande.equalsIgnoreCase("list")) // commande "list" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde list detectée:");
 					// ... on affiche les infos des clients actuellement connectes
 					output.println(this.name + "-> Nombre de devices connectes : "+_socketServ.getNbClients());
 					_socketServ.listAllClients(output);
 				}
 				else if(_strCommande.equalsIgnoreCase("getinfo")) // commande "getinfo" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde getinfo detectée:");
 					char charCur[] = new char[1];
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux devices actuellement connectes
@@ -128,6 +136,7 @@ class CLI_TCP_Thread extends Thread
 				}
 				else if(_strCommande.equalsIgnoreCase("getlocation")) // commande "getlocation" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde getlocatiob detectée:");
 					char charCur[] = new char[1];
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
@@ -138,14 +147,16 @@ class CLI_TCP_Thread extends Thread
 				}
 				else if(_strCommande.equalsIgnoreCase("setconf")) // commande "setconf" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde setconf detectée:");
 					char charCur[] = new char[1];
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
-					_socketServ.sendAll("$WP+COMMTYPE=0000,4,,,Free,,,62.39.82.98,42400,0,212.27.40.241","\r\n"+charCur[0]);
-					output.println(this.name + "-> $WP+COMMTYPE=0000,4,,,Free,,,62.39.82.98,42400,0,212.27.40.241");
+					_socketServ.sendAll("$WP+COMMTYPE=0000,4,,,Free,,,134.214.202.152,2947,0,212.27.40.241","\r\n"+charCur[0]);
+					output.println(this.name + "-> $WP+COMMTYPE=0000,4,,,Free,,,134.214.202.152,2947,0,212.27.40.241");
 				}
 				else if(_strCommande.equalsIgnoreCase("getconf")) // commande "getconf" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde getconf detectée:");
 					char charCur[] = new char[1];
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
@@ -155,6 +166,7 @@ class CLI_TCP_Thread extends Thread
 				}
 				else if(_strCommande.equalsIgnoreCase("setevent")) // commande "setevent" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde setevent detectée:");
 					char charCur[] = new char[1];
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
@@ -163,6 +175,7 @@ class CLI_TCP_Thread extends Thread
 				}
 				else if(_strCommande.equalsIgnoreCase("resetevent")) // commande "resetevent" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde resetevent detectée:");
 					char charCur[] = new char[1];
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
@@ -171,6 +184,7 @@ class CLI_TCP_Thread extends Thread
 				}
 				else if(_strCommande.equalsIgnoreCase("clearbuffer")) // commande "clearbuffer" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde clearbuffer detectée:");
 					char charCur[] = new char[1];
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
@@ -180,6 +194,7 @@ class CLI_TCP_Thread extends Thread
 				}
 				else if(_strCommande.equalsIgnoreCase("settrack")) // commande "settrack" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde settrack detectée:");
 					char charCur[] = new char[1];
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
@@ -190,6 +205,7 @@ class CLI_TCP_Thread extends Thread
 				}
 				else if(_strCommande.equalsIgnoreCase("setnav")) // commande "setnav" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde setnav detectée:");
 					char charCur[] = new char[1];
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
@@ -200,6 +216,7 @@ class CLI_TCP_Thread extends Thread
 				}
 				else if(_strCommande.equalsIgnoreCase("gettrack")) // commande "gettrack" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde gettrack detectée:");
 					char charCur[] = new char[1];
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
@@ -208,6 +225,7 @@ class CLI_TCP_Thread extends Thread
 				}
 				else if(_strCommande.equalsIgnoreCase("resettrack")) // commande "resettrack" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde resettrack detectée:");
 					char charCur[] = new char[1];
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
@@ -216,6 +234,7 @@ class CLI_TCP_Thread extends Thread
 				}
 				else if(_strCommande.equalsIgnoreCase("getsim")) // commande "getsim" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde getsim detectée:");
 					char charCur[] = new char[1];
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
@@ -225,6 +244,7 @@ class CLI_TCP_Thread extends Thread
 				}
 				else if(_strCommande.equalsIgnoreCase("getimei")) // commande "getimei" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde getimei detectée:");
 					char charCur[] = new char[1];
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
@@ -234,6 +254,7 @@ class CLI_TCP_Thread extends Thread
 				}
 				else if(_strCommande.equalsIgnoreCase("getradio")) // commande "getradio" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde getradio detectée:");
 					char charCur[] = new char[1];
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
@@ -243,6 +264,7 @@ class CLI_TCP_Thread extends Thread
 				}
 				else if(_strCommande.equalsIgnoreCase("getversion")) // commande "getversion" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde getversion detectée:");
 					char charCur[] = new char[1];
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
@@ -252,16 +274,23 @@ class CLI_TCP_Thread extends Thread
 				}
 				else if(_strCommande.equalsIgnoreCase("disconnect")) // commande "getradio" detectee ...
 				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde disconnect detectée:");
 					// ... on deconnecte les clients actuellement connectes
 					_socketServ.delAllClients();
 					// ... on affiche le nombre de clients actuellement connectes
 					output.println(this.name + "-> :Nombre de devices connectes : "+_socketServ.getNbClients());
-					output.println(this.name + "-> :---------------------------------");
+				}
+				else if(_strCommande.equalsIgnoreCase("help"))
+				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde help detectée:");
+					printCommandes(output);
 				}
 				else
 				{
-					output.println(this.name + "-> Commande Inconnue !!");
-					//printCommandes(output);
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde inconnue detectée:");
+
+					output.println(this.name + "-> Commande Inconnue - help");
+					
 				}
 				output.flush();
 				//System.out.flush(); // on affiche tout ce qui est en attente dans le flux

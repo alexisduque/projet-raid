@@ -82,12 +82,14 @@ public class CollectServer
 	//** Methode : envoie le message GETLOCATION a tous les clients **
 	synchronized public void sendAll(String message,String sLast)
 	{
+		logger.log(Level.WARNING,"envoi à tous les tracker : "+message);
 		PrintWriter out; // declaration d'une variable permettant l'envoie de texte vers le client
 		for (int i = 0; i < _tabClients.size(); i++) // parcours de la table des connectes
 		{
 			out =  _tabClients.elementAt(i); // extraction de l'element courant (type PrintWriter)
 			if (out != null) // securite, l'element ne doit pas etre vide
 			{
+				logger.log(Level.INFO,"envoi au tracker " +_sockClients.elementAt(i).getId()+" : "+message);
 				// ecriture du texte passe en parametre (et concatenation d'ue string de fin de chaine si besoin)
 				out.print(message+sLast);
 				out.flush(); // envoi dans le flux de sortie
@@ -141,6 +143,7 @@ public class CollectServer
 		
 		for (int i = 0;i < _nbClients;i++) {
 			delClient(i);
+			logger.log(Level.WARNING,"client " +i+ " supprimé");
 		}
 		_nbClients = 0;
 	}
