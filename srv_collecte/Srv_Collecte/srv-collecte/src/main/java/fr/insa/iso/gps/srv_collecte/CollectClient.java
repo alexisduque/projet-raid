@@ -146,6 +146,9 @@ class CollectClient extends Thread
 					_socketServ.updateClient(_numClient, deviceType, _id_Device); // on met a jour le client de la liste
 					//si le message commence par $0K(message du GPS) on redirige vers CLI
 					if (nClient.getMessage().startsWith("$")) {
+						_socketServ.serverCLI._clientCLI.output.println("Tracker "+nClient._numClient+ " -> "+ nClient.getMessage());
+						_socketServ.serverCLI._clientCLI.output.flush();
+						logger.log(Level.INFO,"envoi de: "+nClient.getMessage()+" au client CLI");
 						// TODO : envoyé la réponse du trcker au client CLI
 					} else {
 						n_Service.insertPosition(nClient.getMessage());

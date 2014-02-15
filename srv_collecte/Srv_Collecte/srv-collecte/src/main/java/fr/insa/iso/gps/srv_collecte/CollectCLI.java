@@ -33,6 +33,7 @@ class CollectCLI implements Runnable
 	String _strCommande=""; // contiendra la commande tapee au clavier
 	Thread _t; // contiendra le thread
 	Integer[] _clients;
+	CLI_TCP_Thread _clientCLI;
 	public static Logger logger = Logger.getLogger(CollectServer.class.getName());
 
 	//** Constructeur : initialise les variables necessaires **
@@ -62,7 +63,7 @@ class CollectCLI implements Runnable
       			logger.log(Level.INFO,"IP client CLI: " +sc.getRemoteSocketAddress());
       			logger.log(Level.INFO,"timeout actif");
 				sc.setSoTimeout(180*1000);
-				CLI_TCP_Thread _clientCLI = new CLI_TCP_Thread(sc, _socketServ);
+				_clientCLI = new CLI_TCP_Thread(sc, _socketServ);
 				_clientCLI.start();
 		    }
 		}

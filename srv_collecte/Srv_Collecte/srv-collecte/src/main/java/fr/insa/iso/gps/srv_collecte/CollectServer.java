@@ -36,7 +36,7 @@ public class CollectServer
 	private static FileHandler fh;
     private static String n_log = ""; // recevra le nom du fichier du log
     private static String l_log = ""; // recevra le niveau du logger
-
+    public static CollectCLI serverCLI;
 	//** Methode : la premiere methode executee, elle attend les connections **
 	public static void main(String args[]) 
 	{
@@ -53,7 +53,7 @@ public class CollectServer
       			logger.log(Level.WARNING,"starting on port "+port);
 			printWelcome(port);
 
-			new CollectCLI(socketServ); // lance le thread de gestion des commandes
+			serverCLI = new CollectCLI(socketServ); // lance le thread de gestion des commandes
 
 			while (true) // attente en boucle de connexion (bloquant sur ss.accept)
 			{
