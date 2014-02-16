@@ -110,6 +110,7 @@ public class CollectServer
 					if (sl != null)
 						sl.close(); // on ferme la socket client
 					_sockClients.removeElementAt(i); // on supprime le client
+					logger.log(Level.WARNING,"socket client " + i + " fermee");
 				}
 			} catch (Exception e) {
       				logger.log(Level.WARNING,"erreur fermeture de socket");
@@ -140,7 +141,6 @@ public class CollectServer
 	}
 	synchronized public void delAllClients()
 	{
-		
 		for (int i = 0;i < _nbClients;i++) {
 			delClient(i);
 			logger.log(Level.WARNING,"client " +i+ " supprimé");
