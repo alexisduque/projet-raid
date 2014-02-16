@@ -35,12 +35,13 @@ class CollectCLI implements Runnable
 	Integer[] _clients;
 	CLI_TCP_Thread _clientCLI;
 	public static Logger logger = Logger.getLogger(CollectServer.class.getName());
-
+	int nbCLI;
 	//** Constructeur : initialise les variables necessaires **
 	CollectCLI(CollectServer socketServ)
 	{
 		_socketServ = socketServ; // passage de local en global
 		this.portCLI = 2948;
+		this.nbCLI = 0;
 		_t = new Thread(this); // instanciation du thread
 		_t.start(); // demarrage du thread, la fonction run() est ici lancee
 	}
@@ -59,12 +60,31 @@ class CollectCLI implements Runnable
 		    while (true)
 		    {
 				Socket sc = socketEcoute.accept(); // un client se connecte, un nouveau thread client est lance
-      			logger.log(Level.WARNING,"Nouveau client CLI");
+				logger.log(Level.WARNING,"Nouveau client CLI");
       			logger.log(Level.INFO,"IP client CLI: " +sc.getRemoteSocketAddress());
-      			logger.log(Level.INFO,"timeout actif");
-				sc.setSoTimeout(180*1000);
-				_clientCLI = new CLI_TCP_Thread(sc, _socketServ);
-				_clientCLI.start();
+				if (nbCLI == 0)
+				{
+      				logger.log(Level.INFO,"timeout actif");
+					sc.setSoTimeout(180*1000);
+					_clientCLI = new CLI_TCP_Thread(sc, _socketServ);
+					_clientCLI.start();
+					nbCLI = 1;
+				} else {
+      				logger.log(Level.WARNING,"un client est deja connecte - fermeture de la connection");
+      				PrintWriter output  = new PrintWriter(sc.getOutputStream());
+					output.println("Server CLI-> Connection refusée : un client est déjà connecté!");
+
+      				try 
+	    			{
+	    				output.close();
+			    		sc.close();
+						System.out.println ("CLI" + Thread.currentThread()  + " : Logout !!! ");
+	  				} 
+	  				catch (IOException e)
+	    			{
+	    			}
+				}
+      			
 		    }
 		}
 	      catch (Exception e)
@@ -308,6 +328,7 @@ class CLI_TCP_Thread extends Thread
 	    	{
 			    sockThread.close();
 				System.out.println ("CLI" + Thread.currentThread()  + " : Logout !!! ");
+				_socketServ.serverCLI.nbCLI = 0;
 	  		} 
 	  		catch (IOException e)
 	    	{
