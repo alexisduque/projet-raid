@@ -306,11 +306,18 @@ class CLI_TCP_Thread extends Thread
 					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde help detectée:");
 					printCommandes(output);
 				}
+				else if(_strCommande.equalsIgnoreCase("logout"))
+				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde logout detectée:");
+					output.println(this.name + "-> Logout");
+					break;
+					
+					
+				}
 				else
 				{
 					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde inconnue detectée:");
-
-					output.println(this.name + "-> Commande Inconnue - help");
+					printCommandes(output);
 					
 				}
 				output.flush();
@@ -358,7 +365,8 @@ class CLI_TCP_Thread extends Thread
 		output.println("disconnect: \t Fermer les connexions TCP");
 		output.println("list: \t\t Liste les devices connectes");
 		output.println("total: \t\t Nombre de devices connectes");
-		output.println("quit: \t\t Quitter");
+		output.println("logout: \t Deconnexion du client CLI");
+		output.println("quit: \t\t Arrêt du serveur");
 		output.println("--------------------------------------------------");
 	}
 }
