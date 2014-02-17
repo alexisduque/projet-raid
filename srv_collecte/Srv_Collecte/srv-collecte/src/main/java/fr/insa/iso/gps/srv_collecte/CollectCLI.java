@@ -20,6 +20,7 @@ import java.util.logging.SimpleFormatter;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
+
 import java.util.*;
 import java.net.*;
 
@@ -116,16 +117,19 @@ class CLI_TCP_Thread extends Thread
 			output  = new PrintWriter(sockThread.getOutputStream());
         	InputStreamReader input = new InputStreamReader(sockThread.getInputStream());
 	 		BufferedReader binput   = new BufferedReader(input);
-	  
+	  		String[] commands;
 	  		String _strCommande;
-
-	  		while ((_strCommande = binput.readLine()) != null)
+	  		String _strRecu;
+	  		while ((_strRecu = binput.readLine()) != null)
 	   		{
 	      		//output.print("-> ");
 	      		//output.println(_strCommande);
-	      		output.flush();
+	      		//output.flush();
 	  			//System.out.println ("CLI(" + Thread.currentThread() + ") a recu :"  + _strCommande);
-	  			logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") a recu : "  + _strCommande);
+	  			logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") a recu : "  + _strRecu);
+
+	  			commands = _strRecu.split("\\s+");;
+	  			_strCommande = commands[0];
 
 				if (_strCommande.equalsIgnoreCase("quit")) // commande "quit" detectee ...
 				{
@@ -311,8 +315,15 @@ class CLI_TCP_Thread extends Thread
 					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde logout detectée:");
 					output.println(this.name + "-> Logout");
 					break;
-					
-					
+				}
+				else if(_strCommande.equalsIgnoreCase("custom") && commands.length == 2 && commands[1].startsWith("$WP"))
+				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde lcustom detectée:");
+					char charCur[] = new char[1];
+					charCur[0] = '\u0000';
+					// ... on envoie le message aux clients actuellement connectes
+					_socketServ.sendAll(commands[1],"\r\n"+charCur[0]);
+					output.println(this.name + "-> "+commands[1]);
 				}
 				else
 				{
@@ -366,7 +377,9 @@ class CLI_TCP_Thread extends Thread
 		output.println("list: \t\t Liste les devices connectes");
 		output.println("total: \t\t Nombre de devices connectes");
 		output.println("logout: \t Deconnexion du client CLI");
+		output.println("custom: \t Envoie une commande personalisée");
 		output.println("quit: \t\t Arrêt du serveur");
 		output.println("--------------------------------------------------");
 	}
+
 }
