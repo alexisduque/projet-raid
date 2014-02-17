@@ -97,6 +97,22 @@ public class CollectServer
 		}
 	}
 
+	//** Methode : envoie le message au client passé e paraètre**
+	synchronized public void sendMess(String message,String sLast, int idClient)
+	{
+		logger.log(Level.WARNING,"envoi au tracker "+idClient+" : "+message);
+		PrintWriter out; // declaration d'une variable permettant l'envoie de texte vers le client
+		out =  _tabClients.elementAt(idClient); // extraction de l'element courant (type PrintWriter)
+		if (out != null) // securite, l'element ne doit pas etre vide
+		{
+			logger.log(Level.INFO,"envoi au tracker " +_sockClients.elementAt(idClient).getId()+" : "+message);
+			// ecriture du texte passe en parametre (et concatenation d'ue string de fin de chaine si besoin)
+			out.print(message+sLast);
+			out.flush(); // envoi dans le flux de sortie
+		}
+		
+	}
+
 	//** Methode : detruit le client no i **
 	synchronized public void delClient(int i)
 	{
@@ -147,6 +163,7 @@ public class CollectServer
 		}
 		_nbClients = 0;
 	}
+
 	//** Methode : ajoute un nouveau client dans la liste **
 	synchronized public int addClient(PrintWriter out, Socket s)
 	{
