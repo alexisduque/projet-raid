@@ -102,13 +102,20 @@ public class CollectServer
 	{
 		logger.log(Level.WARNING,"envoi au tracker "+idClient+" : "+message);
 		PrintWriter out; // declaration d'une variable permettant l'envoie de texte vers le client
-		out =  _tabClients.elementAt(idClient); // extraction de l'element courant (type PrintWriter)
-		if (out != null) // securite, l'element ne doit pas etre vide
-		{
-			logger.log(Level.INFO,"envoi au tracker " +_sockClients.elementAt(idClient).getId()+" : "+message);
-			// ecriture du texte passe en parametre (et concatenation d'ue string de fin de chaine si besoin)
-			out.print(message+sLast);
-			out.flush(); // envoi dans le flux de sortie
+		try {
+			out =  _tabClients.elementAt(idClient); // extraction de l'element courant (type PrintWriter)
+			if (out != null) // securite, l'element ne doit pas etre vide
+			{
+				logger.log(Level.INFO,"envoi au tracker " +_sockClients.elementAt(idClient).getId()+" : "+message);
+				// ecriture du texte passe en parametre (et concatenation d'ue string de fin de chaine si besoin)
+				out.print(message+sLast);
+				out.flush(); // envoi dans le flux de sortie
+				serverCLI._clientCLI.output.println("CollectServer CLI-> Cmd envoyée");
+			}
+		} catch (Exception e) {
+			logger.log(Level.INFO,"envoi de la cmd impossible au client" +idClient+". Id inconnue");
+			serverCLI._clientCLI.output.println("CollectServer CLI-> Tracker Id inconnue");
+			serverCLI._clientCLI.output.flush();
 		}
 		
 	}
@@ -116,22 +123,29 @@ public class CollectServer
 	//** Methode : detruit le client no i **
 	synchronized public void delClient(int i)
 	{
-		_nbClients--; // un client en moins ! snif
-		if (_tabClients.elementAt(i) != null) // l'element existe ...
-		{
-			_tabClients.removeElementAt(i); // ... on le supprime
-			try {
-				if (_sockClients.elementAt(i).getSocket() != null) { 
-					Socket sl = _sockClients.elementAt(i).getSocket();
-					if (sl != null)
-						sl.close(); // on ferme la socket client
-					_sockClients.removeElementAt(i); // on supprime le client
-					logger.log(Level.WARNING,"socket client " + i + " fermee");
+		//on catch l'exception si le client n'existe pas (ArrayOutOfBound)
+		try {
+			 // un client en moins ! snif
+			if (_tabClients.elementAt(i) != null) // l'element existe ...
+			{
+				_tabClients.removeElementAt(i); // ... on le supprime
+				
+				try {
+					if (_sockClients.elementAt(i).getSocket() != null) { 
+						Socket sl = _sockClients.elementAt(i).getSocket();
+						if (sl != null)
+							sl.close(); // on ferme la socket client
+						_sockClients.removeElementAt(i); // on supprime le client
+						_nbClients--;
+						logger.log(Level.WARNING,"socket client " + i + " fermee");
+					}
+				} catch (Exception e) {
+	      				logger.log(Level.WARNING,"erreur fermeture de socket");
+				//	System.out.println("erreur fermeture socket");	
 				}
-			} catch (Exception e) {
-      				logger.log(Level.WARNING,"erreur fermeture de socket");
-			//	System.out.println("erreur fermeture socket");	
 			}
+		} catch (Exception e){
+			logger.log(Level.WARNING,"client " + i + " déjà supprimé");
 		}
 	}
 	synchronized public void updateClient(int indice, int type, String sid)
@@ -157,7 +171,8 @@ public class CollectServer
 	}
 	synchronized public void delAllClients()
 	{
-		for (int i = 0;i < _nbClients;i++) {
+		int n = _nbClients;
+		for (int i = n - 1 ;i >=0 ;i--) {
 			delClient(i);
 			logger.log(Level.WARNING,"client " +i+ " supprimé");
 		}

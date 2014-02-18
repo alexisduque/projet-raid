@@ -217,6 +217,7 @@ class CLI_TCP_Thread extends Thread
 					_socketServ.sendAll("$WP+QBCLR=0000","\r\n"+charCur[0]);
 					output.println(this.name + "-> $WP+QBCLR=0000");
 				}
+            
 				else if(_strCommande.equalsIgnoreCase("settrack")) // commande "settrack" detectee ...
 				{
 					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde settrack detectée:");
@@ -318,12 +319,23 @@ class CLI_TCP_Thread extends Thread
 				}
 				else if(_strCommande.equalsIgnoreCase("custom") && commands.length == 2 && commands[1].startsWith("$WP"))
 				{
-					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde lcustom detectée:");
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde custom detectée:");
 					char charCur[] = new char[1];
 					charCur[0] = '\u0000';
 					// ... on envoie le message aux clients actuellement connectes
 					_socketServ.sendAll(commands[1],"\r\n"+charCur[0]);
 					output.println(this.name + "-> "+commands[1]);
+				}
+
+				else if(_strCommande.equalsIgnoreCase("custom") && commands.length == 3 && commands[1].startsWith("$WP") && commands[2].matches("\\d+"))
+				{
+					logger.log(Level.INFO,"CLI(" + Thread.currentThread() +") commamde custom detectée:");
+					char charCur[] = new char[1];
+					charCur[0] = '\u0000';
+					int idClient = Integer.parseInt(commands[2]);
+					// ... on envoie le message aux clients actuellement connectes
+					_socketServ.sendMess(commands[1],"\r\n"+charCur[0], idClient);
+					//output.println(this.name + "-> "+commands[1]+" envoyé à " +idClient);
 				}
 				else
 				{

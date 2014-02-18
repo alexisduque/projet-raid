@@ -29,7 +29,6 @@ import java.util.logging.Level;
 
 public class GeoTrackerService {
 
-	//	private OracleDataBase m_DataBase;
 	private PostgreSQLDataBase m_DataBase;
 
 	private String m_Release = "hello geotracker! release is 3.0.1 (c) Ph. Isorce";
@@ -39,51 +38,6 @@ public class GeoTrackerService {
 	private static Logger logger = Logger.getLogger(CollectServer.class.getName());
 	private static String n_log = "";
 	private static String l_log = ""; // recevra le niveau du logger
-
-	/* Oracle
-
-SQL> desc gps_positions
- Name                                      Null?    Type
- ----------------------------------------- -------- ----------------------------
- TIME_STP                                           DATE
- IDT                                                VARCHAR2(30)
- LONGITUDE                                          NUMBER(22,6)
- LATITUDE                                           NUMBER(22,6)
- SPEED                                              NUMBER
- NBSAT                                              NUMBER
- HEADING                                            NUMBER
- ALTITUDE                                           NUMBER(22,6)
- OP_MODE                                            VARCHAR2(1)
- CREATED_DAT                                        DATE
-
-	 */	
-
-	/*
-	 * MySQL
-	 *
-	 * deux tables :
-	 *
-CREATE TABLE `tracker` (
-  `tracker_id` varchar(30) NOT NULL,
-  PRIMARY KEY (`tracker_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1$$
-
-CREATE TABLE `gps_positions` (
-  `tracker_id` varchar(30) NOT NULL,
-  `time_stp` datetime NOT NULL,
-  `longitude` decimal(22,6) NOT NULL,
-  `latitude` decimal(22,6) NOT NULL,
-  `altitude` decimal(22,6) DEFAULT NULL,
-  `speed` decimal(10,0) NOT NULL,
-  `heading` decimal(10,0) NOT NULL,
-  `op_mode` varchar(1) DEFAULT NULL,
-  `created_dat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`epilote_idt`,`time_stp`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1$$
-
-
-	 */
-
 
 	//------------ WEB SERVICE METHODS ---------------
 
@@ -129,6 +83,7 @@ CREATE TABLE `gps_positions` (
 		}
 		return m_Ids;	
 	}	
+
 	public PositionLog getLastPosition(String id){
 		PositionLog lastPositionLog;
 
@@ -195,19 +150,13 @@ CREATE TABLE `gps_positions` (
 	public PositionLog[] getPositions(String id, String minDate, String maxDate,
 			int maxResponse, boolean OnlyMovingPositions){
 		// The last element must be null. If it is not, then the response reached its maxResponse limit
-		//
+		
 		List<PositionLog> listPos = new ArrayList<PositionLog>();
-		//m_DataBase = new OracleDataBase();
 		m_DataBase = new PostgreSQLDataBase();
+		
 		if(m_DataBase.Connect())
 		{
-			/* Oracle
-			String sql = "SELECT * FROM gps_positions " +
-					"where idt=\'" + id + "\' AND time_stp BETWEEN to_timestamp(\'" +
-					minDate + "\', \'DD/MM/YYYY:HH24:MI:SS\') AND to_timestamp(\'" + maxDate
-					+ "\', \'DD/MM/YYYY:HH24:MI:SS\') ORDER BY time_stp asc";
-			 */
-			/* MySQL */
+
 			String sql = "SELECT count(*) FROM gps_positions " +
 					"where idt=\'" + id + "\' AND time_stp BETWEEN '" +
 					minDate + "\' AND \'" + maxDate
