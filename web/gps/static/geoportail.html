@@ -1,253 +1,111 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Générateur API Javascript</title>	
+<head>
+    <title>standardV2.1_template.html</title>
+    <!-- indicates UTF-8 to get proper display of API labels : -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    /* overwritten styles or new styles : */
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:800px;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    /*]]>*/--></style>
+</head>
+<body>
+    <div id="VISUDiv" style="width:800px;height:600px;"></div>    <!-- the map div -->
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" target="_blank">Terms of Use</a> - ©IGN 2008-2013</div>
+    <!-- Application script : -->
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+    // the interface viewer variable :
+    var iVISU= null;
 
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-
-<!--
-   		 <link id="__OpenLayersCss__" href="/openlayers/theme/default/style.css" type="text/css" rel="stylesheet"/>
--->
-   		 <link id="__GeoportalCss__" href="./lib/api/theme/geoportal/style.css" type="text/css" rel="stylesheet"/>
-		
-		<link type="text/css" href="css/generateur.css" rel="stylesheet"/>
-		<link href="./lib/jquery/plugins/jquery.mCustomScrollbar/css/jquery.mCustomScrollbar.css" rel="stylesheet" />
-		<script type="text/javascript" src="./lib/api/GeoportalExtended.js"></script>
-		<link type="text/css" href="./lib/syntaxhighlighter_3.0.83/styles/shCore.css" rel="stylesheet"/>
-		<link type="text/css" href="./lib/syntaxhighlighter_3.0.83/styles/shCoreDefault.css" rel="stylesheet"/>
-		<link type="text/css" href="./lib/syntaxhighlighter_3.0.83/styles/shThemeDefault.css" rel="stylesheet"/>
-		<link type="text/css" href="./lib/jquery/plugins/jquery.slider/css/jquery.slider.min.css" rel="stylesheet"/>
-		
-
-		<script type="text/javascript" src="./lib/jquery/jquery.min.js"></script>
-		<script type="text/javascript" src="./lib/jquery/jquery-ui/jquery-ui.min.js"></script>
-		<script type="text/javascript" src="./lib/jquery/plugins/jquery.mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
-
-		<script type="text/javascript"src="./lib/jquery/plugins/clickoutside.js"></script>
-		<script type="text/javascript" src="./lib/jquery/plugins/jquery.slider/jquery.slider.all.js"></script>
-
-<!--
-		<script type="text/javascript" src="./lib/syntaxhighlighter_3.0.83/scripts/XRegExp.js"></script>
--->
-		<script type="text/javascript" src="./lib/syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
-		<script type="text/javascript" src="./lib/syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script>
-		<script type="text/javascript" src="./lib/syntaxhighlighter_3.0.83/scripts/shBrushJScript.js"></script>
-
-		<script>
-
-		</script>
-	</head>
-
-  <body>
-    	<div id="generateur-page"> 
-
-		  	<!--Div contenant la carte du geoportail-->
-			<div id="viewerDiv"></div>
-			<div id="icon-fleche"><div id="text-fleche">&gt;</div></div>
-			<div id="info_bulle"><div id="icone_bulle"></div><div id="texte_bulle"></div></div>
-			<div id="popupIgn"><div id="closePopup">X</div><p>&nbsp;Assistant de création de page API Géoportail<br>&nbsp;version 1.0.0<br>&nbsp;&copy;IGN 2013-2014</div>
-  			<div id="generator-tabs">
-				<ul>
-					<!--Création des generators du menu qui permettent de passer d'une étape à l'autre-->
-					<li id="generator-tabs-01"><a href="#tabs-1"><div id="titre-tabs-01">ETAPE 01</div><div id="soustitre-tabs-01">Accès</div></a></li>
-					<li id="generator-tabs-02"><a href="#tabs-2"><div id="titre-tabs-01">ETAPE 02</div><div id="soustitre-tabs-02"> Localisation</div></a></li>
-					<li id="generator-tabs-03"><a href="#tabs-3"><div id="titre-tabs-01">ETAPE 03</div><div id="soustitre-tabs-03"> Vos couches Géoportail</div></a></li>
-					<li id="generator-tabs-04"><a href="#tabs-4"><div id="titre-tabs-01">ETAPE 04</div><div id="soustitre-tabs-04"> Vos données</div></a></li>
-					<li id="generator-tabs-05"><a href="#tabs-5"><div id="titre-tabs-01">ETAPE 05</div><div id="soustitre-tabs-05"> Outils a  utiliser</div></a></li>
-					<li id="generator-tabs-06"><a href="#tabs-6"><div id="titre-tabs-01">ETAPE 06</div><div id="soustitre-tabs-06"> Génération du modèle</div></a></li>
-				</ul>		
-
-				<div id="tabs-1">
-					<form>		
-						<!--premier block de l'ETAPE 01:  éléments pour saisir la clé api et la liste déroulante des couches associées à la clé-->	
-						<div id="panel01-container01">
-							<p><label for="generator-key" id="label_clef">Clef API</label><input id="generator-key" type="text"  value="lcfe7eyxg2b54kdaki8k4nh4"/></p>
-							<input id='key_button' type="button" value="Démarrer"/> 
-							<div class="CellLayers">Ressources de la clé</div>
-							<div class="PanelLayers"></div>
-						</div>
-
-						<!--Deuxième block de l'ETAPE 01 : contient les éléments pour renseigner le titre de la carte et la liste déroulante contenant les différents choix de la taille de la carte-->
-						<div id="panel01-container02">
-							<p><label id="label_titre">Titre</label>
-							<input id="titlegenerator" type="text" value="Entrez votre titre"/></p>
-							<label id='generateur-view' >Taille de la carte</label><div for="CellSize" class="CellSize">Plein écran</div>
-							<div class="PanelSize">
-									<div class="OptSize" value="dim0">Plein écran</div>
-									<div class="OptSize" value="dim1">600*800px</div>
-									<div class="OptSize" value="dim2">400*600px</div>
-							</div>
-						</div>
-
-						<div id="panel01-container03">	
-							<label id="texte_view" for="vtypegenerator-key">Type de viewer</label>
-							<div for="CellView" class="CellView">Interface complète</div>
-							<div class="PanelView">
-									<div class="OptView" value="Default">Interface complète</div>
-									<div class="OptView" value="Simple">Interface sans outils</div>
-							</div>
-						</div>
-					</form>
-
-					<!--Quatrième block de l'ETAPE 01: l'image de fond qui se retrouve en bas a gauche du menu-->
-					<div id="panel01-container04">	
-						<img src="img/fond_menu.jpg" height="100%" width="100%"/> 
-					</div>
-				</div>
-				<!--Premier block de l'ETAPE 02: éléments pour choisir le territoire de visualisation-->
-				<div id="tabs-2">
-					<div id="panel02-container01">
-					<form>
-							<div class="ui-helper-reset">
-								<label  id="generateur-territoire" for="generator-territories-select">Territoire de visualisation </label>
-								<div name="territories-select" class="CellTerritoire">France métropolitaine</div>
-								<div class="PanelTerritories">
-								</div>
-							</div>
-						</form>
-						</div>	
-
-						<!--Deuxième block de l'ETAPE 02, il contient les éléments pour faire la recherche par lieux et pour le centrage manuel de la carte-->	
-						<div id="panel02-container02">	
-						
-							<div id="generator-center">
-								<form id="gpSearch" name="gpSearch" action="#">
-									<label id="label-geocodage">Rechercher un lieux</label>
-										<input type="text" id="nameGazetteer" name="nameGazetteer" class="gazetteerField" value="Entrez un nom de lieu"/>
-										<input type="button" id="searchGazetteer" name="searchGazetteer" class="gazetteerSubmit" value=""/>								
-										<div id="resultsGazetteer"></div>
-								</form>	
-
-								<fieldset>
-									<legend>Centrage</legend>
-									<label for="generator-center-coordsx">Longitude :</label><input readonly id="generator-center-coordsx" type="text" value="2.345274398"  style="text-align: right;"/>
-									<label for="generator-center-coordsy">Latitude :</label><input readonly id="generator-center-coordsy" type="text" value="48.860832557999984"  style="text-align: right;"/>
-									<label for="generator-center-zoom">Niveau de zoom :</label><input readonly id="generator-center-zoom" type="text" value="6"  style="text-align: right;"/>
-								</fieldset>
-							</div>
-						
-					</div>
-
-					<!--Troisième block de l'ETAPE 0: l'image de fond qui se retrouve en bas a gauche du menu-->
-					<div id="panel02-container03">
-						<img src="img/fond_menu.jpg" height="100%" width="100%"/> 
-					</div>
-				</div>
-
-				<!--Premier block de l'ETAPE 03: menus déroulants représentant le gestionnaire de couches-->
-				<div id="tabs-3">
-					<div id="panel03-container01"></div>
-                                        <div id="panel03-container02">
-                                          <img src="img/fond_menu.jpg" height="100%" width="100%"/>
-                                        </div>
-				</div>
-			<div id="tabs-4">
-			<div id="panel04-container01">
-				<form>
-				<div class="ui-couche-raster">
-					<!--Onglet de départ pour l'ajout d'une couche raster (avec le bouton image +)-->
-					<label  id="generateur-raster" for="generator-raster-select">Ajout d'une couche raster</label>
-					<img class="bt_plusmoins" id="craster" src="img/boutonplus.png" style="height:20px; width:20px"/>
-			
-					<!--Liste déroulante pour le choix du type de service-->
-					<label id="service-service">Type de service</label>			
-						<div name="service-type" class="CellTypeRaster">---</div>
-							<div class="PanelTypeRaster">
-								<div class="OptTypeRaster" value="WMS">Web Map Service</div>
-							</div>
-						</div>
-			
-					<div class="ui-select-raster">
-						<!--Zone de texte pour l'ajout de l'url de la couche raster-->			
-						<label id="service-url">URL</label>
-						<input type="text" id="url-raster"/>			
-				
-						<!--Liste déroulante des couches trouvé via l'url ci-dessus (factisse ici)-->			
-						<div name="service-raster" class="CellRaster">Liste de couches</div>
-						<div class="PanelRaster">
-						</div>
-					</div>	
-				</form>
-			</div>
-
-			<!--Deuxième block de l'ETAPE 04, il contient l'ensemble des éléments pour l'ajout d'une couche vecteur, attention au départ ces éléments sont cachés
-				il apparaissent au fur et à mesure via l'utilisation de fonction JQuery-->
-			<div id="panel04-container02">
-				<form>
-				<div class="ui-couche-vecteur">
-					<!--Onglet de départ pour l'ajout d'une couche vecteur (avec le bouton image +)-->
-					<label  id="generateur-vecteur" for="generator-vecteur-select">Ajout d'une couche vecteur</label>
-					<img class="bt_plusmoins" id="cvecteur" src="img/boutonplus.png" style="height:20px; width:20px"/>
-			
-					<!--Liste déroulante pour sélectionner le type de ressources-->
-					<div name="select-vecteur" class="CellVecteur">---</div>
-						<div class="PanelTypeVecteur">
-							<div class="OptTypeVecteur" value="KML">Ressource KML</div>
-							<div class="OptTypeVecteur" value="GPX">Ressource GPX</div>
-							<div class="OptTypeVecteur" value="OSM">Ressource OSM</div>
-							<div class="OptTypeVecteur" value="GeoRSS">Ressource GeoRSS</div>
-							<!--div class="OptTypeVecteur" value="WFS">Ressource WFS</div-->
-						</div>
-					</div>
-
-					<!--Zone de texte pour l'url de la couche-->
-					<div class="ui-select-vecteur">
-					<label id="service-urlvecteur">URL de la couche</label>
-					<input type="text" id="url-vecteur"/>	
-
-					<!--Element pour selectionner URL/Contenu via une checkbox-->		
-					<label id="url-contenu">URL/Contenu</label>
-					<input type="checkbox" id='url-check'/>
-
-					<!--Zone de texte pour le nom de la couche-->		
-					<label id="vecteur-nom">Nom de la couche</label>
-					<input type="text" id="nom-vecteur"/>	
-
-					<!--Zone de texte pour l'url du proxy-->	
-					<label id="service-urlp">URL du proxy</label>
-					<input type="text" id="url-proxy"/>
-					<input id='vecteur_button' type="button" value="AJOUTER"/> 
-			
-
-
-				</div>
-				</form>
-
-			</div>
-
-			<!--Quatrième block de l'ETAPE 04, il contient seulement l'image de fond qui se retrouve en bas a gauche du menu-->
-			<div id="panel04-container03">
-				<img src="img/fond_menu.jpg" height="100%" width="100%"/> 
-			</div>
-			</div>
-		
-			<div id="tabs-5">
-				<!--Premier block de l'ETAPE 05, il contient le menu déroulants des différents outils de mesures que l'on peut activées ou désactivées-->
-				<div id="panel05-container01">
-
-				</div>
-				<div id="panel05-container02">
-					<img src="img/fond_menu.jpg" height="100%" width="100%"/> 
-				</div>
-			</div>		
-
-			<div id="tabs-6">	
-				<div id="panel06-container01">
-					<img src="img/fond_menu.jpg" height="100%" width="100%"/> 
-				</div>
-				<!--Block sous forme d'une lightboxauquel il faudra insérer le document html générer à la fin des étapes-->
-				<div id="lightbox"></div>
-
-				<!--Il s'agit seuelement d'un block qui permet de grisé le générateur lorsque l'on accède à la génération du modèle-->
-				<div id="fade" class="black_overlay"></div> 
-			</div>
-		</div>
-		<div id="footer">&Agrave; propos</div>
-
-		
-		<script type="text/javascript" src="js/apiconfig.js"></script>
-		<script type="text/javascript" src="js/generateur-api.min.js"></script>
-
-	</body>
+    // assign callback when "onload" event is fired
+    // assignation de la fonction à appeler lors de la levée de l'évènement "onload"
+    window.onload= function() {
+        iVISU= Geoportal.load(
+            // map's div id - identifiant de la div de la carte :
+            'VISUDiv',
+            // API's keys - clefs API :
+            ['nhf8wztv3m9wglcda6n6cbuf'],
+            {   // different ways of centering the map :
+                // center in WGS84G - centre en WGS84G
+                //center: new OpenLayers.LonLat(LON,LAT),
+                // OR longitude, latitude :
+                //lon:LON,    // decimal (Number) or sexagecimal deegrees (String) - degrés décimaux (Number) ou sexagécimaux (String)
+                //lat:LAT//,
+                // OR place name - nom de lieux :
+                //place:'PLACE',
+                // OR address - adresse :
+                //address:'STREET, POSTAL CODE, CITY',
+                // OR use geolocation - utiliser la géolocalisation
+                //geolocate:true,
+                // callback when centering is done - fonction de rappel quant le centrage est effectué :
+                //afterCentered: function() { // Defaults to Geoportal.loadJs.defaultAfterCentered
+                //    /* this==iVISU.getViewer().getMap() */
+                //}
+            },
+            // zoom level (0-20) - niveau de zooms (0 à 20) :
+            //ZOOM,
+            {   // various options :
+                // type of API :
+                //type:'js',                          // default value,
+                // viewer default controls options overloads :
+                //componentsOptions:{                   // See Geoportal.Viewer subclasses for explanations (controlsOptions)
+                //},
+                // projection for mouse coordinates :
+                //displayProjection:PROJECTION,       // defaults to CRS:84
+                // GeoRM service URL :
+                //geormUrl:'URL',                     // defaults to Geoportal.GeoRMHandler.GEORM_SERVER_URL
+                // Application language :
+                //language:'LANG',                    // defaults to browser's language
+                // Geoportal's layers to load (when none, all contracts' layers are loaded) :
+                //layers:['GEOPORTALNAME',...],       // e.g. GEOGRAPHICALGRIDSYSTEMS.MAPS
+                // Geoportal's layers options :
+                //layersOptions:{                     // keys are Geoportal's layer name
+                //},
+                //marker:{                            // See OpenLayers.Feature.Vector style for external graphics
+                //},
+                // Viewer's mode :
+                //mode:'normal'|'mini',               // only applies for Geoportal.Viewer.Default
+                //onBeforeView:function() {...},      // callback to use before creating the viewer
+                //onView:function() {/* this==iVISU.getViewer() */},// callback to use before returning (after centering)
+                //onViewerLoaded:function() {/* this==iVISU */},    // callback to use when the viewer is ready.
+                                                                    // Defaults to Geoportal.loadJs.defaultOnViewerLoaded
+                //overlays:{                          // External or user's layers
+                //    'kml':[{'name':'nameOfOverlay','url':'urlOfOverlay', options:{...}}, ...],
+                //    'gpx':[{'name':'nameOfOverlay','url':'urlOfOverlay', options:{...}}, ...],
+                //    ...
+                //    'wms':[{'name':'nameOfOverlay','url':'urlOfOverlay', options:{...}}, ...],
+                //    ...
+                //},
+                // URL for overlays (KML, etc ...) when needed :
+                //proxyUrl:'URL',
+                // Map's territory :
+                //territory:'FXX',                    // ISO 3166 alpha-3 code of territory. Defaults to 'FXX'
+                // Application's theme (CSS to apply) :
+                //theme:[{
+                //    'name':'NAME',                  // used to set the path to images
+                //    'styles':[{                     // CSS to insert (only css is mandatory)
+                //        'css':'URL',                // href
+                //        'id':'ID',                  // link's tag identifier
+                //        'anchor':'ID',              // identifier of the node after which the link is to be inserted. By default, at the end of head
+                //        'alpha':true|false          // insert CSS for IE6
+                //    }]
+                //}],
+                //viewerClass:Geoportal.Viewer.Simple,// class of viewer to use
+            }
+        );
+    };
+    //--><!]]></script>
+    <!-- get compressed API for release 2.0.3 : -->
+    <script type="text/javascript" src="http://api.ign.fr/geoportail/api/js/2.0.3/Geoportal.js"><!--//--><![CDATA[//><!--
+    //--><!]]></script>
+</body>
 </html>
-
