@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>API Géoportail V2.0.2</title>
+
+<!-- CSS incluses facilitant la surcharge des styles : -->
+    <link id="__GeoportalCss__" href="http://api.ign.fr/geoportail/api/js/latest/theme/geoportal/style.css" type="text/css" rel="stylesheet"/>
+  	<link rel="StyleSheet" type="text/css" href="style.css">
+
+<style type="text/css">
+
+
+
+div#header {
+	margin-top: 0;
+	margin-right: auto;
+	margin-bottom: 20px;
+	margin-left: auto;
+	background-color:#FFFFFF;
+	border: 3px solid #ccff00;
+	width: 880px;
+	padding-right: 6px;
+	padding-left: 6px;
+}
+
+div#viewerDiv {
+	margin: 0 auto;
+}
+		
+</style>
+
+</head>
+<body>
+<div>
+<img src="images/tcchappe.png" alt="INSA LYON TC" width="800" height="120" />
+<h3> Bienvenue sur notre projet GEOLOC</h3>
+		<ul id="tabnav">
+     		<li class="active"><a href="index.html">Accueil</a></li>
+     		<li><a href="geotest.html">Global Map</a></li>
+     		<li><a href="FindPositions.jsp">Tracker</a></li>
+     		<li><a href="plist">List</a></li>
+		</ul>
+</div>	
+<div id="viewerDiv" style="width:896px;height:896px;"></div>
+		
+<script type="text/javascript">
+/**
+ * Property: viewer
+ * {<Geoportal.Viewer>} the viewer global instance.
+ */
+viewer= null;
+
+			if (window.__Geoportal$timer===undefined) {
+				var __Geoportal$timer= null;
+			}
+
+/**
+ * Function: initMap
+ * Load the application. Called when all information have been loaded by
+ * <loadAPI>().
+ */
+			function initMap(){
+//__________L'api est chargée à cette étape			
+				var options= {
+        // valeur par défaut
+        mode:'normal'
+        // utile uniquement pour charger des resources externes */
+        //proxy:'http://api.ign.fr/geoportail/api/xmlproxy'+'?url='
+				};
+
+// Création du visualiseur du type <Geoportal.Viewer>
+    // Les viewers disponibles sont Simple, Default, Standard (et Mobile)
+viewer= new Geoportal.Viewer.Default('viewerDiv', OpenLayers.Util.extend(
+        options,
+        // variable contenant la configuration des clefs API remplie par
+        // <Geoportal.GeoRMHandler.getConfig>
+        window.gGEOPORTALRIGHTSMANAGEMENT===undefined? {'apiKey':'1o7ote26hh59idex0pmrixpx'} : gGEOPORTALRIGHTSMANAGEMENT)
+    );
+//____________Onglet "couches" affiché (true=oui  false=non)
+            viewer.setLayersPanelVisibility(true);
+//____________Onglet "couches" développé (true=oui  false=non)
+            viewer.openLayersPanel(true);
+//____________Onglet "outils" affiché (true=oui  false=non)        
+            viewer.setToolsPanelVisibility(true);
+//____________Onglet "outils" développé (true=oui  false=non)        
+            viewer.openToolsPanel(true);
+
+//____________Association d’un select à plusieurs couches
+viewer.addGeoportalLayers([
+            'ORTHOIMAGERY.ORTHOPHOTOS',
+            'GEOGRAPHICALGRIDSYSTEMS.MAPS'],
+            {
+				'ORTHOIMAGERY.ORTHOPHOTOS':{
+					visibility:true,
+					opacity: 1
+				},
+				'GEOGRAPHICALGRIDSYSTEMS.MAPS':{
+					visibility:true,
+					opacity: 0.6
+				},
+                global:{
+                    transitionEffect: 'resize'
+                }
+            });
+
+//__________Ajout de la couche GPX (trace)
+				var StyleGPX= new OpenLayers.StyleMap({
+							"default"  : new OpenLayers.Style ({
+								strokeColor: "#FF0000",	
+								strokeWidth: 3
+							}),
+							"select" : new OpenLayers.Style ({
+								strokeColor: "#000077",
+								strokeWidth: 3
+							})
+				});		
+				var trace=viewer.getMap().addLayer(
+						"GPX",	 
+						"Itinéraire", 			
+						"http://www.valroc.net/archives/docs/jmb.gpx",
+				{ //parameters 
+							visibility: true, // Affichage : true=oui  false=non
+							opacity: 1.0,
+							minZoomLevel: 5,
+							maxZoomLevel: 20,
+//							panMapIfOutOfView:true, // "false" = Annule le recentrage de la carte
+							styleMap:StyleGPX,
+							originators: [{
+								pictureUrl:'images/green_MarkerC.png',
+								url:'http://www.valroc.net/'}] 
+					},		
+				{
+                formatOptions:{
+                    extractStyles:false // "true" = activation des styles KML
+                },
+                preventDefaultBehavior:false // "true" = pas de contrôleur Select
+            });
+
+//__________Ajout d'une couche KML (marqueurs)
+		var pictos= viewer.getMap().addLayer(
+        "KML",
+        'Repères',
+        "http://www.valroc.net/archives/docs/marqueurs16.kml",
+               { //contient les informations permettant d'affiner le comportement de la couche KML
+				minZoomLevel: 5,
+                maxZoomLevel:20,
+                opacity:1.0,
+				visibility: true, // Affichage : true=oui  false=non
+				skipAttributes:['Type'], // Attribut à exclure des popups
+				panMapIfOutOfView:true // false = Annule le recentrage de carte lors du clic sur un marqueur	
+},
+				{formatOptions: {
+			extractStyles: true // "false" = styles ajoutés. "true" = styles du KML 
+		},	
+      preventDefaultBehavior:false // "true" = pas de contrôleur Select
+});
+
+//____________Ajout du contrôle clic aux options par défaut (Geoportal.Control.selectFeature, Geoportal.Control.unselectFeature)
+        // highlight sur le style "select" :
+    var clickCtrlOpts= OpenLayers.Util.extend( viewer.getMap().getPopupDefaults('KML'), {
+                hover: false, // "true" = affichage popup au survol, "false" = au select
+                highlightOnly: true, // "true" = désignation du contenu 
+                renderIntent: "select" // Désignation du style lorsque "highlightOnly" est à "true"
+    });
+    var clickCtrl= new OpenLayers.Control.SelectFeature([trace, pictos], clickCtrlOpts);
+        viewer.getMap().addControl(clickCtrl);
+		clickCtrl.activate(); 
+            /**
+     * onVisibilityChange:
+     * Activate or Deactivate the select control of a layer or layers.
+     * When all layers are not visible, the control is deactivated, otherwise it is activated.
+     */
+	    viewer.getMap().events.on({
+        "changelayer":Geoportal.Map.onVisibilityChange,
+        scope:clickCtrl});
+
+//__________Positionnement du point central de la carte ; coordonnées + niveau de zoom,
+viewer.getMap().setCenterAtLonLat(4.64292, 46.939727, 13);
+
+// cache la patience
+    viewer.div.style[OpenLayers.String.camelize('background-image')]= 'none';
+											}
+/**
+ * Function: loadAPI
+ * Load the configuration related with the API keys.
+ * Called on "onload" event.
+ * Call <initMap>() function to load the interface.
+ */
+			function loadAPI() {
+				// on attend que les classes soient chargées
+				if (__Geoportal$timer!=null) {
+					window.clearTimeout(__Geoportal$timer);
+					__Geoportal$timer= null;
+				}
+				if (typeof(OpenLayers)=='undefined'              ||
+					typeof(Geoportal)=='undefined'               ||
+					typeof(Geoportal.Viewer)=='undefined'        ||
+					typeof(Geoportal.Viewer.Default)=='undefined') {
+					__Geoportal$timer= window.setTimeout('loadAPI();', 300);
+					return;
+				}
+
+    // on charge la configuration de la clef API, puis on charge l'application
+    Geoportal.GeoRMHandler.getConfig(['1o7ote26hh59idex0pmrixpx'], null,null, {
+        onContractsComplete: initMap
+    });
+}
+
+// assignation de la fonction à appeler lors de la levée de l'évènement "onload"
+window.onload= loadAPI;
+		</script>
+
+<script type="text/javascript" charset="utf-8" src="http://api.ign.fr/geoportail/api/js/latest/Geoportal.js"><!-- --></script>
+
+</body>
+</html>
