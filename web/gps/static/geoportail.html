@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+          <head>
+            <title>INSA Lyon TC - API GeoPortail</title>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  	<link rel="StyleSheet" type="text/css" href="style.css">
+                <script type="text/javascript" src="http://api.ign.fr/geoportail/api/js/latest/Geoportal.js"><!-- --></script>
+          </head>
+          <body>
+          <img src="images/tcchappe.png" alt="INSA LYON TC" width="800" height="120" />
+			<h3> Exemple de page Geoportail</h3>
+		<ul id="tabnav">
+     		<li class="active"><a href="index.html">Accueil</a></li>
+     		<li><a href="geotest.html">Global Map</a></li>
+     		<li><a href="FindPositions.jsp">Tracker</a></li>
+     		<li><a href="index.html">List</a></li>
+		</ul>
+            <div id="viewerDiv"></div>
+            <script type="text/javascript"><!--//--><![CDATA[//><!--
+            	var iv= null;
+                window.onload= function() {
+                
+                        iv= Geoportal.load(
+                                 // div's ID:
+                                 'viewerDiv',
+                                 // API's keys:
+                                 ['nhf8wztv3m9wglcda6n6cbuf'],
+                                 {// map's center :
+                                                // longitude:
+                                                lon:2.731525,
+                                                // latitude:
+                                                lat:45.833333
+                                 },
+                                 //zoom level 
+                                 null,
+                                 //options
+                                 {
+                                 	type:'js'
+                                 }
+                        );
+                };
+                //--><!]]></script>
+          </body>
+        </html>
+	               
+
