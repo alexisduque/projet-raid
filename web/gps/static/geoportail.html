@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>standardV2.1_template.html</title>
+    <!-- indicates UTF-8 to get proper display of API labels : -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    /* overwritten styles or new styles : */
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:800px;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    /*]]>*/--></style>
+</head>
+<body>
+    <div id="VISUDiv" style="width:800px;height:600px;"></div>    <!-- the map div -->
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" target="_blank">Terms of Use</a> - ©IGN 2008-2013</div>
+    <!-- Application script : -->
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+    // the interface viewer variable :
+    var iVISU= null;
+
+    // assign callback when "onload" event is fired
+    // assignation de la fonction à appeler lors de la levée de l'évènement "onload"
+    window.onload= function() {
+        iVISU= Geoportal.load(
+            // map's div id - identifiant de la div de la carte :
+            'VISUDiv',
+            // API's keys - clefs API : nhf8wztv3m9wglcda6n6cbuf
+            ['nhf8wztv3m9wglcda6n6cbuf'],
+            {   // different ways of centering the map :
+                // center in WGS84G - centre en WGS84G
+                //center: new OpenLayers.LonLat(LON,LAT),
+                // OR longitude, latitude :
+                //lon:LON,    // decimal (Number) or sexagecimal deegrees (String) - degrés décimaux (Number) ou sexagécimaux (String)
+                //lat:LAT//,
+                // OR place name - nom de lieux :
+                //place:'PLACE',
+                // OR address - adresse :
+                //address:'STREET, POSTAL CODE, CITY',
+                // OR use geolocation - utiliser la géolocalisation
+                //geolocate:true,
+                // callback when centering is done - fonction de rappel quant le centrage est effectué :
+                //afterCentered: function() { // Defaults to Geoportal.loadJs.defaultAfterCentered
+                //    /* this==iVISU.getViewer().getMap() */
+                //}
+            },
+            // zoom level (0-20) - niveau de zooms (0 à 20) :
+            //ZOOM,
+            {   // various options :
+                // type of API :
+                //type:'js',                          // default value,
+                // viewer default controls options overloads :
+                //componentsOptions:{                   // See Geoportal.Viewer subclasses for explanations (controlsOptions)
+                //},
+                // projection for mouse coordinates :
+                //displayProjection:PROJECTION,       // defaults to CRS:84
+                // GeoRM service URL :
+                //geormUrl:'URL',                     // defaults to Geoportal.GeoRMHandler.GEORM_SERVER_URL
+                // Application language :
+                //language:'LANG',                    // defaults to browser's language
+                // Geoportal's layers to load (when none, all contracts' layers are loaded) :
+                //layers:['GEOPORTALNAME',...],       // e.g. GEOGRAPHICALGRIDSYSTEMS.MAPS
+                // Geoportal's layers options :
+                //layersOptions:{                     // keys are Geoportal's layer name
+                //},
+                //marker:{                            // See OpenLayers.Feature.Vector style for external graphics
+                //},
+                // Viewer's mode :
+                //mode:'normal'|'mini',               // only applies for Geoportal.Viewer.Default
+                //onBeforeView:function() {...},      // callback to use before creating the viewer
+                //onView:function() {/* this==iVISU.getViewer() */},// callback to use before returning (after centering)
+                //onViewerLoaded:function() {/* this==iVISU */},    // callback to use when the viewer is ready.
+                                                                    // Defaults to Geoportal.loadJs.defaultOnViewerLoaded
+                //overlays:{                          // External or user's layers
+                //    'kml':[{'name':'nameOfOverlay','url':'urlOfOverlay', options:{...}}, ...],
+                //    'gpx':[{'name':'nameOfOverlay','url':'urlOfOverlay', options:{...}}, ...],
+                //    ...
+                //    'wms':[{'name':'nameOfOverlay','url':'urlOfOverlay', options:{...}}, ...],
+                //    ...
+                //},
+                // URL for overlays (KML, etc ...) when needed :
+                //proxyUrl:'URL',
+                // Map's territory :
+                //territory:'FXX',                    // ISO 3166 alpha-3 code of territory. Defaults to 'FXX'
+                // Application's theme (CSS to apply) :
+                //theme:[{
+                //    'name':'NAME',                  // used to set the path to images
+                //    'styles':[{                     // CSS to insert (only css is mandatory)
+                //        'css':'URL',                // href
+                //        'id':'ID',                  // link's tag identifier
+                //        'anchor':'ID',              // identifier of the node after which the link is to be inserted. By default, at the end of head
+                //        'alpha':true|false          // insert CSS for IE6
+                //    }]
+                //}],
+                //viewerClass:Geoportal.Viewer.Simple,// class of viewer to use
+            }
+        );
+    };
+    //--><!]]></script>
+    <!-- get compressed API for release 2.0.3 : -->
+    <script type="text/javascript" src="http://api.ign.fr/geoportail/api/js/2.0.3/Geoportal.js"><!--//--><![CDATA[//><!--
+    //--><!]]></script>
+</body>
+</html>
