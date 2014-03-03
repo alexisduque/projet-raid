@@ -1,21 +1,46 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>INSA Lyon D&eacute;partement TC</title>
-	<link rel="StyleSheet" type="text/css" href="style.css">
-
+<link href="css/bootstrap.min.css" rel="stylesheet">
+ <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
 <body>
-<img src="images/tcchappe.png" alt="INSA LYON TC" width="800" height="120" />
-<h3> Bienvenue sur notre projet GEOLOC</h3>
-		<ul id="tabnav">
-     		<li class="active"><a href="index.html">Accueil</a></li>
+
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">GeoLoc</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+     		 <li class="active"><a href="index.html">Accueil</a></li>
      		<li><a href="geotest.html">Global Map</a></li>
      		<li><a href="FindPositions.jsp">Tracker</a></li>
      		<li><a href="plist">List</a></li>
-		</ul>
-<table>
+          </ul>
+                    <a class="navbar-brand pull-right" href="https://telecom.insa-lyon.fr/">Dept. Telecom</a>
+
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+<br/><br/>
+    <div class="container">
+<div class="jumbotron">
+	<h2> Bienvenue sur notre projet GEOLOC</h2>
+     <table>
 <tr>
 <td>
 <img src="images/java.jpg" alt="Java" height="80"  />
@@ -40,6 +65,13 @@
  <hr>
 
 <img src="images/insaLyon.png" alt="INSA LYON" width="128"  />
+      </div>
 
+
+</div>
+ <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
 </body>
 </html>
