@@ -1,0 +1,336 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Exemple 27 "classic" - API Géoportail V.latest</title>
+
+<!-- CSS incluses facilitant la surcharge des styles : -->
+    <link id="__GeoportalCss__" href="http://api.ign.fr/geoportail/api/js/latest/theme/geoportal/style.css" type="text/css" rel="stylesheet"/>
+
+<!-- Surcharge de styles : -->
+	<link href="../css/API-02.css" type="text/css" rel="stylesheet"/>
+
+<style type="text/css">
+	    <!--
+
+.olPopupCloseBox {
+	background-image: url(http://www.valroc.net/archives/images/framed-classic/close-classic.png) !important;
+	background-repeat: no-repeat !important;
+	cursor: pointer !important;
+}
+
+body {
+	background-color: #424242;
+}
+
+div#header {
+	margin-top: 0;
+	margin-right: auto;
+	margin-bottom: 20px;
+	margin-left: auto;
+	background-color:#FFFFCE;
+	border: 3px solid #ccff00;
+	width: 880px;
+	padding-right: 6px;
+	padding-left: 6px;
+}
+
+div#viewerDiv {
+	margin: 0 auto;
+}
+		-->
+</style>
+
+</head>
+<body>
+<div id="header">
+  <p><a href="http://www.valroc.net/les-news/192.html" target="_self"><img src="images/fleche.gif" alt="Retour" width="64" height="44" border="0" align="left" /></a></p>
+  <p><strong>Retour à la liste</strong></p>
+  <p><strong>API Géoportail - Version 2.0.3</strong></p>
+  <p><strong>Sources : </strong><a href="http://www.developpez.net/forums/d1122528/applications/sig-systeme-dinformation-geographique/ign-api-geoportail/dimension-info-bulle/">Dimensions d'une info bulle</a> - <a href="http://dev.openlayers.org/apidocs/files/OpenLayers-js.html">Changement d'image popup</a> et <a href="http://www.developpez.net/forums/d919188/applications/sig-systeme-dinformation-geographique/ign-api-geoportail/nouvelle-popup-nuls/">Une nouvelle popup pour les nuls</a></p>
+  <p><strong>Fonctionnalité :</strong> Popup FramedCloud <strong>- Variante &quot;classic&quot;</strong></p>
+</div>
+
+<div id="viewerDiv" style="width:896px;height:896px;"></div>
+		
+<script type="text/javascript">
+
+viewer= null;
+
+			if (window.__Geoportal$timer===undefined) {
+				var __Geoportal$timer= null;
+			}
+
+/**
+ * Function: initMap
+ * Load the application. Called when all information have been loaded by
+ * <loadAPI>().
+ */
+
+function initMap() { // L'api est chargée à cette étape
+
+// localisation de l'image "cloud-popup-relative.png"
+// en remplacement de l'image OpenLayers
+	OpenLayers.ImgPath = "http://www.valroc.net/archives/images/framed-classic/";
+
+    //options for creating viewer:
+    var options= {
+        // valeur par défaut
+        mode:'normal'
+        // utile uniquement pour charger des resources externes */
+//        proxy:'http://api.ign.fr/geoportail/api/xmlproxy'+'?url='
+    };
+
+    // Création du visualiseur du type <Geoportal.Viewer>
+    // Les viewers disponibles sont Simple, Default, Standard (et Mobile)
+viewer= new Geoportal.Viewer.Default('viewerDiv', OpenLayers.Util.extend(
+        options,
+        // variable contenant la configuration des clefs API remplie par
+        // <Geoportal.GeoRMHandler.getConfig>
+        window.gGEOPORTALRIGHTSMANAGEMENT===undefined? {'apiKey':'75m08j0l1jmcpp9bwph7hz92'} : gGEOPORTALRIGHTSMANAGEMENT)
+    );
+//____________Association d’un select à plusieurs couches
+viewer.addGeoportalLayers([
+            'ORTHOIMAGERY.ORTHOPHOTOS',
+            'GEOGRAPHICALGRIDSYSTEMS.MAPS'],
+            {
+				'ORTHOIMAGERY.ORTHOPHOTOS':{
+					visibility:true,
+					opacity: 1
+				},
+				'GEOGRAPHICALGRIDSYSTEMS.MAPS':{
+					visibility:true,
+					opacity: 0.6
+				},
+                global:{
+                    transitionEffect: 'resize'
+                }
+            });
+
+//__________Ajout de la couche KML (trace)
+				var StyleTrace= new OpenLayers.StyleMap({
+							"default"  : new OpenLayers.Style ({
+								fillColor: "none",
+								strokeColor: "#FF0000",	
+								strokeWidth: 3
+//								fillOpacity: 0.1,
+//								cursor: "pointer"
+							}),
+							"select" : new OpenLayers.Style ({
+								fillColor: "none",
+								strokeColor: "#000077",
+								strokeWidth: 3
+//								fillOpacity: 0.1,
+//								cursor: "pointer"
+							})
+				});		
+				var trace=viewer.getMap().addLayer(
+						"KML",	 
+						"Tracé", 			
+						"docs/BOIVIN-4.kml",
+        {//kml_options:
+            /**
+             * Pour modifier le rendu et le comportement par défaut des fiches KML, il faut surcharger les options : preFeatureInsert, onFeatureInsert, onSelect, onUnselect, et, éventuellement, hover.
+             */
+
+            projection:OpenLayers.Projection.CRS84,//always set projection when setting maxExtent
+            maxExtent:new OpenLayers.Bounds(-180, -90, 180, 90),
+            minZoomLevel: 5,
+            maxZoomLevel:20,
+			opacity:1.0,
+			visibility: true, // Affichage : true=oui  false=non
+			styleMap:StyleTrace,
+			originators: [{
+				pictureUrl:'../html/images/logo1.png',
+				url:'http://www.valroc.net/'}] 
+},
+        {
+            formatOptions:{
+				extractStyles: false // False = styles ajoutés. True = styles du KML 
+            }
+       });
+
+//__________Ajout d'une couche KML (pictos)
+    var StyleMarqueurs= new OpenLayers.StyleMap({
+    "default": new OpenLayers.Style(
+		{
+      externalGraphic: '../html/images/rando_rg-X.png',
+			rotation: 0,
+			graphicWidth: 28, // Dimensions du marqueur 
+			graphicHeight: 31,
+			graphicYOffset: -28 // Correctif de la position du marqueur
+    }),		
+        "temporary": new OpenLayers.Style({
+        externalGraphic: '../html/images/info-X.png',
+			rotation: 0,
+			graphicWidth: 28, // Dimensions du marqueur 
+			graphicHeight: 31,
+			graphicYOffset: -28 // Correctif de la position du marqueur
+        }),
+        "select": new OpenLayers.Style({
+      externalGraphic: '../html/images/info-Y.png',
+			rotation: 0,
+			graphicWidth: 28, // Dimensions du marqueur 
+			graphicHeight: 31,
+			graphicYOffset: -28 // Correctif de la position du marqueur
+        })
+    });
+//____________Table de correspondance	
+  var lookup = {
+    1: {externalGraphic: "../html/images/rando_bl-X.png"}, // Départ
+    2: {externalGraphic: "../html/images/house-Y.png"}, // House
+    3: {externalGraphic: "../html/images/info-Z.png"}, // Info
+    4: {externalGraphic: "../html/images/sommet-X.png"} // Sommet
+  }
+//____________Association avec le style	
+StyleMarqueurs.addUniqueValueRules("default", "Type", lookup);
+var pictos= viewer.getMap().addLayer(							   
+						"KML",
+						"Pictos",
+						"docs/marqueurs13.kml",
+        {
+            projection:OpenLayers.Projection.CRS84,//always set projection when setting maxExtent
+            // don't give maxExtent, let the API compute it ...
+            minZoomLevel: 5,
+            maxZoomLevel:20,
+			skipAttributes:['Type'], // Attribut à exclure des popups
+            opacity: 1.0,
+			visibility: true, // Affichage : true=oui  false=non
+            styleMap:StyleMarqueurs
+        },
+        {
+            formatOptions:{
+				extractStyles: false // False = styles ajoutés. True = styles du KML 
+            }
+        });
+    /**
+     * getPopupDefaults:
+     * Crée une popup avec des comportements par défaut pour : select, unselect and hover callbacks.
+     * On crée un objet popup dont les valeurs sont :
+     *
+     {
+         multipleKey: null,
+         toggleKey: null,
+         multiple: false,
+         clickout: true,
+         toggle: true,
+         hover: false,
+         highlightOnly: false,
+         box: false,
+         onBeforeSelect: function() {},
+         onSelect: Geoportal.Control.selectFeature,
+         onUnselect: Geoportal.Control.unselectFeature,
+         scope: null,
+         geometryTypes: null,
+         callbacks: null,
+         handlersOptions: null,
+         selectStyle: null,
+         renderIntent: "select"
+     }
+     */
+
+    var unPopupFunc= function(f) {    // Gère la fermeture de popup
+        Geoportal.Control.unselectFeature(f);
+    };
+
+    var clickCtrl= new OpenLayers.Control.SelectFeature([trace, pictos], {
+        autoActivate:true, // "true" = Activation style popup personnalisé
+        clickout:true,
+        toggle:false,
+        multiple:false, // "true" = Autorisation des popups multiples
+        hover: false, // "true" = Affichage popup au survol, "false" = au select
+        onSelect: function(f) {
+		var popup = new OpenLayers.Popup.FramedCloud(
+                "popup",
+                f.geometry.getBounds().getCenterLonLat(),
+//				new OpenLayers.Size(200,200), // Ce paramètres est sans effet
+				null, // Taille
+
+//____________Ajout d'attributs dans le popup :
+	"<div style='font-size:1em'>" + "<font color='#0D0DFF'><b>" + f.attributes.name + 
+		"</font></b></div>" + "<br />" +
+	"<div style='font-size:.85em'>" + "<font color='#CC3366'><b>" + "Détails" + 
+		"</font></b></div>" +
+	"<div style='font-size:.75em'>" + "<font color='#008400'>" + f.attributes.description +
+		"</font></div>" + "<br />" +
+	"<div style='font-size:.75em'>" + "<font color='#000000'><b>" + "Coordonnées WGS84 (longitude-latitude)" + 
+		"</font></b></div>" +
+	"<div style='font-size:.7em'>" + "<font color='#000000'>" + f.attributes.position +
+		"</font>",
+
+				null,
+                true, // "true" = Croix de fermeture popup
+                function(evt) {
+                    if (this.feature) {
+// Corrige défaut fermeture popup avec IE8
+// http://www.developpez.net/forums/d1290245/applications/sig-systeme-dinformation-geographique/ign-api-geoportail/declinaisons-style-anchored/
+					clickCtrl.unselect(this.feature);
+//					unPopupFunc(this.feature);
+                    }
+                },
+                f
+            );
+			popup.feature=f;
+			f.popup= popup;
+			f.popup.panMapIfOutOfView= true; // Affichage de l'info-bulle : "true" déplace la carte, "false" déplace l'info-bulle.			
+			f.popup.autoSize= true; // "true" = Taille adaptée au contenu
+			f.popup.maxSize= new OpenLayers.Size(400,600); // Taille maxi
+			f.popup.minSize= new OpenLayers.Size(100,100); // Taille mini
+			f.popup.contentDiv.style.overflow= 'auto'; // Affichage des barres de défilement si nécessaire
+            f.layer.map.addPopup(popup);
+        },
+        onUnselect: unPopupFunc // Gère la fermeture de popup
+    });
+
+		viewer.getMap().addControl(clickCtrl);
+		clickCtrl.activate(); 
+            /**
+     * onVisibilityChange:
+     * Activate or Deactivate the select control of a layer or layers.
+     * When all layers are not visible, the control is deactivated, otherwise it is activated.
+     */
+	    viewer.getMap().events.on({
+        "changelayer":Geoportal.Map.onVisibilityChange,
+        scope:clickCtrl});
+
+//__________Positionnement du point central de la carte ; coordonnées + niveau de zoom,
+viewer.getMap().setCenterAtLonLat(4.64292, 46.939727, 13);
+    // cache la patience - hide loading image
+    viewer.div.style[OpenLayers.String.camelize('background-image')]= 'none';
+}
+
+/**
+ * Function: loadAPI
+ * Load the configuration related with the API keys.
+ * Called on "onload" event.
+ * Call <initMap>() function to load the interface.
+ */
+			function loadAPI() {
+				// on attend que les classes soient chargées
+				if (__Geoportal$timer!=null) {
+					window.clearTimeout(__Geoportal$timer);
+					__Geoportal$timer= null;
+				}
+				if (typeof(OpenLayers)=='undefined'              ||
+					typeof(Geoportal)=='undefined'               ||
+					typeof(Geoportal.Viewer)=='undefined'        ||
+					typeof(Geoportal.Viewer.Default)=='undefined') {
+					__Geoportal$timer= window.setTimeout('loadAPI();', 300);
+					return;
+				}
+
+    // on charge la configuration de la clef API, puis on charge l'application
+    Geoportal.GeoRMHandler.getConfig(['75m08j0l1jmcpp9bwph7hz92'], null,null, {
+        onContractsComplete: initMap
+    });
+}
+
+// assignation de la fonction à appeler lors de la levée de l'évènement "onload"
+window.onload= loadAPI;
+</script>
+  <!-- Load the OpenLayers Library -->
+<!--     <script src="http://www.openlayers.org/api/OpenLayers.js"></script> -->
+<script type="text/javascript" charset="utf-8" src="http://api.ign.fr/geoportail/api/js/latest/Geoportal.js"><!-- --></script>
+</body>
+</html>
