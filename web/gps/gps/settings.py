@@ -61,6 +61,7 @@ ADMIN_MEDIA_PREFIX = '/media/'
 # pour geoportail
 #
 GEOPORTAL_API_KEY = 'nhf8wztv3m9wglcda6n6cbuf'
+GEOPORTAL_MEDIA_URL = 'http://gps-iso.insa-lyon.fr/geoportal/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
