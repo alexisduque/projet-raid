@@ -57,6 +57,10 @@ MEDIA_ROOT = '../media'
 # Examples: "http://example.com/media/", "http://media.example.com/"
 MEDIA_URL = '/media/'
 ADMIN_MEDIA_PREFIX = '/media/'
+#
+# pour geoportail
+#
+GEOPORTAL_API_KEY = 'nhf8wztv3m9wglcda6n6cbuf'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -126,6 +130,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'geoportal'
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
