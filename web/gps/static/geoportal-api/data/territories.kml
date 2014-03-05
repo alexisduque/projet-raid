@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<kml xmlns="http://earth.google.com/kml/2.0">
+<Document>
+  <Folder>
+    <name>Territoires couvert par le Géoportail</name>
+    <Style id="territory_style">
+      <LineStyle>
+        <color>44000077</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>44000077</color>
+      </PolyStyle>
+    </Style>
+    <Placemark>
+      <name><![CDATA[Amsterdam et Saint Paul]]></name>
+      <ExtendedData>
+        <Data name="url">
+          <value>http://fr.wikipedia.org/wiki/Saint-Paul-et-Amsterdam</value>
+        </Data>
+      </ExtendedData>
+      <styleUrl>#territory_style</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>76,-40 79,-40 79,-36 76,-36 76,-40</coordinates>
+            <!--coordinates>77.48,-38.75 77.60,-38.75 77.60,-37.78 77.48,-37.78 77.48,-38.75</coordinates-->
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Terre Adélie]]></name>
+      <ExtendedData>
+        <Data name="url">
+          <value>http://fr.wikipedia.org/wiki/Terre_Ad%C3%A9lie</value>
+        </Data>
+      </ExtendedData>
+      <styleUrl>#territory_style</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>132,-69 132,-64 145,-64 145,-69 132,-69</coordinates>
+            <!--coordinates>132.56,-68.62, 132.56,-64.03 144.54,-64.03 144.54,-68.62 132.56,-68.62</coordinates-->
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Crozet]]></name>
+      <ExtendedData>
+        <Data name="url">
+          <value>http://fr.wikipedia.org/wiki/Crozet</value>
+        </Data>
+      </ExtendedData>
+      <styleUrl>#territory_style</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>47,-48 55,-48 55,-44 47,-44 47,-48</coordinates>
+            <!--coordinates>49.992,-46.827 52.688,-46.827 52.688,-45.659 49.992,-45.659 49.992,-46.827</coordinates-->
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[France Métropolitaine]]></name>
+      <ExtendedData>
+        <Data name="url">
+          <value>http://fr.wikipedia.org/wiki/France_metropolitaine</value>
+        </Data>
+      </ExtendedData>
+      <styleUrl>#territory_style</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>-31.17,27.33 69.03,27.33 69.03,80.83 -31.17,80.83 -31.17,27.33</coordinates>
+            <!--coordinates>-12,36 16.99,36 16.99,53.971 -12,53.971 -12,36</coordinates-->
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Guadeloupe]]></name>
+      <ExtendedData>
+        <Data name="url">
+          <value>http://fr.wikipedia.org/wiki/Guadeloupe</value>
+        </Data>
+      </ExtendedData>
+      <styleUrl>#territory_style</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>-63.2,15.75 -60,15.75 -60,17.5 -63.2,17.5 -63.2,15.75</coordinates>
+            <!--coordinates>-62,15.75 -60.90,15.75 -60.90,16.75 -62,16.75 -62,15.75</coordinates-->
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Guyane Francaise]]></name>
+      <ExtendedData>
+        <Data name="url">
+          <value>http://fr.wikipedia.org/wiki/Guyane_(France)</value>
+        </Data>
+      </ExtendedData>
+      <styleUrl>#territory_style</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>-62.1,-4.3 -46,-4.3 -46,11.5 -62.1,11.5 -62.1,-4.3</coordinates>
+            <!--coordinates>-54.764,1.611 -51.149,1.611 -51.149,6.138 -54.764,6.138 -54.764,1.611</coordinates-->
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Kerguelen]]></name>
+      <ExtendedData>
+        <Data name="url">
+          <value>http://fr.wikipedia.org/wiki/Kerguelen</value>
+        </Data>
+      </ExtendedData>
+      <styleUrl>#territory_style</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>62,-53 76,-53 76,-45 62,-45 62,-53</coordinates>
+            <!--coordinates>67.165,-50.082 71.932,-50.082 71.932,-48.316 67.165,-48.316 67.165,-50.082</coordinates-->
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Martinique]]></name>
+      <ExtendedData>
+        <Data name="url">
+          <value>http://fr.wikipedia.org/wiki/Martinique</value>
+        </Data>
+      </ExtendedData>
+      <styleUrl>#territory_style</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>-64,11.7 -59,11.7 -59,15.7 -64,15.7 -64,11.7</coordinates>
+            <!--coordinates>-62,14 -60,14 -60,15.35 -62,15.35 -62,14</coordinates-->
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Mayotte]]></name>
+      <ExtendedData>
+        <Data name="url">
+          <value>http://fr.wikipedia.org/wiki/Mayotte</value>
+        </Data>
+      </ExtendedData>
+      <styleUrl>#territory_style</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>40,-17.5 56,-17.5 56,3 40,3 40,-17.5</coordinates>
+            <!--coordinates>44.935,-13.099 45.369,-13.099 45.369,-12.555 44.935,-12.555 44.935,-13.099</coordinates-->
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Nouvelle-Calédonie]]></name>
+      <ExtendedData>
+        <Data name="url">
+          <value>http://fr.wikipedia.org/wiki/Nouvelle-Cal%C3%A9donie</value>
+        </Data>
+      </ExtendedData>
+      <styleUrl>#territory_style</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>160,-24.3 170,-24.3 170,-17.1 160,-17.1 160,-24.3</coordinates>
+            <!--coordinates>163.459,-22.968 168.315,-22.968 168.315,-19.34 163.459,-19.34 163.459,-22.968</coordinates-->
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Polynésie Française]]></name>
+      <ExtendedData>
+        <Data name="url">
+          <value>http://fr.wikipedia.org/wiki/Polyn%C3%A9sie_Francaise</value>
+        </Data>
+      </ExtendedData>
+      <styleUrl>#territory_style</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>-160,-28.2 -108,-28.2 -108,11 -160,11 -160,-28.2</coordinates>
+            <!--coordinates>-151.858,-17.962 -149.093,-17.962 -149.093,-16.21 -151.858,-16.21 -151.858,-17.962</coordinates-->
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Réunion]]></name>
+      <ExtendedData>
+        <Data name="url">
+          <value>http://fr.wikipedia.org/wiki/R%C3%A9union_(%C3%AEle)</value>
+        </Data>
+      </ExtendedData>
+      <styleUrl>#territory_style</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>37.5,-26.2 60,-26.2 60,-17.75 37.5,-17.75 37.5,-26.2</coordinates>
+            <!--coordinates>55.151,-21.461 55.899,-21.461 55.899,-20.791 55.151,-20.791 55.151,-21.461</coordinates-->
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Saint-Barthélémy]]></name>
+      <ExtendedData>
+        <Data name="url">
+          <value>http://fr.wikipedia.org/wiki/Saint-Barth%C3%A9l%C3%A9my_(Guadeloupe)</value>
+        </Data>
+      </ExtendedData>
+      <styleUrl>#territory_style</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>-63,17.75 -62.7,17.75 -62.7,17.99 -63,17.99 -63,17.75</coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Saint-Martin]]></name>
+      <ExtendedData>
+        <Data name="url">
+          <value>http://fr.wikipedia.org/wiki/Saint-Martin_(Antilles_francaises)</value>
+        </Data>
+      </ExtendedData>
+      <styleUrl>#territory_style</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>-63.19,18 -62.9,18 -62.9,18.18 -63.19,18.18 -63.19,18</coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Saint-Pierre-et-Miquelon]]></name>
+      <ExtendedData>
+        <Data name="url">
+          <value>http://fr.wikipedia.org/wiki/Saint-Pierre-et-Miquelon</value>
+        </Data>
+      </ExtendedData>
+      <styleUrl>#territory_style</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>-60,43.5 -50,43.5 -50,52 -60,52 -60,43.5</coordinates>
+            <!--coordinates>-56.437,46.725 -56.0409,46.725 -56.0409,47.177 -56.437,47.177 -56.437,46.725</coordinates-->
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Wallis et Futuna]]></name>
+      <ExtendedData>
+        <Data name="url">
+          <value>http://fr.wikipedia.org/wiki/Wallis_et_Futuna</value>
+          <!--value>http://fr.wikipedia.org/wiki/Wallis_(%C3%AEle)</value-->
+          <!--value>http://fr.wikipedia.org/wiki/Futuna_(%C3%AEle)</value-->
+        </Data>
+      </ExtendedData>
+      <styleUrl>#territory_style</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>-178.5,-14.6 -175.8,-14.6 -175.8,-12.8 -178.5,-12.8 -178.5,-14.6</coordinates>
+            <!--coordinates>-176.316,-13.433 -176.083,-13.433 -176.082,-13.15 -176.316,-13.15 -176.316,-13.433</coordinates-->
+            <!--coordinates>-178.216,-14.416 -177.949,-14.416 -177.949,-14.199 -178.216,-14.199 -178.216,-14.416</coordinates-->
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+  </Folder>
+</Document>
+</kml>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>standardV1_template.html</title>
+    <!-- indicates UTF-8 to get proper display of API labels : -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    /* overwritten styles or new styles : */
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:800px;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    /*]]>*/--></style>
+</head>
+<body>
+    <div id="VISUDiv" style="width:800px;height:600px;"></div>    <!-- the map div -->
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" target="_blank">Terms of Use</a> - &copy;IGN 2008-2013</div>
+    <!-- get the API configuration, with the API javascript : -->
+    <script type="text/javascript" src="http://api.ign.fr/geoportail/api?key=KEY&amp;instance=VISU&amp;"><!--//--><![CDATA[//><!--
+    //--><!]]></script>
+    <!-- Application script : -->
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+    // ----------------------------------------------------------------------
+    // WARNING: avoid using this template as it won't be anymore supported in
+    // the next release of the Geoportal's API (2.0)
+    // ----------------------------------------------------------------------
+    // the viewer variable is declared by the API through the instance parameter
+    VISU= null;
+
+    // called when onload event is fired :
+    function initGeoportalMap() {
+        if (typeof(geoportalLoadVISU)!='function') {
+            alert('Map creation failed');
+            return;
+        }
+        geoportalLoadVISU("VISUDiv", "normal", 'FXX');// build a new viewer
+        if (!VISU) {
+            alert('Map creation failed');
+            return;
+        }
+        VISU.addGeoportalLayers();                    // load all available layers
+        // default center and zoom location :
+        VISU.getMap().setCenter(VISU.viewerOptions.defaultCenter,VISU.viewerOptions.defaultZoom);
+    }
+    //--><!]]></script>
+</body>
+</html>

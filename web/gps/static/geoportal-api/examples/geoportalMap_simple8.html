@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>geoportalMap_simple.html (8)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    h1 {
+        text-align:center;
+        font-size:0.75em;
+        font-style: italic;
+        width:800px;
+    }
+    div#example_explain {
+        margin:0px 0px 10px 0px;
+        border: thin solid #595E61;
+        width:800px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+        color: #595E61;
+    }
+    form#gpLangChange {
+        border:0px;
+        margin:0px;
+        padding:0px;
+    }
+    div#viewerDiv {
+        width:800px;
+        height:600px;
+        background-color:white;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:800px;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    /*]]>*/--></style>
+  </head>
+  <body>
+    <h1 id="example_title">Carte simple (8)</h1>
+    <div id="viewerDiv"></div>
+    <div id="example_explain">Cette carte montre comment insérer très rapidement les données du Géoportail dans une page web&nbsp;: centrage sur des coordonnées en degrés décimaux, à un zoom et ajout d'un service WFS</div>
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank">Mentions Légales</a> - &copy;IGN 2008-2013</div>
+    
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+    var iv= null;
+    window.onload= function() {
+        iv= Geoportal.load(
+            // div's ID:
+            'viewerDiv',
+            // API's keys:
+            ['nhf8wztv3m9wglcda6n6cbuf'],
+            // map's center : use default
+            null,
+            11,//map's zoom
+            {
+                // only use ortho-imagery and maps :
+                layers:['ORTHOIMAGERY.ORTHOPHOTOS', 'GEOGRAPHICALGRIDSYSTEMS.MAPS'],
+                // add a wms service (sandre) :
+                overlays:{
+                    'wfs':[{
+                        name:"Cours d'eau",
+                        url:"http://services.sandre.eaufrance.fr/geo/mdo_FXX",
+                        options:{
+                            params:{//WFS parameters:
+                                typename:'MasseDEauRiviere'
+                            },
+                            options:{//WFS layer's options
+                                protocolOptions:{
+                                    featurePrefix:'sa',
+                                    featureNS:'http://xml.sandre.eaufrance.fr/',
+                                    geometryName:'msGeometry'
+                                },
+                                projection:'EPSG:2154',
+                                units:'m',
+                                // maxExtent expressed in EPSG:2154 :
+                                maxExtent:new OpenLayers.Bounds(-58253.71015916939,6031824.7296808595,1181938.177574663,7233428.222339219),
+                                minZoomLevel:11,
+                                maxZoomLevel:16,
+                                //one could make it not visible with this :
+                                //visibility: false,
+                                originators:[
+                                    {
+                                        logo:'sandre',
+                                        pictureUrl: 'img/logo_sandre.gif',
+                                        url: 'http://sandre.eaufrance.fr'
+                                    }
+                                ],
+                                styleMap:new OpenLayers.StyleMap({
+                                    "default": new OpenLayers.Style({
+                                        strokeColor:'#0000ff',
+                                        strokeWidth:3
+                                    }),
+                                    "select": new OpenLayers.Style({
+                                        strokeColor:'#3399ff',
+                                        strokeWidth:3
+                                    })
+                                }),
+                                /**
+                                 * Function: overRiver
+                                 * Called when a feature is selected.
+                                 *
+                                 * Parameters:
+                                 * feature - {<OpenLayers.Feature>}
+                                 */
+                                onSelect:function(feature) {
+                                    if (feature) {
+                                        if (!feature.popup) {
+                                            if (!OpenLayers.Popup.FramedCloudMaxSize) {
+                                                OpenLayers.Popup.FramedCloudMaxSize= OpenLayers.Class(OpenLayers.Popup.FramedCloud, {
+                                                    'autoSize': false,
+                                                    'maxSize': new OpenLayers.Size(200,100)
+                                                });
+                                            }
+
+                                            var ll= this.map.getLonLatFromViewPortPx(this.handlers.feature.evt.xy);
+                                            feature.popup= new OpenLayers.Popup.FramedCloudMaxSize(
+                                                "chicken",
+                                                ll,
+                                                null,
+                                                "<div style='font-size:1.0em;line-height:1.5em;'>" + feature.attributes['NomMasseDE']+ "</div>",
+                                                null,
+                                                false);
+                                        }
+                                        if (feature.popup) {
+                                            this.map.addPopup(feature.popup,true);
+                                        }
+                                    }
+                                },
+                                /**
+                                 * Function: outRiver
+                                 * Called when a feature is unselected.
+                                 *
+                                 * Parameters:
+                                 * feature - {<OpenLayers.Feature>}
+                                 */
+                                onUnselect:function(feature) {
+                                    if (feature && feature.popup) {
+                                        feature.popup.destroy();
+                                        feature.popup= null;
+                                    }
+                                },
+                                hover:true
+                            }
+                        }
+                    }]
+                }
+                ,language:'fr',proxyUrl:'/geoportail/api/xmlproxy'+'?url=',viewerClass:'Geoportal.Viewer.Default'
+            }
+        );
+    };
+    //--><!]]></script>
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/GeoportalExtended.js"><!-- --></script>
+  </body>
+</html>

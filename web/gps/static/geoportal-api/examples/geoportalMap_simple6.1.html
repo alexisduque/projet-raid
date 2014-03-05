@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>geoportalMap_simple.html (6.1)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    h1 {
+        text-align:center;
+        font-size:0.75em;
+        font-style: italic;
+        width:800px;
+    }
+    div#example_explain {
+        margin:0px 0px 10px 0px;
+        border: thin solid #595E61;
+        width:800px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+        color: #595E61;
+    }
+    form#gpLangChange {
+        border:0px;
+        margin:0px;
+        padding:0px;
+    }
+    div#viewerDiv {
+        width:800px;
+        height:600px;
+        background-color:white;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:800px;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    /*]]>*/--></style>
+  </head>
+  <body>
+    <h1 id="example_title">Carte simple (6.1)</h1>
+    <div id="viewerDiv"></div>
+    <div id="example_explain">Cette carte montre comment insérer très rapidement les données du Géoportail dans une page web&nbsp;: centrage sur des coordonnées en degrés décimaux, à un zoom et ajout d'un fichier GPX</div>
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank">Mentions Légales</a> - &copy;IGN 2008-2013</div>
+    
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+    var iv= null;
+
+    /**
+     * Function: changeRenderIntent
+     * Toggle rendering for selected features.
+     *
+     * Parameters:
+     * o - {<OpenLayers.Feature.Vector>}
+     */
+    function changeRenderIntent (o) {
+        if (o && o.feature) {
+            o.feature.renderIntent= o.feature.renderIntent=="default"?
+                "select"
+            :   "default";
+        }
+    }
+
+    window.onload= function() {
+        iv= Geoportal.load(
+            // div's ID:
+            'viewerDiv',
+            // API's keys:
+            ['nhf8wztv3m9wglcda6n6cbuf'],
+            // map's center : see eventListeners.loadend !
+            null,
+            //map's zoom : see eventListeners.loadend !
+            undefined,
+            {
+                // only use ortho-imagery :
+                layers:['ORTHOIMAGERY.ORTHOPHOTOS'],
+                // add a gpx (url relative to this page) :
+                overlays:{
+                    'gpx':[{
+                        name:'Campomoro Tizzano Sartene',
+                        url:'../data/Campomoro-Tizzano-Sartene_3029.gpx',
+                        options:{
+                            params:{// layer's options ...
+                                minZoomLevel:10,
+                                maxZoomLevel:14,
+                                originators:[{
+                                    pictureUrl:'./img/tracegps.gif',
+                                    url:'http://www.tracegps.com/'
+                                }],
+                                styleMap:new OpenLayers.StyleMap({
+                                    "default": new OpenLayers.Style(
+                                        OpenLayers.Util.applyDefaults({
+                                            fillColor: "#FFFF00",
+                                            fillOpacity: 0.75,
+                                            strokeColor: "#FF9900",
+                                            strokeWidth: 2,
+                                            graphicZIndex: "${zIndex}",
+                                            graphicName: "triangle",
+                                            pointRadius: 8,
+                                            //see context object below
+                                            label:"${getName}",
+                                            labelAlign: "rb",
+                                            labelXOffset: -20,
+                                            labelYOffset: -20,
+                                            labelBackgroundColor: "#FFFF00",
+                                            labelBorderColor: "black",
+                                            labelBorderSize: "1px",
+                                            fontColor: "black",
+                                            fontWeight: "bold",
+                                            fontSize: "12px",
+                                            fontFamily: "Courier New, monospace"
+                                        },OpenLayers.Feature.Vector.style["default"]),{
+                                            context:{
+                                                getName: function(f) {
+                                                    if (f.attributes['typeName']=='wpt') {
+                                                        return f.attributes['name'];
+                                                    }
+                                                    return '';
+                                                }
+                                            }
+                                        }),
+                                    "select": new OpenLayers.Style(
+                                        OpenLayers.Util.applyDefaults({
+                                            fillColor: "#FF9900",
+                                            fillOpacity: 0.75,
+                                            strokeColor: "#FFFF00",
+                                            strokeWidth: 4,
+                                            pointRadius: 12
+                                        },OpenLayers.Feature.Vector.style["select"]))
+                                }),
+                                preFeatureInsert:
+                                    function(f) {
+                                        if (f) {
+                                            // default Geoportal API : cursor pointer on hover ...
+                                            Geoportal.Popup.setPointerCursorForFeature(f);
+                                            var zidx= 0;
+                                            if (f.attributes['typeName']=='wpt') {
+                                                zidx= 1;
+                                            }
+                                            f.attributes['zIndex']= zidx;
+                                        }
+                                    },
+                                rendererOptions: {
+                                    zIndexing: true
+                                },
+                                skipAttributes:['zIndex'],//do not render zIndex in popups!
+                                eventListeners:{
+                                    "loadend"              : function() {
+                                        if (this.maxExtent) {
+                                            //Zoom and refocusing on the max extent
+                                            //Zoom et recentrage sur l'emprise maxi
+                                            this.setVisibility(true);
+                                            this.map.zoomToExtent(this.maxExtent);
+                                        }
+                                    },
+                                    //Changing the feature's style
+                                    "beforefeatureselected": changeRenderIntent,
+                                    "featureunselected"    : changeRenderIntent
+                                }
+                            },
+                            options:{//popup's options ...
+                            }
+                        }
+                    }]
+                }
+                ,language:'fr'
+            }
+        );
+    };
+    //--><!]]></script>
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/Geoportal.js"><!-- --></script>
+  </body>
+</html>

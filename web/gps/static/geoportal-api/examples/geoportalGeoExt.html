@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>geoportalGeoExt.html</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="http://extjs.cachefly.net/ext-3.2.1/resources/css/ext-all.css" />
+    <link rel="stylesheet" type="text/css" href="http://extjs.cachefly.net/ext-3.2.1/examples/shared/examples.css" />
+    <link rel="stylesheet" type="text/css" href="http://dev.openlayers.org/releases/OpenLayers-2.11/theme/default/style.css" />
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="http://dev.openlayers.org/releases/OpenLayers-2.11/theme/default/ie6-style.css"/>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="http://dev.openlayers.org/releases/OpenLayers-2.11/theme/default/framedCloud.css"/>
+    <link id="__GeoportalCss__" href="/geoportail/api/js/2.0.3/theme/geoportal/style.css" type="text/css" rel="stylesheet"/>
+    <!--[if lte IE 6]>
+    <link id="__IE6GeoportalCss__" href="/geoportail/api/js/2.0.3/theme/geoportal/ie6-style.css" type="text/css" rel="stylesheet"/>
+    <![endif]-->
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    h1 {
+        text-align:center;
+        font-size:0.75em;
+        font-style: italic;
+    }
+    div#viewerDiv {
+    }
+    div#example_explain {
+        margin:0px 0px 10px 0px;
+        border: thin solid #595E61;
+        width:100%;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+        color: #595E61;
+    }
+    .float-left {
+        float: left;
+    }
+    .clear-left {
+        clear: left;
+    }
+    #north {
+        /* uncomment this line to insert a banner : */
+        /*background:transparent url(images/banner.jpg) repeat-x scroll 0 0;*/
+    }
+    .olControlAttribution {
+        bottom:15px;
+    }
+    .gpControlPermanentLogo {
+        bottom:10px;
+        left:45%;
+        padding:0px;
+    }
+    .gpControlPermanentLogo img {
+        margin:0px;
+        padding:0px;
+        border:0px none;
+    }
+    .gpControlTermsOfService {
+        left:45%;
+        padding:0px;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:100%;
+        position:inherit;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    div#code a, div#code a:link, div#code a:visited, div#code a:hover {
+        text-decoration:none;
+        color: #595E61;
+    }     
+    div#code {
+        margin:0px 0px 10px 0px;
+        width:800px;
+        position:inherit;
+        left:0px;
+        top:31px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+    }
+    /*]]>*/--></style>
+    
+    <script type="text/javascript" src="http://extjs.cachefly.net/ext-3.2.1/adapter/ext/ext-base.js"><!--//--><![CDATA[//><!--//--><!]]></script>
+    <script type="text/javascript" src="http://extjs.cachefly.net/ext-3.2.1/ext-all.js"><!--//--><![CDATA[//><!--//--><!]]></script>
+    <script type="text/javascript" src="http://dev.openlayers.org/releases/OpenLayers-2.11/OpenLayers.js"><!--//--><![CDATA[//><!--//--><!]]></script>
+    <script type="text/javascript" src="http://api.geoext.org/1.0/script/GeoExt.js"><!--//--><![CDATA[//><!--//--><!]]></script>
+    <!--script type="text/javascript" charset="utf-8" src="http://api.ign.fr/geoportail/api/js/2.0.3/GeoportalMin.js"></script-->
+    <!-- replace the below line, by the above line when copying this page -->
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/GeoportalMin.js"><!-- --></script>
+</head>
+<body>
+    <div id="north">
+        <h1 id="example_title"></h1>
+    </div>
+    <div id="viewerDiv"></div>
+    <div id="south">
+        <div id="example_explain" style="margin-top: 10px"></div>
+        <div id='code'><a href="./js/geoportalGeoExt.js" alt="geoportalGeoExt" id="example_jscode" target="_blank"></a></div>
+        <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank"></a> - &copy;IGN 2008-2013</div>
+    </div>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/i18n/geoportalGeoExt.js"></script>
+    <script type="text/javascript" src="js/geoportalGeoExt.js"></script>
+  </body>
+</html>

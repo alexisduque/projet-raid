@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>standardV2.2_template.html</title>
+    <!-- indicates UTF-8 to get proper display of API labels : -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    /* overwritten styles or new styles : */
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:800px;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    /*]]>*/--></style>
+</head>
+<body>
+    <div id="VISUDiv" style="width:800px;height:600px;"></div>    <!-- the map div -->
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" target="_blank">Terms of Use</a> - &copy;IGN 2008-2013</div>
+    <!-- Application script : -->
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+    // the viewer variable is declared by the API through the instance parameter
+    VISU= null;
+
+    /**
+     * Function: initGeoportalMap
+     * Load the application. Called when all information have been loaded by <loadAPI>().
+     */
+    function initGeoportalMap() {
+        // viewer creation of type <Geoportal.Viewer>
+        // création du visualiseur du type <Geoportal.Viewer>
+        //                                   map's div id
+        viewer= new Geoportal.Viewer.Default('VISUDiv', OpenLayers.Util.extend(
+            // options:
+            {
+                // default value
+                // valeur par défaut
+                //mode:'normal',
+                // default value
+                // valeur par défaut
+                //territory:'FXX',
+                // default value
+                // valeur par défaut
+                //displayProjection:'IGNF:RGF93G'
+                // only usefull when loading external resources
+                // utile uniquement pour charger des resources externes */
+                //proxy:'/geoportail/api/xmlproxy'+'?url='
+            },
+            // API keys configuration variable set by <Geoportal.GeoRMHandler.getConfig>
+            // variable contenant la configuration des clefs API remplie par <Geoportal.GeoRMHandler.getConfig>
+            window.gGEOPORTALRIGHTSMANAGEMENT===undefined? {'apiKey':'nhf8wztv3m9wglcda6n6cbuf'} : gGEOPORTALRIGHTSMANAGEMENT)
+        );
+
+        if (!VISU) {
+            // problem ...
+            alert('Map creation failed');
+            return;
+        }
+
+        // add all resources bound to the API's keys
+        // charge toutes les ressources liées aux clefs API
+        VISU.addGeoportalLayers();
+
+        // set center at default location and zoom
+        // centrage en utilisant la position et la résolution par défaut
+        VISU.getMap().setCenter(VISU.viewerOptions.defaultCenter,VISU.viewerOptions.defaultZoom);
+    }
+
+    /**
+     * Function: loadAPI
+     * Load the configuration related with the API keys.
+     * Called on "onload" event.
+     * Call <initMap>() function to load the interface.
+     */
+    function loadAPI() {
+        // wait for all classes to be loaded
+        // on attend que les classes soient chargées
+        if (__Geoportal$timer!=null) {
+            window.clearTimeout(__Geoportal$timer);
+            __Geoportal$timer= null;
+        }
+        var f;
+        var C= ['OpenLayers', 'Geoportal', 'Geoportal.Viewer', 'Geoportal.Viewer.Default'];
+        for (var i= 0, l= C.length; i<l; i++) {
+            try {
+                f= eval(C[i]);
+            } catch (e) {
+                f= undefined;
+            }
+            if (typeof(f)==='undefined') {
+                __Geoportal$timer= window.setTimeout('loadAPI()', 300);
+                return;
+            }
+        }
+
+        // load API keys configuration into gGEOPORTALRIGHTSMANAGEMENT, then load the interface
+        // on charge la configuration des clefs API dans gGEOPORTALRIGHTSMANAGEMENT, puis on charge l'application
+        Geoportal.GeoRMHandler.getConfig(
+            // API's keys :
+            ['KEY'],
+            // callback (1) when receiving configuration
+            null,   // defaults to Geoportal.GeoRMHandler.getContract
+            // GeoRM's service URL :
+            null,   // defaults to Geoportal.GeoRMHandler.GEORM_SERVER_URL
+            }, {
+                // options :
+                // callback when all API's key configuration have been received
+                // fonction de rappel quant toutes les configurations de clefs API ont été reçues
+                onContractsComplete: initGeoportalMap//,
+                // when the callback (1) is user's defined, the following options are passed through the global variable gGEOPORTALRIGHTSMANAGEMENT
+                // quand la fonction de rappel (1) n'est pas null, les options suivantes sont passées à la variable globale gGEOPORTALRIGHTSMANAGEMENT
+                //capabilities:{
+                //    proxy:Geoportal.JSON_PROXY_URL,                   //default value, JSON proxy Url
+                //                                                      //valeur par défaut, Url du proxy JSON
+                //    callback:Geoportal.GeoRMHandler.getCapabilities,  // utility function, callback when capabilities are received
+                //    onCapabilitiesComplete:null                       // callback when all capabilities have been received
+                //}
+            }
+        );
+    }
+
+    // assign callback when "onload" event is fired
+    // assignation de la fonction à appeler lors de la levée de l'évènement "onload"
+    window.onload= loadAPI;
+    //--><!]]></script>
+    <!-- get compressed API for release 2.0.3 : -->
+    <script type="text/javascript" src="http://api.ign.fr/geoportail/api/js/2.0.3/Geoportal.js"><!--//--><![CDATA[//><!--
+    //--><!]]></script>
+</body>
+</html>

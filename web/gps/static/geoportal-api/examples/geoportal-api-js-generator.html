@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Générateur de pages API Javascript Géoportail</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta content="api,geoportail,ign,javascript" name="keywords">
+    <meta content="a simple generator for the french web 2D javascript Geoportal API." name="description">
+    <meta content="Institut National de l'Information Géographique et Forestière (IGN) - France" name="author">
+    <link href="http://api.ign.fr/geoportail/api/doc/examples/img/favicon.ico" rel="shortcut icon">
+    <link href="http://api.ign.fr/geoportail/api/doc/examples/img/favicon.ico" rel="icon" type="image/x-icon">
+    <link type="text/css" href="http://code.jquery.com/ui/1.8.17/themes/base/jquery-ui.css" rel="stylesheet"/>
+    <link type="text/css" href="../js/${project.version}/lib/jquery/richardscarrott-jquery-ui-carousel-f21e3d1/css/jquery.rs.carousel.css" rel="stylesheet"/>
+    <link type="text/css" href="../js/${project.version}/lib/SyntaxHighlighter/styles/shCore.css" rel="stylesheet"/>
+    <link type="text/css" href="../js/${project.version}/lib/SyntaxHighlighter/styles/shCoreDefault.css" rel="stylesheet"/>
+    <link type="text/css" href="../js/${project.version}/lib/SyntaxHighlighter/styles/shThemeDefault.css" rel="stylesheet"/>
+    <link id="__OpenLayersCss__" href="/geoportail/api/js/2.0.3/theme/default/style.css" type="text/css" rel="stylesheet"/>
+    <link id="__GeoportalCss__" href="/geoportail/api/js/2.0.3/theme/geoportal/style.css" type="text/css" rel="stylesheet"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    #generator-tabs li .ui-icon-help {
+        float:left;
+        margin:0.2em 0.2em 0 0;
+        cursor:pointer;
+    }
+    #generator-page {
+        width:100%;
+        height:auto;
+    }
+    .generator-description {
+    }
+    #generator-map-holder {
+        padding:0.2em;
+        height:600px;
+        display:none;
+    }
+    #generator-map {
+        width:100%;
+        height:100%;
+        background-color:#AAAAAA;
+    }
+    /* carousels */
+    /* generator-layers-carousel : */
+    #generator-layers-carousel.rs-carousel-vertical {
+        width:100%;
+        height:30px;
+    }
+    #generator-layers-carousel .rs-carousel-runner {
+        margin:0px;
+        padding:0px;
+        width:100%;
+        height:30px;
+        list-style:none;
+    }
+    #generator-layers-carousel .rs-carousel-item {
+        width:100%;
+        height:30px;
+    }
+    #generator-layers-carousel .rs-carousel-action-prev,
+    #generator-layers-carousel .rs-carousel-action-next {
+        cursor: pointer;
+        color:#FFF;
+        display:block;
+        height:16px;
+        width:16px;
+        position:relative;
+        background-repeat: no-repeat;
+        display: block;
+        overflow: hidden;
+        text-indent: -99999px;
+    }
+    #generator-layers-carousel .rs-carousel-action-prev {
+        top:-30px;
+        left:-19px;
+    }
+    #generator-layers-carousel .rs-carousel-action-next {
+        top:-30px;
+        left:-20px;
+    }
+    #generator-layers-carousel .rs-carousel-action-prev,
+    #generator-layers-carousel .rs-carousel-action-next {
+        background-image:url(http://code.jquery.com/ui/1.8.17/themes/base/images/ui-icons_222222_256x240.png);
+    }
+    #generator-layers-carousel .rs-carousel-action-disabled {
+        background-image:url(http://code.jquery.com/ui/1.8.17/themes/base/images/ui-icons_888888_256x240.png);
+    }
+    #generator-layers-carousel .rs-carousel-action-prev,
+    #generator-layers-carousel .rs-carousel-action-prev.rs-carousel-action-disabled {
+        background-position: 0 -16px;
+    }
+    #generator-layers-carousel .rs-carousel-action-next,
+    #generator-layers-carousel .rs-carousel-action-next.rs-carousel-action-disabled {
+        background-position: -64px -16px;
+    }
+    /* generator-userlayers-carousel : */
+    #generator-userlayers-carousel.rs-carousel-vertical {
+        width:100%;
+        height:30px;
+    }
+    #generator-userlayers-carousel .rs-carousel-runner {
+        margin:0px;
+        padding:0px;
+        width:100%;
+        height:30px;
+        list-style:none;
+    }
+    #generator-userlayers-carousel .rs-carousel-item {
+        width:100%;
+        height:30px;
+    }
+    #generator-userlayers-carousel .rs-carousel-action-prev,
+    #generator-userlayers-carousel .rs-carousel-action-next {
+        cursor: pointer;
+        color:#FFF;
+        display:block;
+        height:16px;
+        width:16px;
+        position:relative;
+        background-repeat: no-repeat;
+        display: block;
+        overflow: hidden;
+        text-indent: -99999px;
+    }
+    #generator-userlayers-carousel .rs-carousel-action-prev {
+        top:-30px;
+        left:-19px;
+    }
+    #generator-userlayers-carousel .rs-carousel-action-next {
+        top:-30px;
+        left:-20px;
+    }
+    #generator-userlayers-carousel .rs-carousel-action-prev,
+    #generator-userlayers-carousel .rs-carousel-action-next {
+        background-image:url(http://code.jquery.com/ui/1.8.17/themes/base/images/ui-icons_222222_256x240.png);
+    }
+    #generator-userlayers-carousel .rs-carousel-action-disabled {
+        background-image:url(http://code.jquery.com/ui/1.8.17/themes/base/images/ui-icons_888888_256x240.png);
+    }
+    #generator-userlayers-carousel .rs-carousel-action-prev,
+    #generator-userlayers-carousel .rs-carousel-action-prev.rs-carousel-action-disabled {
+        background-position: 0 -16px;
+    }
+    #generator-userlayers-carousel .rs-carousel-action-next,
+    #generator-userlayers-carousel .rs-carousel-action-next.rs-carousel-action-disabled {
+        background-position: -64px -16px;
+    }
+    /* generator-components-carousel */
+    #generator-components-carousel.rs-carousel-vertical {
+        width:100%;
+        height:30px;
+    }
+    #generator-components-carousel .rs-carousel-runner {
+        margin:0px;
+        padding:0px;
+        width:100%;
+        height:30px;
+        list-style:none;
+    }
+    #generator-components-carousel .rs-carousel-item {
+        width:100%;
+        height:30px;
+    }
+    #generator-components-carousel .rs-carousel-action-prev,
+    #generator-components-carousel .rs-carousel-action-next {
+        cursor: pointer;
+        color:#FFF;
+        display:block;
+        height:16px;
+        width:16px;
+        position:relative;
+        background-repeat: no-repeat;
+        display: block;
+        overflow: hidden;
+        text-indent: -99999px;
+    }
+    #generator-components-carousel .rs-carousel-action-prev {
+        top:-30px;
+        left:-19px;
+    }
+    #generator-components-carousel .rs-carousel-action-next {
+        top:-30px;
+        left:-20px;
+    }
+    #generator-components-carousel .rs-carousel-action-prev,
+    #generator-components-carousel .rs-carousel-action-next {
+        background-image:url(http://code.jquery.com/ui/1.8.17/themes/base/images/ui-icons_222222_256x240.png);
+    }
+    #generator-components-carousel .rs-carousel-action-disabled {
+        background-image:url(http://code.jquery.com/ui/1.8.17/themes/base/images/ui-icons_888888_256x240.png);
+    }
+    #generator-components-carousel .rs-carousel-action-prev,
+    #generator-components-carousel .rs-carousel-action-prev.rs-carousel-action-disabled {
+        background-position: 0 -16px;
+    }
+    #generator-components-carousel .rs-carousel-action-next,
+    #generator-components-carousel .rs-carousel-action-next.rs-carousel-action-disabled {
+        background-position: -64px -16px;
+    }
+    #generator-sample-code-container {
+        max-height:150px;
+        overflow:auto;
+    }
+    fieldset.ui-helper-reset label {
+        display:inline-block;
+        width:160px;
+    }
+    .gpLayerVisible {
+        height:18px;
+        width:18px;
+        margin:0px;
+        padding:0px;
+        border:0px;
+        display:inline-block;
+        background:transparent url(http://api.ign.fr/tech-docs-js/examples/img/MenuLayerVisibility.gif) no-repeat 0px 0px;
+    }
+    .gpLayerNotVisible {
+        height:18px;
+        width:18px;
+        margin:0px;
+        padding:0px;
+        border:0px;
+        display:inline-block;
+        background:transparent url(http://api.ign.fr/tech-docs-js/examples/img/MenuLayerVisibility.gif) no-repeat 0px -18px;
+    }
+    .gpControlRemoveLayerFullItemInactive {
+        background-image:url(picto_layerDropFull_off.gif);
+        background-repeat:no-repeat;
+        cursor:pointer;
+        float:left;
+        position:relative;
+        left:0%;
+        top:0%;
+        width:23px;
+        height:23px;
+    }
+    /*]]>*/--></style>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"><!--//--><![CDATA[//><!--
+    //--><!]]></script>
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.8.17/jquery-ui.min.js"><!--//--><![CDATA[//><!--
+    //--><!]]></script>
+    <script type="text/javascript" src="../js/${project.version}/lib/jquery/richardscarrott-jquery-ui-carousel-f21e3d1/js/jquery.rs.carousel.js"><!--//--><![CDATA[//><!--
+    //--><!]]></script>
+    <script type="text/javascript" src="../js/${project.version}/lib/jquery/malsup-corner-7ebb1bf/jquery.corner.js"><!--//--><![CDATA[//><!--
+    //--><!]]></script>
+    <script type="text/javascript" src="../js/${project.version}/lib/SyntaxHighlighter/scripts/XRegExp.js"><!--//--><![CDATA[//><!--
+    //--><!]]></script>
+    <script type="text/javascript" src="../js/${project.version}/lib/SyntaxHighlighter/scripts/shCore.js"><!--//--><![CDATA[//><!--
+    //--><!]]></script>
+    <script type="text/javascript" src="../js/${project.version}/lib/SyntaxHighlighter/scripts/shBrushXml.js"><!--//--><![CDATA[//><!--
+    //--><!]]></script>
+    <script type="text/javascript" src="../js/${project.version}/lib/SyntaxHighlighter/scripts/shBrushJScript.js"><!--//--><![CDATA[//><!--
+    //--><!]]></script>
+    <script type="text/javascript" src="../js/${project.version}/lib/SyntaxHighlighter/scripts/shBrushCss.js"><!--//--><![CDATA[//><!--
+    //--><!]]></script>
+</head>
+<body>
+    <div id="generator-help" title="Aide"></div>
+    <div id="generator-page">
+        <img alt="Site de l'Institut National de l'Information Géographique et Forestière"  src="img/logo_geo.png">
+        <div class="generator-description">
+            <p></p>
+        </div>
+
+        <div id="generator-map-holder" class="ui-widget-content ui-corner-all">
+            <div id="generator-map"></div>
+        </div>
+
+        <div class="generator-page">
+            <div id="generator-tabs"></div>
+        </div>
+    </div>
+    
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/GeoportalExtended.js"><!-- --></script>
+    <script type="text/javascript" src="js/geoportal-api-js-generator.js"></script>
+</body>
+</html>

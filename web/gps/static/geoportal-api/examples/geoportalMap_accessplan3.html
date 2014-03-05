@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>geoportalMap_accessplan3.html</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <!-- import OpenLayers/Geoportal CSS to ease overloading their styles : -->
+    <!-- OpenLayers :-->
+    <link id="__OpenLayersCss__" href="/geoportail/api/js/2.0.3/theme/default/style.css" type="text/css" rel="stylesheet"/>
+    <!--[if lte IE 6]>
+    <link id="__IE6OpenLayersCss__" href="/geoportail/api/js/2.0.3/theme/default/ie6-style.css" type="text/css" rel="stylesheet"/>
+    <![endif]-->
+    <!-- as OpenLayers.Popup.FramedCloud is used : -->
+    <link id="__FramedCloudOpenLayersCss__" href="/geoportail/api/js/2.0.3/theme/default/framedCloud.css" type="text/css" rel="stylesheet"/>
+    <!-- Geoportal :-->
+    <link id="__GeoportalCss__" href="/geoportail/api/js/2.0.3/theme/geoportal/style.css" type="text/css" rel="stylesheet"/>
+    <!--[if lte IE 6]>
+    <link id="__IE6GeoportalCss__" href="/geoportail/api/js/2.0.3/theme/geoportal/ie6-style.css" type="text/css" rel="stylesheet"/>
+    <![endif]-->
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    /* overwritten styles or new styles : */
+    .olControlZoomPanel {
+        top:5px;
+    }
+    .olControlZoomPanel div {
+        background-image:url("http://maps.gstatic.com/mapfiles/szc3d.png");/*19x42*/
+        width:19px;
+        height:21px;
+    }
+    .olControlZoomPanel .olControlZoomToMaxExtentItemInactive {
+        display:none;
+    }
+    .olControlZoomPanel .olControlZoomOutItemInactive {
+        background-position:0 -21px;
+        top:21px;
+    }
+    .gpMainMapCell {
+        border:0px none;
+    }
+    .gpControlLayerSwitcherSimple {
+        margin:5px;
+        right:0px;
+        top:0px;
+        font-family: Arial,Helvetica,sans-serif;
+        color: #333333;
+    }
+    .gpControlLayerSwitcherSimpleGroupDivClass {
+    }
+    .gpControlLayerSwitcherSimpleDivClass {
+        float:left;
+        cursor:pointer;
+    }
+    .gpControlLayerSwitcherSimpleDivClass {
+    }
+    .gpControlLayerSwitcherSimpleSpanClass {
+        background: #6D8ACC;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#6D8ACC', endColorstr='#7B98D9');
+        background: -moz-linear-gradient(center top , #6D8ACC, #7B98D9);
+        background: -webkit-gradient(linear, center top, center bottom, from(#6D81CC), to(#7B98D9));
+        border: 1px solid #678AC7;
+        -moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.35);
+        -webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.35);
+        box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.35);
+        color: white;
+        font-family: Arial,sans-serif;
+        font-size: 12px;
+        font-weight: bold;
+        line-height: 160%;
+        overflow: hidden;
+        padding: 0 6px;
+        text-align: center;
+    }
+    .gpControlLayerSwitcherSimpleSpanClassNotVisible {
+        background: #FEFEFE;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FEFEFE', endColorstr='#F3F3F3');
+        background: -moz-linear-gradient(center top , #FEFEFE, #F3F3F3);
+        background: -webkit-gradient(linear, center top, center bottom, from(#FEFEFE), to(#F3F3F3));
+        border-color: #A9BBDF #A9BBDF #A9BBDF -moz-use-text-color;
+        border-style: solid solid solid none;
+        border-width: 1px 1px 1px 0;
+        -moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.35);
+        -webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.35);
+        box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.35);
+        color: black;
+        font-family: Arial,sans-serif;
+        font-size: 12px;
+        font-weight: bold;
+        line-height: 160%;
+        overflow: hidden;
+        padding: 0 6px;
+        text-align: center;
+    }
+    h1 {
+        text-align:center;
+        font-size:0.75em;
+        font-style: italic;
+    }
+    div#example_explain {
+        margin:0px 0px 10px 0px;
+        border: thin solid #595E61;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+        color: #595E61;
+    }
+    form#gpLangChange {
+        border:0px;
+        margin:0px;
+        padding:0px;
+    }
+    div#viewerDiv {
+        background-color:white;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    div#code a, div#code a:link, div#code a:visited, div#code a:hover {
+        text-decoration:none;
+        color: #595E61;
+    }
+    div#code {
+        margin:0px 0px 10px 0px;
+        position:relative;
+        left:0px;
+        top:0px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+    }
+    div.acpopup {
+        font-family:Arial,Helvetica,sans-serif;
+        font-size:12px;
+        cursor:default;
+    }
+    div.acpopup h3 {
+        color:#20679E;
+        font-weight:bold;
+        margin:0px;
+        padding:0px;
+    }
+    div.acpopup p {
+        margin:0px;
+        padding:0px;
+    }
+    /*]]>*/--></style>
+</head>
+<body>
+    <h1 id="example_title"></h1>
+    <form id="gpLangChange" name="gpLangChange" action="#">
+      <select style="font-size:0.75em;" id="gpChooseLang" name="gpChooseLang" size="1">
+        <option value="de">Deutsch</option>
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="it">Italiano</option>
+      </select>
+    </form>
+    <div id="viewerDiv"></div>
+    <div id="example_explain"></div>
+    <div id='code'><a href="./js/geoportalMap_accessplan3.js" alt="geoportalMap_accessplan3" id="example_jscode" target="_blank"></a></div>
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank"></a> - &copy;IGN 2008-2013</div>
+    
+    <!--script type="text/javascript" charset="utf-8" src="http://api.ign.fr/geoportail/api/js/2.0.3/GeoportalExtended.js"></script-->
+    <!-- replace the below line, by the above line when copying this page -->
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/GeoportalExtended.js"><!-- --></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/i18n/geoportalMap_accessplan3.js"></script>
+    <script type="text/javascript" src="js/geoportalMap_accessplan3.js"></script>
+</body>
+</html>

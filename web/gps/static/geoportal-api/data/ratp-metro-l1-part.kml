@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Document>
+  <name>Stations Ligne 1 (part)</name>
+  <Style id="metro">
+    <IconStyle>
+      <scale>1.00</scale>
+      <Icon>
+        <href>img/m1.gif</href>
+        <w>21</w>
+        <h>21</h>
+      </Icon>
+    </IconStyle>
+    <LabelStyle>
+      <color>ff000000</color>
+      <scale>0.8</scale>
+    </LabelStyle>
+  </Style>
+  <Folder>
+    <name>Ligne 1 (4 stations)</name>
+    <Placemark>
+      <name><![CDATA[Château de Vincennes]]></name>
+      <description><![CDATA[Château de Vincennes - Ligne 1]]></description>
+      <styleUrl>#metro</styleUrl>
+      <Point>
+        <coordinates>2.439082092420151,48.84460609112755,0</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Bérault]]></name>
+      <description><![CDATA[Bérault - Ligne 1]]></description>
+      <styleUrl>#metro</styleUrl>
+      <Point>
+        <coordinates>2.428532140353653,48.84561119867807,0</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Saint Mandé]]></name>
+      <description><![CDATA[Saint Mandé - Ligne 1]]></description>
+      <styleUrl>#metro</styleUrl>
+      <Point>
+        <coordinates>2.417628763114109,48.84652346962503,0</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Porte de Vincennes]]></name>
+      <description><![CDATA[Porte de Vincennes - Ligne 1]]></description>
+      <styleUrl>#metro</styleUrl>
+      <Point>
+        <coordinates>2.408568268483649,48.84729378623873,0</coordinates>
+      </Point>
+    </Placemark>
+  </Folder>
+</Document>
+</kml>

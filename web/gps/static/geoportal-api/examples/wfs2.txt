@@ -1,0 +1,38 @@
+...
+// WFS v2.0.0 avec protocole Script (requête Get/JSONP ne nécessitant pas de déclaration de proxyHost)
+var wfs2 = maCarte.getMap().addLayer(new OpenLayers.Layer.Vector("States", {
+        strategies: [new OpenLayers.Strategy.BBOX()],
+        protocol: new OpenLayers.Protocol.Script({
+            url : wfsUrl,
+            callbackKey: "callback",
+            callbackPrefix: "",
+            srsInBBOX: true,
+            format : new OpenLayers.Format.WFST.v2_0_0({
+                featureType: "arrondissement",
+                featureNS: featureNS
+            }),
+            params: {
+                service: "WFS",
+                version: "2.0.0",
+                srsName: "EPSG:4326",
+                request: "GetFeature",
+                typeNames: "sde:arrondissement",
+                output: "json"
+            },
+            filterToParams: function(filter, params) {
+                // example to demonstrate BBOX serialization
+                if (filter.type === OpenLayers.Filter.Spatial.BBOX) {
+                    params.bbox = filter.value.toArray();
+                    if (this.srsInBBOX && filter.projection) {
+                        params.bbox.push((filter.projection instanceof OpenLayers.Projection) ? 
+                            filter.projection.getCode() : filter.projection);
+                    }
+                }
+                return params;
+            },
+            parseFeatures: function(response, options) {
+                return this.format.read(response.xml);
+            }
+        })
+    }));
+...

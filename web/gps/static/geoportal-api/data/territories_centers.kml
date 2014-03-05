@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<kml xmlns="http://earth.google.com/kml/2.0">
+<Document>
+  <Folder>
+    <name>Citées</name>
+    <Style id="center_style">
+      <IconStyle>
+        <scale>1.00</scale>
+        <Icon>
+          <href>img/punaise.gif</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <Placemark>
+      <name><![CDATA[Base Alfred Faure]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Base_Alfred-Faure" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=monde&amp;z=0&amp;c=51.77,-46.41&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>51.768999999999998,-46.409999999999997</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Base Dumont d'Urville]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Base_Dumont_d%27Urville" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=monde&amp;z=0&amp;c=140.001389,-66.662778&amp;l=Photos&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>140.001389,-66.662778</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Basse Terre]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Basse-Terre_(%C3%AEle_de_la_Guadeloupe)" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=reunion&amp;c=-61.73,16&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>-61.732999999999997,16.001</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Crête de la Novara]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Cr%C3%AAte_de_la_Novara" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=monde&amp;c=77.52,-38.715&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>77.52,-38.715</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Cayenne]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Cayenne" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=guyane&amp;c=-52.29,4.93&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>-52.293999999999997,4.927</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Mamoudzou]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Mamoudzou" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=mayotte&amp;c=45.23,-12.78&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>45.228000000000002,-12.781</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Mont de la Dive]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Mont_de_la_Dives" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=monde&amp;c=77.55,-37.848&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>77.55,-37.848</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Nouméa]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Noum%C3%A9a" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=newcaled&amp;c=166.45,22.27&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>166.449999999999989,-22.266999999999999</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Fort-de-France]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Fort-de-France" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=martinique&amp;c=-60.98,14.62&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>-60.982999999999997,14.615</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Futuna]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Futuna" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=futuna&amp;c=-178.16,-14.3&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>-178.159,-14.299</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Gustavia]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Gustavia_(Saint-Barth%C3%A9lemy)" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=stbarth&amp;c=-62.85,17.9&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>-62.844999999999999,17.896999999999998</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Marigot]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Marigot_(Saint-Martin)" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=stmartin&amp;c=-63.09,18.09&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>-63.085999999999999,18.087</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Papeete]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Papeete" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=polynesie&amp;c=-149.57,-17.54&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>-149.566000000000003,-17.536999999999999</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Paris]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Paris" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=metropole&amp;c=2.345,48.861&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>2.345,48.861</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Port-aux-Français]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Port-aux-Fran%C3%A7ais" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=kerguelen&amp;c=69.21,-49.35&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>69.212999999999994,-49.345999999999997</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Saint Denis]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Saint_Denis_(R%C3%A9union)" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=reunion&amp;c=55.46,-20.88&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>55.457999999999998,-20.879</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Saint-Pierre]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Saint-Pierre_(Saint-Pierre-et-Miquelon)" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=stpierre&amp;c=-56.18,46.78&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>-56.177999999999997,46.777999999999999</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Mata'utu]]></name>
+      <description><![CDATA[<a href="http://fr.wikipedia.org/wiki/Mata%27utu" target="_blank">Wikipedia</a><br/><a href="http://www.geoportail.fr/?t=wallis&amp;c=-176.17,-13.28&amp;" target="_blank">Géoportail</a>]]></description>
+      <styleUrl>#center_style</styleUrl>
+      <Point><coordinates>-176.174000000000007,-13.282</coordinates></Point>
+    </Placemark>
+  </Folder>
+</Document>
+</kml>

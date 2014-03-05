@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>geoportalMap_starting (1)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    h1 {
+        text-align:center;
+        font-size:0.75em;
+        font-style: italic;
+    }
+    div#example_explain {
+        margin:0px 0px 10px 0px;
+        border: thin solid #595E61;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+        color: #595E61;
+    }
+    form#gpLangChange {
+        border:0px;
+        margin:0px;
+        padding:0px;
+    }
+    div#viewerDiv {
+        background-color:white;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    /*]]>*/--></style>
+  </head>
+  <body>
+    <h1 id="example_title">Carte de situation</h1>
+    <div id="viewerDiv"></div>
+    <div id="example_explain">Montre comment créer un simple plan d'accès avec l'API. Pour faire fonctionner cet exemple, il suffit de copier/coller le code sur votre serveur Web.</div>
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank">Mentions Légales</a> - &copy;IGN 2008-2013</div>
+    
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+    if (window.__Geoportal$timer===undefined) {
+        var __Geoportal$timer= null;
+    }
+
+    var lon= '04° 31\' 37.8" E';
+    var lat= '43° 37\' 24.6" N';
+    var zoom= 14 ;
+
+    var name=
+'<span class="gpPopupLabelCenter">' +
+    'Maison du Parc de Camargue' +
+'</span>';
+    var description=
+'<span class="gpPopupDescriptionCenter">' +
+    '<table>' +
+        '<tr>' +
+            '<td>' +
+                '<img src="img/PNRCAMARGUE.jpg"/>' +
+            '</td>' +
+            '<td>' +
+                'PNR Carmargue<br/>Mas du Pont de Rousty<br/>13200 ARLES<br/>Tél.: 04 90 97 86 32<br/>Fax : 04 90 97 70 82' +
+            '</td>' +
+        '</tr>' +
+    '</table>' +
+'</span>';
+            
+    var width= "800px";
+    var height= "600px";
+    
+    //var url_marker="http://api.ign.fr/geoportail/api/js/2.0.3/img/marker-gold.png";
+    var url_marker="http://maps.gstatic.com/intl/fr_ALL/mapfiles/marker.png";
+    
+    document.getElementById("example_title").style.width=width;
+    document.getElementById("viewerDiv").style.width=width;
+    document.getElementById("viewerDiv").style.height=height;
+    document.getElementById("example_explain").style.width=width;
+    document.getElementById("footer").style.width=width;
+
+    /**
+     * Function: initMap
+     * Load the application. Called when all information have been loaded by
+     * <loadAPI>().
+     */
+    function initMap() {
+
+        //The api is loaded at this step
+        //L'api est chargée à cette étape
+
+        // ensure french
+        OpenLayers.Lang.setCode('fr');
+
+        //options for creating viewer:
+        var options= {
+            // default value
+            // valeur par défaut
+            mode:'normal',
+            //mode:'mini',
+            // default value
+            // valeur par défaut
+            //territory:'FXX',
+            // default value
+            // valeur par défaut
+            //displayProjection:'IGNF:RGF93G'
+            // only usefull when loading external resources
+            // utile uniquement pour charger des resources externes */
+            //proxy:'/geoportail/api/xmlproxy'+'?url='
+        };
+
+        // viewer creation of type <Geoportal.Viewer>
+        // création du visualiseur du type <Geoportal.Viewer>
+        //                                       HTML div id, options
+        var viewer= new Geoportal.Viewer.Default('viewerDiv',OpenLayers.Util.extend(
+            options,
+            // API keys configuration variable set by <Geoportal.GeoRMHandler.getConfig>
+            // variable contenant la configuration des clefs API remplie par <Geoportal.GeoRMHandler.getConfig>
+            window.gGEOPORTALRIGHTSMANAGEMENT===undefined? {'apiKey':'nhf8wztv3m9wglcda6n6cbuf'} : gGEOPORTALRIGHTSMANAGEMENT)
+        );
+        if (!viewer) {
+            // problem ...
+            OpenLayers.Console.error('Création de la carte échouée');
+            return;
+        }
+
+        // display reference datasets, full opacity
+        // affiche les données de référence en pleine opacité
+        viewer.addGeoportalLayers([
+            'ORTHOIMAGERY.ORTHOPHOTOS',
+            'GEOGRAPHICALGRIDSYSTEMS.MAPS'
+        ], {
+            'ORTHOIMAGERY.ORTHOPHOTOS':{
+                opacity:1.0,        // default= 1.0
+                visibility:true    // default= true
+            },
+            'GEOGRAPHICALGRIDSYSTEMS.MAPS':{
+                opacity:1.0,        // default= 0.3
+                visibility:true     // default= true
+            }
+            // short cut, but with different layout :
+            //,global:{
+            //    opacity:1.0,
+            //    visibility:true
+            //}
+        });
+
+        // center map
+        // centrage de la carte
+        viewer.getMap().setCenterAtLonLat(lon,lat,zoom);
+
+        // add marker - ajout du marqueur
+        // put a marker at map's center
+        var mrks= new OpenLayers.Layer.Vector(
+            "-x-",
+            {
+                styleMap: new OpenLayers.StyleMap({
+                    // Set the external graphic and background graphic images.
+                    externalGraphic:url_marker,
+                    graphicWidth:20,
+                    graphicHeight:34,
+                    graphicXOffset:-10,
+                    graphicYOffset:-17
+                }),
+                isBaseLayer: false,
+                displayInLayerSwitcher: false,
+                opacity:1.0,
+                visibility:true,
+                //FIXME: options ?
+                preFeatureInsert: Geoportal.Popup.setPointerCursorForFeature,
+                onFeatureInsert: Geoportal.Popup.Anchored.createPopUpForKMLFeature,
+                formatOptions: {
+                    popupClass:OpenLayers.Popup.FramedCloud,
+                    closeBox:false,
+                    autoSize:true
+                }
+            }
+        );
+        viewer.getMap().addLayer(mrks,null,null,null,{
+            attachDefaultPopup: true
+        });
+        var center= viewer.getMap().getCenter();
+        var ll= (center.clone()).transform(mrks.getNativeProjection(), OpenLayers.Projection.CRS84);
+        var mrkr= new OpenLayers.Feature.Vector(
+            new OpenLayers.Geometry.Point(center.lon, center.lat),
+            {
+                name:       name,
+                description:description
+            }
+        );
+        mrks.addFeatures([mrkr]);
+    }
+
+    /**
+     * Function: loadAPI
+     * Load the configuration related with the API keys.
+     * Called on "onload" event.
+     * Call <initMap>() function to load the interface.
+     */
+    function loadAPI() {
+        // wait for all classes to be loaded
+        // on attend que les classes soient chargées
+        if (__Geoportal$timer!=null) {
+            window.clearTimeout(__Geoportal$timer);
+            __Geoportal$timer= null;
+        }
+        if (typeof(OpenLayers)=='undefined'              ||
+            typeof(Geoportal)=='undefined'               ||
+            typeof(Geoportal.Viewer)=='undefined'        ||
+            typeof(Geoportal.Viewer.Default)=='undefined') {
+            __Geoportal$timer= window.setTimeout('loadAPI();', 300);
+            return;
+        }
+
+
+        // load API keys configuration, then load the interface
+        // on charge la configuration de la clef API, puis on charge l'application
+        Geoportal.GeoRMHandler.getConfig(['nhf8wztv3m9wglcda6n6cbuf'], null,null, {
+            onContractsComplete: initMap
+        });
+    }
+
+    // assign callback when "onload" event is fired
+    // assignation de la fonction à appeler lors de la levée de l'évènement "onload"
+    window.onload= loadAPI;
+    //--><!]]></script>
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/Geoportal.js"><!-- --></script>
+  </body>
+</html>

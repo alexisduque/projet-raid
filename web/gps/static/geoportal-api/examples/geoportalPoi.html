@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>geoportalPoi.html</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    body {
+        height:100%;
+    }
+    h1 {
+        font-family: "Arial Black", Verdana, Tahoma, sans-serif;
+        color:gray;
+    }
+    #viewerDiv {
+        width:450px;
+        height:500px;
+        border:0px;
+        background-color:white;
+        background-image:url(/geoportail/api/js/2.0.3/theme/geoportal/img/loading.gif);
+        background-position:center center;
+        background-repeat:no-repeat;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:800px;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    div#code {
+        margin:0px 0px 10px 0px;
+        width:800px;
+        position:relative;
+        left:0px;
+        top:0px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+    }
+    div#code a, div#code a:link, div#code a:visited, div#code a:hover {
+        text-decoration:none;
+        color: #595E61;
+    }
+    #page {
+        width:780px;
+        margin:auto;
+        border:solid gray;
+        border-width:1px 2px 2px 1px;
+        background-color:white;
+        padding:1em 2em;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .right {
+        width:400px;
+        position:absolute;
+        top:260px;
+        float:right;
+        margin-left:460px;
+    }
+    fieldset {
+        width:80%;
+        padding:5px;
+    }
+    #layer_kml {
+        font-size:0.96em;
+    }
+    /*]]>*/--></style>  </head>
+  <body@onload@>
+    <div id="page">
+        <h1 id="title"><span style="letter-spacing:-4px;"><span style="color:#43a3d7;font-size:0.5em;font-weight:bold;z-index:1;">g</span><span style="color:#97bf0f;font-size:1.0em;z-index:0;">é</span><span style="color:#f19406;font-size:1.6em;font-weight:bold;z-index:1;"><sub>O</sub></span></span><span style="color:#000000;font-style:italic;font-weight:normal;"><sup>(&lambda;,&phi;)</sup></span>Saisie de points d'intérêt</h1>
+        <div style="font-size:small;">
+            <p>Cet exemple permet de saisir des points d'intérêt sur la carte : </p>
+            <ul>
+                <li>Saisie d'un nouveau point : Choisissez le pictogramme ensuite Ctrl+clic<br/>
+                NB: A la création, le point est sélectionné par défaut, il se met donc en rouge (style de sélection)</li>
+                <li>Déplacement : Sélectionnez le point en cliquant dessus et faites le glisser. Les coordonnées du point sont ainsi modifiées dans le formulaire</li>
+                <li>Enregistrement de la description: Sélectionnez le point, saisissez la description et validez-la en appuyant sur le bouton correspondant</li>
+            </ul>
+        </div>
+        <div id='code'><a href="./js/geoportalPoi.js" alt="geoportalPoi" id="example_jscode" target="_blank">Voir le code JavaScript de l'exemple</a></div>
+        <div id="viewerDiv"></div><br/>
+        <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank">Mentions Légales</a> - &copy;IGN 2008-2013</div>
+        <div id="formulaire" class="right">
+            <form style="font-size:small; padding-top:17px">
+                <fieldset>
+                    <legend>Saisie des points d'intérêt</legend>
+                    <fieldset>
+                        <legend>Pictogrammes&nbsp;:</legend>
+                        <input id="gold" type="radio" name="style_picto" value="http://api.ign.fr/geoportail/api/js/2.0.3/img/marker-gold.png" checked/><img src="http://api.ign.fr/geoportail/api/js/2.0.3/img/marker-gold.png"></img>
+                        <input id="blue" type="radio" name="style_picto" value="http://api.ign.fr/geoportail/api/js/2.0.3/img/marker-blue.png"><img src="http://api.ign.fr/geoportail/api/js/2.0.3/img/marker-blue.png"></img>
+                        <input id="green" type="radio" name="style_picto" value="http://api.ign.fr/geoportail/api/js/2.0.3/img/marker-green.png"><img src="http://api.ign.fr/geoportail/api/js/2.0.3/img/marker-green.png"></img>
+                    </fieldset><br/>
+                    <fieldset><br/>
+                        <legend>Informations&nbsp;:</legend>
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td>Description&nbsp;:</td>
+                                <td><textarea rows="2" cols="18" type="text" id="Description" name="Description"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td>Position&nbsp;:</td>
+                                <td><input disabled type="text" size="16" id="GeoXYFormLon" name="GeoXYFormLon" class="number" value=""/>
+                                    <input disabled type="text" size="16" id="GeoXYFormLat" name="GeoXYFormLat" class="number" value=""/></td>
+                            </tr>
+                        </table>
+                    </fieldset><br/>
+                    <button type="button" id="validation" name="validation">Valider les modifications</button><br/><br/>
+                    <button type="button" id="remove_feature" name="remove_feature">Supprimer le point sélectionné</button><br/><br/>
+                    <fieldset id="output">
+                        <legend><button type="button" id="save_layer" name="save_layer">Enregistrer les points</button>&nbsp;
+                                <button type="button" id="raz" name="raz">Cacher</button></legend>
+                        <textarea rows="6" cols="37" type="text" id="layer_kml" name="layer_kml" style="display:none;background-color:#CCCCCC;"></textarea>
+                    </fieldset>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    
+    <!--script type="text/javascript" charset="utf-8" src="http://api.ign.fr/geoportail/api/js/2.0.3/GeoportalExtended.js"></script-->
+    <!-- replace the below line, by the above line when copying this page -->
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/GeoportalExtended.js"><!-- --></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/geoportalPoi.js"></script>
+  </body>
+</html>

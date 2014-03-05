@@ -1,0 +1,433 @@
+<html>
+<head>
+    <title>Geoportal API test suite</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="http://api.ign.fr/tech-docs-js/fr/css/maven-theme.css"/>
+    <link rel="stylesheet" type="text/css" href="http://api.ign.fr/tech-docs-js/fr/css/site.css"/>
+    <link rel="stylesheet" type="text/css" href="css/examples.css"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    html, body {
+        height:100%;
+        overflow:hidden;
+        margin:0px;
+        padding:0px;
+        line-height:1.25em;
+        vertical-align:baseline;
+        color:#222222;
+    }
+
+    #main-example {
+        float:none;
+        width:100%;
+        height:655px;
+    }
+    #toc {
+        float:left;
+        width:25%;
+        height:100%;
+    }
+    #filter {
+        height:80px;
+        padding:1px 1em;
+    }
+    #filter p a, #filter p a:hover {
+        color:#000000;
+        font-weight:bold;
+    }
+    #filter p a:link, #filter p a:visited {
+        color:#006699;
+        text-decoration:none;
+    }
+    #frameContainer {
+        width:75%;
+        height:100%;
+        margin:0px;
+        float:left;
+    }
+    #exframe {
+        width:100%;
+        height:100%;
+    }
+    #exListCol {
+        border-top:1px solid #555555;
+        overflow:scroll;
+        margin:0px;
+        padding:0px;
+        color:#000000;
+        overflow:auto;
+        height:595px;
+    }
+    #exListCol ul {
+        list-style-image: none;
+        list-style-position: outside;
+        list-style-type: none;
+    }
+    #exListCol ul li {
+        margin-top:10px;
+        border-bottom:1px solid #555555;
+    }
+    #exListCol ul li a {
+        color:#000000;
+        font-weight:bold;
+    }
+    #exListCol ul li a:link, #exListCol ul li a:visited {
+        color:#006699;
+        text-decoration:none;
+    }
+    #exListCol ul li a:hover {
+        color:#000000;
+        text-decoration:none;
+    }
+    .address {
+        font-size:0.65em;
+        margin-left:20px;
+        color:#6633FF;
+    }
+    .about {
+        font-size:0.75em;
+        margin-left:10px;
+    }
+    #exListCol ul li.console a:link, #exListCol ul li.console a:visited, #exListCol ul li.console div.address {
+        background-color:#000000;
+        color:#00FF00;
+        border-radius:8px;
+    }
+    #footer {
+        margin-bottom:0px;
+        height:25px;
+    }
+    /*]]>*/--></style>
+</head>
+<body>
+
+    <div id="main-example">
+        <div id="toc">
+            <div id="filter">
+                <p>
+                    <label for="keywords">Rechercher par mot-clefs / Filter by keywords</label><br/>
+                    <input type="text" id="keywords"/>
+                    <span id="count"></span><br/>
+                    <a href="javascript:void showAll();">tout montrer / show all</a>
+                </p>
+            </div>
+            <div id="exListCol"></div>
+        </div>
+        <div id="frameContainer">
+            <iframe id="exframe" name="exframe" src="exframe.html" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <div id="footer">
+        <ul class="xright">
+            <li>&copy;2012 IGN - Géoportail | Dernière publication: 2012-12-06&nbsp;| Version: 2.0.3 | 
+            <a target="_blank" alt="Mentions Légales" href="http://api.ign.fr/geoportail/document.do?doc=legal_mentions">Mentions Légales</a>
+        </li>
+      </ul>
+      <div class="clear">
+        <hr>
+      </div>
+    </div>
+
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+    var info= {
+        index:{},
+        examples:[]
+    };
+
+    function loadLists(t) {
+        for (var i= 0, l= t.length; i<l; i++) {
+            loadList(t[i]);
+        }
+    }
+
+    function loadList(fileName) {
+        var xmlDoc;
+        var loaded;
+        if (document.implementation && document.implementation.createDocument) {
+            // does not work in konqueror ...
+            //if (/konqueror/.test(navigator.userAgent.toLowerCase())) {
+            //    xmlDoc= document.implementation.createDocument(null,null,null);
+            //    if (!xmlDoc.onreadystatechange) {
+            //        xmlDoc.onreadystatechange= null;
+            //    }
+            //    if (!xmlDoc.readyState) {
+            //        xmlDoc.readyState= 0;
+            //    }
+            //    xmlDoc.addEventListener("load", function() {
+            //            this.readyState= 4;
+            //            this.readyState= 4;
+            //            if (this.onreadystatechange!=null && typeof(this.onreadystatechange)=="function") {
+            //                this.onreadystatechange();
+            //            }
+            //            loaded= true;
+            //        }, false);
+            //} else {
+                xmlDoc= document.implementation.createDocument("", "", null);
+            //}
+            xmlDoc.async= false;
+            if (!xmlDoc.load) {//Safari
+                var xhr= new XMLHttpRequest();
+                xhr.onreadystatechange= function() {
+                    if (xhr.readyState==4) {
+                        if (!xhr.status || (xhr.status>=200 && xhr.status<300)) {
+                            xmlDoc= xhr.responseXML;
+                            loaded= true;
+                        }
+                    }
+                };
+                xhr.open('GET',fileName,false);//synchronous
+                xhr.send('');
+            } else {
+                loaded= xmlDoc.load(fileName);
+            }
+        } else {
+            if (window.ActiveXObject) {
+                xmlDoc= new ActiveXObject("Microsoft.XMLDOM");
+                xmlDoc.async= false;
+                loaded= xmlDoc.load(fileName);
+            } else {
+                alert("Sorry, this browser is not XML-compliant and cannot render the XML data.");
+                return;
+            }
+        }
+        if (loaded) {
+            createInfo(xmlDoc);
+        }
+    }
+
+    function getValue(node) {
+        if (node.childNodes.length>0) {
+            for (var k= 0; k<node.childNodes.length; k++) {
+                if ((node.childNodes[k].nodeType==3 && node.childNodes.length==1) ||// TEXT NODE
+                    node.childNodes[k].nodeType==4) {                               // CDATA_SECTION_NODE
+                    return node.childNodes[k].nodeValue;
+                }
+            }
+        }
+        return '';
+    }
+
+    stripAccentedLetters= (function() {
+        var accentsReg= /[ÀÁÂÃÄÅàáâãäåÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšßŸÿýŽž]/g;
+        var accentsMap= {
+            'À':'A', 'Á':'A', 'Â':'A', 'Ã':'A', 'Ä':'A', 'Å':'A',
+            'à':'a', 'á':'a', 'â':'a', 'ã':'a', 'ä':'a', 'å':'a',
+            'Ò':'O', 'Ó':'O', 'Ô':'O', 'Õ':'O', 'Õ':'O', 'Ö':'O', 'Ø':'O',
+            'ò':'o', 'ó':'o', 'ô':'o', 'õ':'o', 'ö':'o', 'ø':'o',
+            'œ': 'oe',
+            'È':'E', 'É':'E', 'Ê':'E', 'Ë':'E',
+            'è':'e', 'é':'e', 'ê':'e', 'ë':'e', 'ð':'e',
+            'Ç':'C',
+            'ç':'c',
+            'Ð':'D',
+            'Ì':'I', 'Í':'I', 'Î':'I', 'Ï':'I',
+            'ì':'i', 'í':'i', 'î':'i', 'ï':'i',
+            'Ù':'U', 'Ú':'U', 'Û':'U', 'Ü':'U',
+            'ù':'u', 'ú':'u', 'û':'u', 'ü':'u',
+            'Ñ':'n',
+            'ñ':'n',
+            'Š':'S',
+            'š':'s',
+            'ß':'s',//FIXME: 'ss'
+            'Ÿ':'Y',
+            'ÿ':'y', 'ý':'y',
+            'Ž':'Z',
+            'ž':'z'
+        };
+        return function(s) {
+            if (s) {
+                return s.replace(accentsReg, function(match) {
+                    return accentsMap[match];
+                });
+            }
+            return s;
+        }
+    })();
+
+    function createInfo(xmlDoc) {
+        var x= xmlDoc.getElementsByTagName('entry');
+        var title= new String();
+        var url= new String();
+        var liClass= null;
+        var address= new String();
+        var about= new String();
+        var currentNode= null;
+
+        for (var i= 0, il= x.length; i<il; i++) {
+            for (var j= 0, jl= x[i].childNodes.length; j<jl; j++) {
+                currentNode= x[i].childNodes[j];
+                if (currentNode.nodeType != 1)
+                    continue;
+                if (currentNode.tagName == "title") {
+                    title= getValue(currentNode);
+                    continue;
+                }
+                if (currentNode.tagName == "link") {
+                    address= currentNode.attributes[0].nodeValue;
+                    var m= address.match(/^loadtxt\.html\?txt=([^&]+)/i);
+                    if (m!=null && m.length==2) {
+                        url= decodeURIComponent(m[1]).replace(/^\.\//,'');
+                    } else {
+                        m= address.match(/^([^?]+)\?.+/);
+                        if (m!=null && m.length==2) {
+                            url= m[1];
+                        } else {
+                            url= address;
+                        }
+                    }
+                    continue;
+                }
+                if (currentNode.tagName == "summary") {
+                    about= getValue(currentNode);
+                    continue;
+                }
+            }
+            liClass= x[i].getAttribute('className');
+            var words= stripAccentedLetters(liClass+' '+title+' '+about).split(/\W+/);
+            for (var wi= 0, wl= words.length; wi<wl; wi++) {
+                var word= words[wi].toLowerCase();
+                if (word.length<2) { continue; }
+                if (word.match(/^[0-9]+/)) { continue; }
+                var dict= info.index[word];
+                var exIndex= ""+(info.examples.length);
+                if (dict===undefined) {
+                    info.index[word]= {};
+                    dict= info.index[word];
+                }
+                if (dict[exIndex]===undefined) {
+                    dict[exIndex]= 0;
+                }
+                dict[exIndex]++;
+            }
+            info.examples.push({
+                "title":title,
+                "link":address,
+                "example":url,
+                "className":liClass,
+                "shortdesc":about
+            });
+        }
+    }
+
+    function filterList(text) {
+        var examples;
+        if (!text || text.length<2) {
+            examples= info.examples;
+        } else {
+            examples= [];
+
+            var words= stripAccentedLetters(text).split(/\W+/);
+            var scores= {};
+            for (var wi= 0, wl=words.length; wi<wl; wi++) {
+                var word= words[wi].toLowerCase();
+                var dict= info.index[word];
+                if (dict) {
+                    for (exIndex in dict) {
+                        var count= dict[exIndex];
+                        if (scores[exIndex]) {
+                            if (scores[exIndex][word]) {
+                                scores[exIndex][word]+= count;
+                            } else {
+                                scores[exIndex][word]= count;
+                            }
+                        } else {
+                            scores[exIndex]= {};
+                            scores[exIndex][word]= count;
+                        }
+                    }
+                }
+            }
+            for (var j in scores) {
+                var ex= info.examples[j];
+                ex.score= scores[j];
+                examples.push(ex);
+            }
+            // sort examples by first by number of words matched, then
+            // by word frequency
+            examples.sort(function(a, b) {
+                var cmp;
+                var aWords= 0, bWords= 0;
+                var aScore= 0, bScore= 0;
+                for (var i in a.score) {
+                    aScore+= a.score[i];
+                    aWords+= 1;
+                }
+                for (var j in b.score) {
+                    bScore+= b.score[j];
+                    bWords+= 1;
+                }
+                if (aWords==bWords) {
+                    cmp= bScore - aScore;
+                } else {
+                    cmp= bWords - aWords;
+                }
+                return cmp;
+            });
+        }
+        listExamples(examples);
+    }
+
+    function listExamples(xs) {
+        var element= new String();
+        var leftColNode= document.getElementById('exListCol');
+        //var tgt= "exframe";
+        var tgt= "_blank";
+        xs= xs || [];
+        leftColNode.innerHTML= '';
+        for (var i= 0, l= xs.length; i<l; i++) {
+            var x= xs[i];
+            element= '<li'+(x.className!=null? ' class="'+x.className+'"':'')+'>'+
+                        '<a href="'+x.link+'" target="'+tgt+'">'+x.title+'</a>'+
+                        '<div class="address">'+x.example+'</div>'+
+                        '<div class="about">'+x.shortdesc+'</div>'+
+                     '</li>';
+            leftColNode.innerHTML+= element;
+        }
+        leftColNode.innerHTML= '<ul>'+leftColNode.innerHTML+'</ul>';
+        document.getElementById("count").innerHTML = "(" + xs.length + ")";
+    }
+
+    function showAll() {
+        document.getElementById("keywords").value= "";
+        listExamples(info.examples);
+    }
+
+    var timerId;
+
+    function inputChange() {
+        if (timerId) {
+            window.clearTimeout(timerId);
+        }
+        var text= this.value;
+        timerId= window.setTimeout(function() {
+            filterList(text);
+        }, 500);
+    }
+
+    function parseQuery() {
+        var params= {};
+        var kvp= window.location.search.substring(1).split("&");
+        for(var i= 0, l= kvp.length; i<l; i++) {
+            var pair= kvp[i].split("=");
+            if (pair.length==2) {
+                params[decodeURIComponent(pair[0])]= decodeURIComponent(pair[1]);
+            }
+        }
+        if (params["q"]) {
+            var input= document.getElementById("keywords");
+            input.value= params["q"];
+            inputChange.call(input);
+        }
+    }
+
+    window.onload= function () {
+        loadLists(["./xml/example-list.xml"]);
+        filterList();
+        document.getElementById("keywords").onkeyup= inputChange;
+        parseQuery();
+    };
+
+    //--><!]]></script>
+</body>
+</html>
