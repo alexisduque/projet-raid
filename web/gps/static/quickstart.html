@@ -1,0 +1,84 @@
+    <!DOCTYPE html>
+<html>
+  <head>
+    <title>JS API Tutorials - Quickstart</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    h1 {
+        text-align:center;
+        font-size:0.75em;
+        font-style: italic;
+        width:800px;
+    }
+    div#example_explain {
+        margin:0px 0px 10px 0px;
+        border: thin solid #595E61;
+        width:800px;
+        position:relative;
+        left:0px;
+        top:0px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+        color: #595E61;
+    }
+    form#gpLangChange {
+        border:0px;
+        margin:0px;
+        padding:0px;
+    }
+    div#viewerDiv {
+        width:800px;
+        height:600px;
+        background-color:white;
+        background-image:url(http://api.ign.fr/geoportail/api/js/2.0.0/theme/geoportal/img/loading.gif);
+        background-position:center center;
+        background-repeat:no-repeat;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:800px;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    div#code a, div#code a:link, div#code a:visited, div#code a:hover {
+        text-decoration:none;
+        color: #595E61;
+    }
+     
+   div#code {
+        margin:0px 0px 10px 0px;
+        width:800px;
+        position:relative;
+        left:0px;
+        top:0px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+        
+    }
+    /*]]>*/--></style>
+  </head>
+  <body>
+    <h1 id="example_title"></h1>
+    <form id="gpLangChange" name="gpLangChange" action="#">
+      <select style="font-size:0.75em;" id="gpChooseLang" name="gpChooseLang" size="1">
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+      </select>
+    </form>
+    <div id="viewerDiv"></div>
+    <div id="example_explain"></div>
+    <div id='code'><a href="js/quickstart.js" alt="quickstart" id="example_jscode" target="_blank"></a></div>
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank"></a> - &copy;IGN 2008-2011</div>
+  
+    <script type="text/javascript" src="http://api.ign.fr/geoportail/api/js/latest/GeoportalExtended.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>     
+    <script type="text/javascript" src="js/i18n/quickstart.js"></script>
+    <script type="text/javascript" src="js/quickstart.js"></script>
+  </body>
+</html>
