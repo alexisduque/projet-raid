@@ -169,7 +169,7 @@ class CollectClient extends Thread {
 
                     } else if (trame.startsWith("[=")) {
                         // Traitement
-                        n_Service.insertPosition(tClient.getMessage());
+                        n_Service.insertTKPosition(tClient.getMessage(), _id_Device);
                     }
                     
                     continue;
