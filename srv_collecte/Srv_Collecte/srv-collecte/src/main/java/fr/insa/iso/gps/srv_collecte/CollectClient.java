@@ -72,7 +72,7 @@ class CollectClient extends Thread {
         try {
             // fabrication d'une variable permettant l'utilisation du flux de sortie avec des string
             _out = new PrintWriter(_s.getOutputStream());
-			// fabrication d'une variable permettant l'utilisation du flux d'entree avec des string
+            // fabrication d'une variable permettant l'utilisation du flux d'entree avec des string
             //_in = new BufferedReader(new InputStreamReader(_s.getInputStream()));
             _inb = _s.getInputStream();
             // ajoute le flux de sortie dans la liste et recuperation de son numero
@@ -84,7 +84,7 @@ class CollectClient extends Thread {
         }
     }
 
-	//** Methode :  executee au lancement du thread par t.start() **
+    //** Methode :  executee au lancement du thread par t.start() **
     //** Elle attend les messages en provenance du serveur et les redirige **
     // cette methode doit obligatoirement etre implementee a cause de l'interface Runnable
     public void run() {
@@ -95,7 +95,7 @@ class CollectClient extends Thread {
         logger.log(Level.WARNING, "connexion nouveau client " + _numClient);
         /*Creation de la connexion BD*/
         n_DataBase = new PostgreSQLDataBase();
-		//n_DataBase.setLogger();
+        //n_DataBase.setLogger();
         // user and pass are optional temporary
         n_DataBase.setUserName(n_user);
         n_DataBase.setPassword(n_pass);
@@ -112,7 +112,7 @@ class CollectClient extends Thread {
             } else {
                 logger.log(Level.SEVERE, "impossible de se connecter a la base de donnees");
             }
-			// la lecture des donnees entrantes se fait caractere par caractere ...
+            // la lecture des donnees entrantes se fait caractere par caractere ...
             // ou en mode buffer max de 255 caracteres
             // exemple de message recu du device en mode track:
             // 1000000002,20120607205431,4.881658,45.780070,0,270,227,4,2
@@ -131,50 +131,47 @@ class CollectClient extends Thread {
 				// a la connexion du device on est par defaut sur deviceType = 0
 
                 //GPS type TK-102
-                if ((data[0] == 0x5B)) {
+                if ((data[0] == 0x5B) & (data[1] == 0x21)) {
+                    // Demande connexion
                     // longueur IMEI 15 bytes
                     logger.log(Level.INFO, "" + _numClient + " boitier TK-102 ");
                     deviceType = 2; // type boitier TK-102
-
                     tkClient = new GPSTK102(_numClient);
-                    // la classe parseHeader envoie l'id (IMEI- du device
-                    _id_Device = tkClient.parseFrame(bufferData, nlus);
+                    // la classe parseHeader envoie l'id (IMEI- du device)
+                    _id_Device = tkClient.parseHeader(bufferData, nlus);
 
                     if (_id_Device == null) {
                         continue;
                     } else {
                         _socketServ.updateClient(_numClient, deviceType, _id_Device); // on met a jour le client de la liste
                     }
-                    String trame = nClient.getMessage();
-                    //Reception d'un JOIN
-                    if (trame.startsWith("[!")) {
-                        logger.log(Level.WARNING, "recu du tracker(" + nClient._numClient + ") TK-102 demande de connexion");
-                        //On change simplemement le type de message
-                        String ack = trame.replaceFirst("!", ".");
-                        //Envoie l'ACK
-                        logger.log(Level.WARNING, "envoi au tracker(" + nClient._numClient + ") TK-102 connexion OK : "+ack);
-                        _out.write(ack);
-                        _out.flush();
-                        
-                        //Reception d'un KEEP ALIVE
-                    } else if (trame.startsWith("[%")) {
-                        logger.log(Level.WARNING, "recu du tracker(" + nClient._numClient + ") TK-102 keepalive");
-                        
-                        //On change simplemement le type de message
-                        String ack = trame.replaceFirst("%", "&");
-                        //Envoie l'ACK
-                        _out.write(ack);
-                        _out.flush();
-                        logger.log(Level.WARNING, "envoi au tracker(" + nClient._numClient + ") TK-102 maintient de connexion");
 
-                    } else if (trame.startsWith("[=")) {
-                        // Traitement
-                        n_Service.insertTKPosition(tClient.getMessage(), _id_Device);
-                    }
-                    
+                    logger.log(Level.WARNING, "recu du tracker(" + nClient._numClient + ") TK-102 demande de connexion");
+                    //On change simplemement le type de message
+                    String ack = tkClient.getMessage().replaceFirst("!", ".");
+                    //Envoie l'ACK
+                    logger.log(Level.WARNING, "envoi au tracker(" + nClient._numClient + ") TK-102 connexion OK : " + ack);
+                    _out.write(ack);
+                    _out.flush();
+                    continue;
+                    //Reception d'un KEEP ALIVE
+                } else if ((data[0] == 0x5B) & (data[1] == 0x25)) {
+                    logger.log(Level.WARNING, "recu du tracker(" + nClient._numClient + ") TK-102 keepalive");
+                    _id_Device = tkClient.parseHeader(bufferData, nlus);
+                    //On change simplemement le type de message
+                    String ack = tkClient.getMessage().replaceFirst("%", "&");
+                    //Envoie l'ACK
+                    _out.write(ack);
+                    _out.flush();
+                    logger.log(Level.WARNING, "envoi au tracker(" + nClient._numClient + ") TK-102 maintient de connexion");
+                    continue;
+                } else if ((data[0] == 0x5B) & (data[1] == 0x3D)) {
+                    // Traitement
+                    _id_Device = tkClient.parseFrame(bufferData, nlus);
+                    n_Service.insertTKPosition(tkClient.getMessage(), _id_Device);
                     continue;
                 }
-                
+
                 if ((deviceType == 0) && (nlus > 17)) {
                     logger.log(Level.INFO, "" + _numClient + " boitier Nomadic ");
                     deviceType = 0; // type boitier teltonika
@@ -264,7 +261,7 @@ class CollectClient extends Thread {
 
         // pour stopper les logs sur la console ou les parents
         logger.setUseParentHandlers(false);
-		// pour acepter tous les niveaux
+        // pour acepter tous les niveaux
         // dans les proprietes on a LEVEL qui va indiquer le niveau du logger
         l_log = props.getProperty("LEVEL");
         if (l_log.equals("ALL")) {

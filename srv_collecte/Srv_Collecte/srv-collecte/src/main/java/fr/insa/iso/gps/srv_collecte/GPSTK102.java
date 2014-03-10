@@ -6,7 +6,6 @@
  * 
  * Auteur: Philippe ISORCE (c) OPhone 2012
  */
-
 package fr.insa.iso.gps.srv_collecte;
 
 import java.text.DateFormat;
@@ -28,55 +27,57 @@ import java.nio.ByteOrder;
 
 public class GPSTK102 extends GPSDevice {
 
-	public static Logger logger;
-	public static int _numClient;
+    public static Logger logger;
+    public static int _numClient;
+    private static String sIMEI;
+    
+    // cette classe se charge de faire un parsing de la trame et de renvoyer un boolean
+    // true alors la classe CollectClient pourra utiliser les methodes pour extraire les
+    // proprietes de la geolocalisation  
+    public GPSTK102(int _nClient) {
+        super(_nClient);
+        _numClient = _nClient;
+        logger = Logger.getLogger(CollectServer.class.getName());
+    }
 
-	// cette classe se charge de faire un parsing de la trame et de renvoyer un boolean
-        // true alors la classe CollectClient pourra utiliser les methodes pour extraire les
-	// proprietes de la geolocalisation  
-	public GPSTK102(int _nClient) {
-		super(_nClient);
-		_numClient = _nClient;
-		logger = Logger.getLogger(CollectServer.class.getName());
-	}
-	
-	public static String parseFrame(byte[] bufferData, int nlus) {
+    public static String parseHeader(byte[] bufferData, int nlus) {
 
-		String sId = null;
+        logger.log(Level.INFO, "" + _numClient + " boitier TK-102 ");
+        logger.log(Level.INFO, "" + _numClient + " transforme ");
 
-		logger.log(Level.INFO,""+_numClient+" boitier TK-102 ");
-		// traitement specifique pour les devices nomadic
-		// on peut recevoir plusieurs trames GPS en une seule fois
-		// le separateur de la trame est alors Ox0D 0xOA
-		logger.log(Level.INFO,""+_numClient+" transforme ");
-		Vector<String> mVector = byteArrayToStrings(bufferData,nlus);
-		logger.log(Level.INFO,""+_numClient+" retour transforme ");
-		if (mVector.size() > 0) {
-			logger.log(Level.INFO,""+_numClient+" taille du vector :"+mVector.size());
-			// pour chaque item du vector on va inserer le message 
-			for (int i = 0; i < mVector.size(); i++) {
-				// on va invoquer la methode pour inserer la position 
-				// le parsing du message est fait dans cette methode 
-				String st = new String(mVector.elementAt(i));
-				// on va extraire l ID de la trame sur 10 caracteres	
-				sId =  byteArrayToString(bufferData,14,15);
-				logger.log(Level.INFO,""+_numClient+" (hexa) :"+st.length()+":"+sId.getBytes());
-				logger.log(Level.WARNING,""+_numClient+" ID :"+st.length()+":"+sId.getBytes());
-				logger.log(Level.INFO,""+_numClient+" insere :"+st);
-				setMessage(st);
-				/*
-				int res = n_Service.insertPosition(st);
-				if (res == 0) { 
-					logger.log(Level.INFO,"insert pour le client "+_numClient+" OK");
-				} else {
-					logger.log(Level.INFO,"insert pour le client "+_numClient+" NOK");
-				}
-				*/
-			}
-		}  else {
-			logger.log(Level.INFO,""+_numClient+" vector null ");
-		}
-		return sId;
-	}
+        String message = new String(bufferData);
+                // traitement specifique pour les devices teltonika
+        // entete du IMEI doit etre 0x0F deux bytes et total 17 bytes
+        if (message.startsWith("[!")) {
+            sIMEI = message.substring(14, 28);
+            logger.log(Level.INFO, "" + _numClient + " (hexa) :" + message.length() + ":" + sIMEI.getBytes());
+            logger.log(Level.WARNING, "" + _numClient + " ID :" + message.length() + ":" + sIMEI.getBytes());
+            logger.log(Level.INFO, "" + _numClient + " header :" + message);
+            setMessage(message);
+
+        } else {
+            return null;
+        }
+        return sIMEI;
+    }
+
+    public static String parseFrame(byte[] bufferData, int nlus) {
+
+        String sId = null;
+
+        logger.log(Level.INFO, "" + _numClient + " boitier TK-102 ");
+        // traitement specifique pour les devices nomadic
+        // on peut recevoir plusieurs trames GPS en une seule fois
+        // le separateur de la trame est alors Ox0D 0xOA
+        logger.log(Level.INFO, "" + _numClient + " transforme ");
+        String message = new String(bufferData);
+        logger.log(Level.INFO, "" + _numClient + " retour transforme ");
+        if (message.length() > 0) {
+            logger.log(Level.INFO, "" + _numClient + " taille du message :" + message.length());
+            // on va extraire l ID de la trame sur 10 caracteres	
+            logger.log(Level.INFO, "" + _numClient + " insere :" + message);
+            setMessage(message);
+        }
+        return sId;
+    }
 }
-
