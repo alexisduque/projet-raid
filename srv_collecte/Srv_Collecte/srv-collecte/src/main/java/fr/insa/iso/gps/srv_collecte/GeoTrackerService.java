@@ -18,6 +18,7 @@ package fr.insa.iso.gps.srv_collecte;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -346,7 +347,7 @@ public class GeoTrackerService {
                 "([EW])"
                 + "(\\d{3}\\.\\d{3})" + // Speed
                 "(\\d{2})(\\d{2})(\\d{2})" + // Date (DDMMYY)
-                "\\d+\\)");
+                "\\d+\\)\\]");
 
         // parametres qui seront inseres dans la base de donnees
         String gpsId = null;
@@ -364,11 +365,13 @@ public class GeoTrackerService {
         int result = 0;
         // constantes 
         final int EVENT_GPS = 0;
+        final double MILE = 1.609344;
         final int NB_SAT = 4;
         final int ERROR_POS = -1;
         final int NB_PARAMS_NS90 = 9; // Nomadic NS90 personnal
         final int NB_PARAMS_NS10 = 14; // Nomadic NS10 embedded
-
+        DecimalFormat f = new DecimalFormat();
+	f.setMaximumFractionDigits(6);
         //   Date systeme
         Date dateS = new Date();
 
@@ -376,15 +379,14 @@ public class GeoTrackerService {
 
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.FULL, locale);
         DateFormat dateFormatO = new SimpleDateFormat("dd/MM/yyyy:hh:mm:ss");
-
-        logger.log(Level.INFO,
-                "date : " + dateFormat.format(dateS));
         logger.log(Level.INFO,
                 "traitement insertionPosition:" + message);
 
         // Parse message
-        Matcher parser = pattern.matcher(message);
+        Matcher parser = pattern.matcher(message.replaceAll("[\n]+", ""));
         if (!parser.matches()) {
+            logger.log(Level.WARNING,
+                "Message incorrect, matching impossible:" + message);
             return ERROR_POS;
         }
 
@@ -407,6 +409,9 @@ public class GeoTrackerService {
             latitude = -latitude;
         }
         gpsLatitude = latitude;
+        gpsLatitude *= 10000.0;
+	gpsLatitude = Math.floor(gpsLatitude+0.5);
+	gpsLatitude /= 10000.0; // 1.67
 
         // Longitude
         Double longitude = Double.valueOf(parser.group(index++));
@@ -415,13 +420,17 @@ public class GeoTrackerService {
             longitude = -longitude;
         }
         gpsLongitude = longitude;
-
+        gpsLongitude *= 10000.0;
+	gpsLongitude = Math.floor(gpsLongitude+0.5);
+	gpsLongitude /= 10000.0; // 1.67
+        
         // Speed
-        gpsSpeed = Integer.valueOf(parser.group(index++));
+        double speedKilo = Double.valueOf(parser.group(index++)) * MILE;
+        gpsSpeed = (int)speedKilo;
 
         // Date
         day = Integer.valueOf(parser.group(index++));
-        month = Integer.valueOf(parser.group(index++)) - 1;
+        month = Integer.valueOf(parser.group(index++));
         year = 2000 + Integer.valueOf(parser.group(index++));
 
         // Altitude
@@ -433,6 +442,7 @@ public class GeoTrackerService {
                             + hour + ":"
                             + minute + ":"
                             + sec);
+        
             //System.out.println(">>"+gDateD);
 
         // autres parametres

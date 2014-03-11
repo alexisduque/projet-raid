@@ -157,7 +157,7 @@ class CollectClient extends Thread {
                     //Reception d'un KEEP ALIVE
                 } else if ((data[0] == 0x5B) & (data[1] == 0x25)) {
                     logger.log(Level.WARNING, "recu du tracker(" + nClient._numClient + ") TK-102 keepalive");
-                    _id_Device = tkClient.parseFrame(bufferData, nlus);
+                    String tkMessage = tkClient.parseFrame(bufferData, nlus);
                     //On change simplemement le type de message
                     String ack = tkClient.getMessage().replaceFirst("%", "&");
                     //Envoie l'ACK
@@ -167,7 +167,7 @@ class CollectClient extends Thread {
                     continue;
                 } else if ((data[0] == 0x5B) & (data[1] == 0x3D)) {
                     // Traitement
-                    _id_Device = tkClient.parseFrame(bufferData, nlus);
+                    String tkMessage = tkClient.parseFrame(bufferData, nlus);
                     n_Service.insertTKPosition(tkClient.getMessage(), _id_Device);
                     continue;
                 }
