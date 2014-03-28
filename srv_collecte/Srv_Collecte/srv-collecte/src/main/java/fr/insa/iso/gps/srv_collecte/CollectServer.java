@@ -163,8 +163,10 @@ public class CollectServer
 			if (_sockClients.elementAt(i).getSocket() != null) { 
 				if (_sockClients.elementAt(i).getType() == 0)
 					output.println("rg:"+i+", id:"+_sockClients.elementAt(i).getId()+", type:nomadic") ;
-				else
+                                else if (_sockClients.elementAt(i).getType() == 1)
 					output.println("rg:"+i+", id:"+_sockClients.elementAt(i).getId()+", type:teltonika") ;
+                                else
+					output.println("rg:"+i+", id:"+_sockClients.elementAt(i).getId()+", type:tk-102") ;
 			}
 			// on affiche les infos du client sur la console
 		}
