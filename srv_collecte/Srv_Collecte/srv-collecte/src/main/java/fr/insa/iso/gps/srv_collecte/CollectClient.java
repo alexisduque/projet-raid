@@ -163,18 +163,22 @@ class CollectClient extends Thread {
                     //Envoie l'ACK
                     _out.write(ack);
                     _out.flush();
-                    logger.log(Level.WARNING, "envoi au tracker(" + nClient._numClient + ") TK-102 maintient de connexion");
+                    logger.log(Level.WARNING, "envoi au tracker(" + nClient._numClient + ") TK-102 : maintient de connexion");
                     continue;
                 } else if ((data[0] == 0x5B) & (data[1] == 0x3D)) {
                     // Traitement
                     String tkMessage = tkClient.parseFrame(bufferData, nlus);
                     n_Service.insertTKPosition(tkClient.getMessage(), _id_Device);
                     continue;
+                } else if ((data[0] == 0x5B) & (data[1] == 0x4C)) {
+                    logger.log(Level.WARNING, "recu du tracker(" + nClient._numClient + ") TK-102 : GPS indisponible");
+                    String tkMessage = tkClient.parseFrame(bufferData, nlus);
+                    logger.log(Level.WARNING, "recu du tracker(" + nClient._numClient + ") : " + tkMessage);
+                    continue;
                 }
-
                 if ((deviceType == 0) && (nlus > 17)) {
                     logger.log(Level.INFO, "" + _numClient + " boitier Nomadic ");
-                    deviceType = 0; // type boitier teltonika
+                    deviceType = 0; // type boitier Nomadic
                     nClient = new GPSNomadic(_numClient);
                     _id_Device = nClient.parseFrame(bufferData, nlus);
 					// on ajoute le type du device et son id
