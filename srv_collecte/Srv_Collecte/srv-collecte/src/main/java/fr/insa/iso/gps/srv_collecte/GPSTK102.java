@@ -64,16 +64,11 @@ public class GPSTK102 extends GPSDevice {
     public static String parseFrame(byte[] bufferData, int nlus) {
 
         logger.log(Level.INFO, "" + _numClient + " boitier TK-102 ");
-        // traitement specifique pour les devices nomadic
-        // on peut recevoir plusieurs trames GPS en une seule fois
-        // le separateur de la trame est alors Ox0D 0xOA
-        logger.log(Level.INFO, "" + _numClient + " transforme ");
         String message = new String(bufferData);
-        logger.log(Level.INFO, "" + _numClient + " retour transforme ");
         if (message.length() > 0) {
             logger.log(Level.INFO, "" + _numClient + " taille du message :" + message.length());
             // on va extraire l ID de la trame sur 10 caracteres	
-            logger.log(Level.INFO, "" + _numClient + " insere :" + message);
+            logger.log(Level.INFO, "" + _numClient + " recu :" + message);
             setMessage(message);
         }
         return message;
