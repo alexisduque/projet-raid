@@ -180,10 +180,7 @@ class CollectClient extends Thread {
                     logger.log(Level.INFO, "" + _numClient + " boitier Nomadic ");
                     deviceType = 0; // type boitier Nomadic
                     nClient = new GPSNomadic(_numClient);
-                    _id_Device = nClient.parseFrame(bufferData, nlus);
-					// on ajoute le type du device et son id
-                    // a la table des clients du serveur
-                    _socketServ.updateClient(_numClient, deviceType, _id_Device); // on met a jour le client de la liste
+                    _id_Device = nClient.parseFrame(bufferData, nlus);	
                     //si le message commence par $0K(message du GPS) on redirige vers CLI
                     if (nClient.getMessage().startsWith("$")) {
                         logger.log(Level.WARNING, "recu du tracker(" + nClient._numClient + ") reponse CLI");
@@ -193,6 +190,9 @@ class CollectClient extends Thread {
                         logger.log(Level.INFO, "envoi de: " + nClient.getMessage() + " au client CLI");
                         // TODO : envoyé la réponse du trcker au client CLI
                     } else {
+                        // on ajoute le type du device et son id
+                        // a la table des clients du serveur
+                        _socketServ.updateClient(_numClient, deviceType, _id_Device);
                         n_Service.insertPosition(nClient.getMessage());
                     }
                     continue;
