@@ -129,6 +129,7 @@ public class CollectServer
 			if (_tabClients.elementAt(i) != null) // l'element existe ...
 			{
 				_tabClients.removeElementAt(i); // ... on le supprime
+				logger.log(Level.WARNING,"suppresion client [" + i + "]"); 
 				
 				try {
 					if (_sockClients.elementAt(i).getSocket() != null) { 
@@ -143,6 +144,7 @@ public class CollectServer
 	      				logger.log(Level.WARNING,"erreur fermeture de socket");
 				//	System.out.println("erreur fermeture socket");	
 				}
+                                
 			}
 		} catch (Exception e){
 			logger.log(Level.WARNING,"client " + i + " déjà supprimé");
