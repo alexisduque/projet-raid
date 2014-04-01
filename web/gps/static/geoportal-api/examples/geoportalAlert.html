@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>geoportalAlert.html</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <!-- include CSS for easying overwriting of styles : -->
+    <!-- OpenLayers styles : -->
+    <link id="__OpenLayersCss__" href="/geoportail/api/js/2.0.3/theme/default/style.css" type="text/css" rel="stylesheet"/>
+    <!--[if lte IE 6]>
+    <link id="__IE6OpenLayersCss__" href="/geoportail/api/js/2.0.3/theme/default/ie6-style.css" type="text/css" rel="stylesheet"/>
+    <![endif]-->
+    <link id="__FramedCloudOpenLayersCss__" href="/geoportail/api/js/2.0.3/theme/default/framedCloud.css" type="text/css" rel="stylesheet"/>
+    <link id="__GeoportalCss__" href="/geoportail/api/js/2.0.3/theme/geoportal/style.css" type="text/css" rel="stylesheet"/>
+    <!--[if lte IE 6]>
+    <link id="__IE6GeoportalCss__" href="/geoportail/api/js/2.0.3/theme/geoportal/ie6-style.css" type="text/css" rel="stylesheet"/>
+    <![endif]-->
+    <style><!--/*--><![CDATA[/*><!--*/
+    html {
+        height:100%;
+    }
+    body {
+        background:#F2F2F6 url("img/geoportail-logo-background-image.gif") no-repeat 96% 96%;
+        height:100%;
+    }
+    h1 {
+        font-family: "Arial Black", Verdana, Tahoma, sans-serif;
+        color:gray;
+    }
+    .text {
+        clear:both;
+        font-size:0.75em;
+        width:700px;
+        height:auto;
+    }
+    a.mail {
+        color:#336699;
+        text-decoration:none;
+    }
+    a.mail:link, a.mail:visited {
+    }
+    a.mail:hover {
+        color:#99CCFF;
+    }
+    #page {
+        width:750px;
+        margin:auto;
+        border:solid gray;
+        border-width:1px 2px 2px 1px;
+        background-color:white;
+        padding:1em 2em;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    #overlayDiv {
+        border:0px;
+        margin:0px;
+        padding:0px;
+        width:700px;
+        height:500px;
+    }
+    #viewerDiv {
+        float:left;
+        position:relative;
+        border:0px;
+        margin:0px;
+        padding:0px;
+        top:0px;
+        left:0px;
+        width:700px;
+        height:500px;
+        background-color:white;
+        background-image:url(/geoportail/api/js/2.0.3/theme/geoportal/img/loading.gif);
+        background-position:center center;
+        background-repeat:no-repeat;
+    }
+    #helpDiv {
+        float:left;
+        position:relative;
+        border:0px;
+        margin:0px;
+        padding:0px;
+        top:-500px;
+        left:0px;
+        width:700px;
+        height:500px;
+        overflow:auto;
+        background-color:#99CCFF;
+        font-size:0.75em;
+    }
+    #helpToggle {
+        border:0px;
+        margin:0px;
+        padding:0px;
+        width:700px;
+        height:30px;
+    }
+    input#gpVisibility {
+        background-color:#99CCFF;
+        color:#000000;
+    }
+    .olPopup .olFramedCloudPopupContent .gpPopupHead {
+        font-size:12px;
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+    }
+    .olPopup .olFramedCloudPopupContent .gpPopupHead input {
+        font-size:12px;
+        background-color:#CCCCFF;
+        color:#006699;
+        border: 1px outset;
+        margin: 0px;
+        padding: 0px;
+    }
+    .olPopup .olFramedCloudPopupContent .gpPopupBody {
+        font-size:12px;
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+    }
+    .olPopup .olFramedCloudPopupContent .gpPopupBody label {
+        font-size:12px;
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+    }
+    .olPopup .olFramedCloudPopupContent .gpPopupBody input {
+        font-size:12px;
+        border: 1px inset;
+        margin: 0px;
+        padding: 0px;
+    }
+    .olPopup .olFramedCloudPopupContent .gpPopupBody textarea {
+        font-size:12px;
+        border: 1px inset;
+        margin: 0px;
+        padding: 0px;
+    }
+    .olPopupCloseBox {
+        background-image:url("/geoportail/api/js/2.0.3/theme/geoportal/img/ico_win_close.gif")!important;
+    }
+    .gpControlLayerToolbar .gpControlAddImageLayerItemActive {
+        background-image:url("/geoportail/api/js/2.0.3/theme/geoportal/img/picto_template_off.gif");
+    }
+    .gpControlLayerToolbar .gpControlAddImageLayerItemInactive {
+        background-image:url("/geoportail/api/js/2.0.3/theme/geoportal/img/picto_template_off.gif");
+        cursor:auto;
+    }
+    .gpControlMousePosition {
+        left:15%;
+    }
+    div#footer {
+        float:left;
+        position:relative;
+        top:-500px;
+        font-size:x-small;
+        text-align:center;
+        width:100%;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    div#code a, div#code a:link, div#code a:visited, div#code a:hover {
+        text-decoration:none;
+        color: #000000;
+    }
+    div#code {
+        margin:0px 0px 10px 0px;
+        width:800px;
+        position:relative;
+        left:0px;
+        top:0px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+    }
+    /*]]>*/--></style>
+</head>
+<body>
+    <div id="page">
+        <h1 id="title"><span style="letter-spacing:-4px;"><span style="color:#43a3d7;font-size:0.5em;font-weight:bold;z-index:1;">g</span><span style="color:#97bf0f;font-size:1.0em;z-index:0;">é</span><span style="color:#f19406;font-size:1.6em;font-weight:bold;z-index:1;"><sub>O</sub></span></span>Alerte!</h1>
+        <div id="__intro__" class="text">
+            <p>Utilisation d'une carte Géoportail pour de la saisie d'évènements simples comme la localisation d'une anomalie, d'une information, etc ...<p>
+            <p>Vous pouvez envoyer votre anomalie à <a class="mail" href="#" onclick="location.href='mai' + 'lto:' + 'geop_' + 'autres' + '@' + 'geo' + 'portail.fr'; return false;">geop_<span style="display: none">.nosp@m.</span>autres<span>@</span>geo<span style="display: none">.nosp@m.</span>portail.fr</a>&nbsp;!</p>
+        </div>
+        <form id="helpToggle" name="helpToggle" action="#">
+            <input type="button" id="gpVisibility" name="gpVisibility" value="Afficher l'aide"/>
+        </form>
+        <div id='code'><a href="./js/geoportalAlert.js" alt="geoportalAlert" id="example_jscode" target="_blank"></a></div>
+        <div id="overlayDiv">
+            <div id="viewerDiv"></div>
+            <div id="helpDiv" style="visibility:hidden;">
+                <h3>Comment saisir une anomalie ?</h3>
+                <ol>
+                    <li>On crée une nouvelle couche via le bouton <img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_addvectorlayer_off.gif" style="vertical-align:middle;"/>. Le choix d'une couche vectorielle dépend de l'anomalie ;</li>
+                    <li>Un nom peut être donné à la couche ;</li>
+                    <li>Pour les couches linéaires ou surfaciques, il est possible de dessiner en déplaçant la souris la géométrie des objets (mode à main levée) ;</li>
+                    <li>Il est possible d'importer un fichier KML, une trace GPX ou un export OpenStreetMap dans la visualisation. <span style="color:red;">Expérimental</span></li>
+                    <li>Une fois ces choix effectués, on clique sur <span style="background:#FFCC00 none;border:1px solid #666666;color:#000000;font-weight:bold;margin:2px;">Ajouter</span>. La couche apparaît alors dans le gestionnaire en haut, à gauche ;</li>
+                    <li>La saisie elle-même passe par l'utilisation de l'outil dessin (<img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_drawPoint_off.gif" style="vertical-align:middle;"/> pour les couches ponctuelles, <img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_drawLine_off.gif" style="vertical-align:middle;"/> pour les couches linéaires, <img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_drawPolygon_off.gif" style="vertical-align:middle;"/> pour les couches surfaciques) ;</li>
+                    <li>À la fin de la saisie des objets vectoriels, une fenêtre apparaît pour saisir le nom de l'anomalie et une description ;</li>
+                    <li>Une fois les informations fournies, il suffit de fermer la fenêtre ;</li>
+                    <li>Il est possible d'effectuer plusieurs saisies, sur plusieurs couches ;</li>
+                    <li>Pour quitter le mode saisie, il suffit de cliquer sur <img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_selectFeature_off.gif" style="vertical-align:middle;"/> ;</li>
+                    <li>Une fois la saisie terminée, plusieurs outils permettent de la reprendre&nbsp;:
+                        <ol>
+                            <li><img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_moveFeature_off.gif" style="vertical-align:middle;"/> permet de déplacer un objet saisi ;</li>
+                            <li><img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_modifyFeature_off.gif" style="vertical-align:middle;"/> permet de changer la géométrie des objets par déplacement des points des objets vectoriels ;</li>
+                            <li><img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_deleteFeature_off.gif" style="vertical-align:middle;"/> permet de détruire l'objet qui va être sélectionné avec la souris ;</li>
+                            <li><img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_selectFeature_off.gif" style="vertical-align:middle;"/> permet de sélectionner un objet. La sélection ouvre la fenêtre de saisie du nom et de la description de l'anomalie (à minima, d'autres attributs ayant pu être ajoutés) ou de la fiche associée au KML/GPX/OSM. </li>
+                        </ol>
+                    </li>
+                    <li>Il est possible d'agir sur la couche en cliquant sur <div style="display:inline;background-image:url(/geoportail/api/js/2.0.3/theme/geoportal/img/regl_Horiz_Haut.gif);background-position:50% 0%;background-repeat:no-repeat;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> pour accéder aux outils suivant&nbsp;:
+                        <ol>
+                            <li>suppression de la couche en cliquant sur <img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_layerDrop_off.gif" style="vertical-align:middle;"/> ;</li>
+                            <li>ajout d'attributs sur la couche en cliquant sur <img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_addatt_off.gif" style="vertical-align:middle;"/> ;</li>
+                            <li>changement de la couleur des objets (coutours et remplissage) en cliquant sur <img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_palette_off.gif" style="vertical-align:middle;"/> ;</li>
+                            <li>sauvegarde sur votre poste de travail de la couche saisie (et éventuellement de nous l'envoyer par courriel) en cliquant sur <img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_save_off.gif" style="vertical-align:middle;"/>. Seuls les exports GML, GPX, OSM et Géoconcept sauvegardent les attributs additionnels (autre que nom et description) ;</li>
+                            <li>zoom sur l'emprise de la couche en cliquant sur <img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_zoomToExtent_off.gif" style="vertical-align:middle;"/>. </li>
+                        </ol>
+                    </li>
+                </ol>
+                <h3>Comment saisir un objet ?</h3>
+                <ol>
+                <li>La saisie d'un point débute par un clic sur <img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_drawPoint_off.gif" style="vertical-align:middle;"/>, puis chaque clic gauche sur la carte permet de localiser un objet ponctuel. La fiche de l'objet s'ouvre alors et il suffit de rentrer les valeurs pour le champ <b>Nom</b> (le titre de la fiche) et sa <b>description</b> (le corps de la fiche). L'ajout d'attributs additionnels via <img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_addatt_off.gif" style="vertical-align:middle;"/> permet d'avoir ces attributs automatiquement dans la fiche ;</li>
+                <li>La saisie d'un ligne débute par un clic sur <img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_drawLine_off.gif" style="vertical-align:middle;"/>, puis un clic gauche débute la saisie de la ligne, un trait relie alors le point saisi avec la position de la souris. Un autre clic gauche saisit un nouveau point et ainsi de suite. Pour terminer, un double-clic gauche est nécessaire. Lors de ce double-clic, la fenêtre de saisie s'affiche. Le mode à main levée est possible sur les saisie de ligne à la création de la couche ;</li>
+                <li>La saisie d'une surface débute par un clic sur <img src="/geoportail/api/js/2.0.3/theme/geoportal/img/picto_drawPolygon_off.gif" style="vertical-align:middle;"/>, puis un clic gauche débute la saisie du polygone, un trait relie alors le point saisi avec la position de la souris. Un autre clic gauche saisit un nouveau point et ainsi de suite. Pour terminer (et donc fermer le polygone), un double-clic gauche est nécessaire. Deux actions sont associées à ce double-clic : la saisie de l'avant dernier point du polygone et la fermeture du polygone (le dernier point du polygone est donc le premier saisi). Il ne reste plus qu'à remplir la fiche. Le mode à main levée est possible sur les saisie de ligne à la création de la couche. </li><!--u>Astuce&nbsp;:</u> il est possible de saisir un trou dans le polygone et effectuant un Contrôle-Clic gauche à l'intérieur du polygone. La saisie des points suivants s'effectue comme pour le périmètre externe du polygone !</li-->
+                </ol>
+            </div>
+        </div>
+         <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank"></a> - &copy;IGN 2008-2013</div>
+    </div>
+    
+    <!--script type="text/javascript" charset="utf-8" src="http://api.ign.fr/geoportail/api/js/2.0.3/GeoportalExtended.js"></script-->
+    <!-- replace the below line, by the above line when copying this page -->
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/GeoportalExtended.js"><!-- --></script>
+    <script type="text/javascript" src="js/utils.js"></script>     
+    <script type="text/javascript" src="js/i18n/geoportalAlert.js"></script>
+    <script type="text/javascript" src="js/geoportalAlert.js"></script>
+
+  </body>
+</html>

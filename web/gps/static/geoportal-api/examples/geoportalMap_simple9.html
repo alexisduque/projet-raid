@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>geoportalMap_simple.html (9)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    h1 {
+        text-align:center;
+        font-size:0.75em;
+        font-style:italic;
+        width:800px;
+    }
+    div#example_explain {
+        margin:0px 0px 10px 0px;
+        border:thin solid #595E61;
+        width:800px;
+        text-align:justify;
+        font-size:0.75em;
+        font-style:italic;
+        color:#595E61;
+    }
+    form#gpLangChange {
+        border:0px;
+        margin:0px;
+        padding:0px;
+    }
+    div#viewerDiv {
+        width:800px;
+        height:600px;
+        background-color:white;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:800px;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    /*]]>*/--></style>
+  </head>
+  <body>
+    <h1 id="example_title">Carte simple (9)</h1>
+    <table>
+      <tr>
+        <td>
+          <div id="viewerDiv"></div>
+        </td>
+        <td>
+          <form action="javascript:(void)0">
+            <label for="getFeatureToggle">
+              <input type="checkbox" id="getFeatureToggle"/>
+                <span>Activer/Désactiver WFS GetFeature</span>
+            </label>
+            <br/>
+            <textarea id="getFeatureResults" rows="25" cols="80"></textarea>
+            <br/>
+            <input type="button" id="getFeatureClean" value="Vider !"/>
+          </form>
+        </td>
+      </tr>
+    </table>
+    <div id="example_explain">Cette carte montre comment insérer très rapidement les données du Géoportail dans une page web&nbsp;: interrogation d'un service WMS (GetFeatureInfo) et WFS (GetFeature).</div>
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank">Mentions Légales</a> - &copy;IGN 2008-2013</div>
+    
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+    var iv= null;
+    window.onload= function() {
+        // base URL for WMS and WFS:
+        var wxsUrl= 'http://geodesie.ign.fr/cgi-bin/mapserv?map=/var/webapp/lib/visugeod/mapfile_bdg.map';
+
+        // base URL for GetLegendGraphic :
+        var glgUrl= wxsUrl+'&amp;SERVICE=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.1.1&amp;FORMAT=image/jpeg&amp;';
+
+        // GetFeature results field:
+        var gfResults= null;
+
+        // GetFeature results GeoJSON format:
+        var gfGeoJSON= null;
+
+        /**
+         * Function: attachGetFeatureInfoControl
+         * Adds a GetFeatureInfo control to the layer in the layerswitcher.
+         * Expects the WMS to return plain/text information.
+         */
+        function attachGetFeatureInfoControl() {
+            //this===layer
+            var blc= this.map.getControlsBy('id', 'basic_'+this.id)[0];
+            if (!blc) { return; }
+            var wic= new OpenLayers.Control.WMSGetFeatureInfo({
+                url:this.url,
+                layers:[this],
+                title:"Identifier les « " + this.name + " »",
+                type:OpenLayers.Control.TYPE_BUTTON,
+                queryVisible:true,
+                maxFeatures:1,
+                eventListeners:{
+                    getfeatureinfo:function(event) {
+                        //this===control
+                        if (event.text) {
+                            this.map.addPopup(new
+                                OpenLayers.Popup.FramedCloud(
+                                    "chicken",
+                                    this.map.getLonLatFromPixel(event.xy),
+                                    null,
+                                    event.text,
+                                    null,
+                                    true
+                                )
+                            );
+                        }
+                    }
+                },
+                trigger:function() {
+                    //this===control
+                    if (this.active) {
+                        this.deactivate();
+                    } else {
+                        this.activate();
+                    }
+                }
+            });
+            blc.addControls([wic]);
+        }
+
+        iv= Geoportal.load(
+            // div's ID:
+            'viewerDiv',
+            // API's keys:
+            ['nhf8wztv3m9wglcda6n6cbuf'],
+            // map's center :
+            {
+                lon:55.53,
+                lat:-21.12
+            },
+            10,//map's zoom
+            {
+                // only use ortho-imagery and maps :
+                layers:['ORTHOIMAGERY.ORTHOPHOTOS', 'GEOGRAPHICALGRIDSYSTEMS.MAPS'],
+                // change maps default opacity :
+                layersOptions:{
+                    'GEOGRAPHICALGRIDSYSTEMS.MAPS': {
+                        opacity:0.5
+                    }
+                },
+                // add a wms service (sandre) :
+                overlays:{
+                    'wms':[{
+                        name:"Repères de Nivellement",
+                        url:wxsUrl,
+                        options:{
+                            params:{//WMS parameters
+                                layers:'triplet,rn',
+                                format:'image/png',
+                                transparent:true
+                            },
+                            options:{//WMS layer's options
+                                singleTile:false,
+                                projection:'EPSG:4326',
+                                // maxExtent expressed in EPSG:4326 :
+                                maxExtent:new OpenLayers.Bounds(55.221600, -21.386400, 55.826300, -20.875500),
+                                minZoomLevel:14,
+                                maxZoomLevel:19,
+                                opacity:1.0,
+                                visibility:true,
+                                // display legends
+                                legends:[
+                                    {
+                                        title:'Légende',
+                                        href:glgUrl+'WIDTH=245&amp;HEIGHT=113&amp;LAYER=rn&amp;',
+                                        width:245,
+                                        height:113
+                                    }
+                                ],
+                                originators:[
+                                    {
+                                        logo:'ign'
+                                    }
+                                ],
+                                // add GetFeatureInfo on WMS layer just after
+                                // the layer has been added to the map
+                                afterAdd:attachGetFeatureInfoControl
+                            }
+                        }
+                    },{
+                        name:"Réseau géodésique de détail",
+                        url:wxsUrl,
+                        options:{
+                            params:{//WMS parameters
+                                layers:'sit_rdf',
+                                format:'image/png',
+                                transparent:true
+                            },
+                            options:{//WMS layer's options
+                                singleTile:false,
+                                projection:'EPSG:4326',
+                                // maxExtent expressed in EPSG:4326 :
+                                maxExtent:new OpenLayers.Bounds(55.230700, -21.386900, 55.826700, -20.878800),
+                                minZoomLevel:12,
+                                maxZoomLevel:19,
+                                opacity:1.0,
+                                visibility:true,
+                                // display legends
+                                legends:[
+                                    {
+                                        title:'Légende',
+                                        href:glgUrl+'WIDTH=287&amp;HEIGHT=77&amp;LAYER=sit_rdf&amp;',
+                                        width:287,
+                                        height:77
+                                    }
+                                ],
+                                originators:[
+                                    {
+                                        logo:'ign'
+                                    }
+                                ],
+                                // add GetFeatureInfo on WMS layer just after
+                                // the layer has been added to the map
+                                afterAdd:attachGetFeatureInfoControl
+                            }
+                        }
+                    },{
+                        name:"Réseau géodésique de base",
+                        url:wxsUrl,
+                        options:{
+                            params:{//WMS parameters
+                                layers:'sit_rbf',
+                                format:'image/png',
+                                transparent:true
+                            },
+                            options:{//WMS layer's options
+                                singleTile:false,
+                                projection:'EPSG:4326',
+                                // maxExtent expressed in EPSG:4326 :
+                                maxExtent:new OpenLayers.Bounds(55.232200, -21.386600, 55.828800, -20.872000),
+                                minZoomLevel:10,
+                                maxZoomLevel:19,
+                                opacity:1.0,
+                                visibility:true,
+                                // display legends
+                                legends:[
+                                    {
+                                        title:'Légende',
+                                        href:glgUrl+'WIDTH=287&amp;HEIGHT=77&amp;LAYER=sit_rbf&amp;',
+                                        width:287,
+                                        height:77
+                                    }
+                                ],
+                                originators:[
+                                    {
+                                        logo:'ign'
+                                    }
+                                ],
+                                // add GetFeatureInfo on WMS layer just after
+                                // the layer has been added to the map
+                                afterAdd:attachGetFeatureInfoControl
+                            }
+                        }
+                    },{
+                        name:"Stations Réseau GNSS Permanent",
+                        url:wxsUrl,
+                        options:{
+                            params:{//WMS parameters
+                                layers:'rgp',
+                                format:'image/png',
+                                transparent:true
+                            },
+                            options:{//WMS layer's options
+                                singleTile:false,
+                                projection:'EPSG:4326',
+                                // maxExtent expressed in EPSG:4326 :
+                                maxExtent:new OpenLayers.Bounds(55.288000, -21.208200, 55.687200, -21.002000),
+                                minZoomLevel: 9,
+                                maxZoomLevel:19,
+                                opacity:1.0,
+                                visibility:true,
+                                // display legends
+                                legends:[
+                                    {
+                                        title:'Légende',
+                                        href:glgUrl+'WIDTH=112&amp;HEIGHT=23&amp;LAYER=rgp&amp;',
+                                        width:112,
+                                        height:23
+                                    }
+                                ],
+                                originators:[
+                                    {
+                                        logo:'ign'
+                                    }
+                                ],
+                                // add GetFeatureInfo on WMS layer just after
+                                // the layer has been added to the map
+                                afterAdd:attachGetFeatureInfoControl
+                            }
+                        }
+                    }]
+                }
+                ,language:'fr',proxyUrl:'/geoportail/api/xmlproxy'+'?url=',viewerClass:'Geoportal.Viewer.Default',territory:'REU',
+                // prepare variables
+                onBeforeView:function() {
+                    gfResults= OpenLayers.Util.getElement('getFeatureResults');
+                    gfGeoJSON= new OpenLayers.Format.GeoJSON();
+                },
+                // load WFS GetFeature control (context "this" is the
+                // <Geoportal.InterfaceViewer>)
+                onView:function() {
+                    var wfsGFCtrl= new OpenLayers.Control.GetFeature({
+                        protocol: new OpenLayers.Protocol.WFS({
+                            url:wxsUrl,
+                            featurePrefix:'ms',
+                            featureNS:'http://mapserver.gis.umn.edu/mapserver',
+                            geometryName:'msGeometry',
+                            featureType:['sit_rbf', 'sit_rdf', 'rn'],
+                            srsName:'EPSG:4326',
+                            version:'1.0.0',
+                            formatOptions:{
+                                // WARNING: because of EPSG:4326 in Mapserver
+                                //          WFS 1.1.0 (axis order) :
+                                //          xy must be false in WFS 1.1.0 and
+                                //          true in WFS 1.0.0 !
+                                xy:true,
+                                // keep coordinates as sent :
+                                //internalProjection:this.getViewer().getMap().getProjection().clone(),
+                                externalProjection:new OpenLayers.Projection('EPSG:4326')
+                            }
+                        }),
+                        // select by bbox only
+                        box:true,
+                        click:false,
+                        clickout:false,
+                        eventListeners:{
+                            'featuresselected': function(e) {
+                                gfResults.value+= '\n/* --- */\n' + gfGeoJSON.write(e.features,true);
+                            }
+                        }
+                    });
+                    this.getViewer().getMap().addControl(wfsGFCtrl);
+                    // open layer switcher
+                    this.getViewer().openLayersPanel(true);
+
+                    var e= OpenLayers.Util.getElement('getFeatureToggle');
+                    e.onclick= function() {
+                        // context is input checkbox
+                        if (this.checked) {
+                            wfsGFCtrl.activate();
+                        } else {
+                            wfsGFCtrl.deactivate();
+                        }
+                    };
+                    e= OpenLayers.Util.getElement('getFeatureClean');
+                    e.onclick= function() {
+                        gfResults.value= '';
+                    };
+
+                    // open layer switcher advanced panel
+                    var wmss= this.getViewer().getMap().getLayersByClass('OpenLayers.Layer.WMS');
+                    var ptcs= this.getViewer().getMap().getControlsByClass('Geoportal.Control.PanelToggle');
+                    for (var i= 0, n= wmss.length; i<n; i++) {
+                        for (var j= 0, l= ptcs.length; j<l; j++) {
+                            if (ptcs[j].id.indexOf(wmss[i].id)!=-1) {
+                                ptcs[j].panel.activateControl(ptcs[j]);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        );
+    };
+    //--><!]]></script>
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/GeoportalExtended.js"><!-- --></script>
+  </body>
+</html>

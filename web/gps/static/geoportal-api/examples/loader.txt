@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>geoportalMap_simple.html (1.3)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+
+    div#viewerDiv {
+        width:800px;
+        height:600px;
+        background-color:white;
+        background-image:url(http://api.ign.fr/geoportail/api/js/1.3.0/theme/geoportal/img/loading.gif);
+        background-position:center center;
+        background-repeat:no-repeat;
+    }
+
+    /*]]>*/--></style>
+  </head>
+  <body>
+    <div id="viewerDiv"></div>
+
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+    var iv= null;
+    window.onload= function() {
+        iv= Geoportal.load(
+            // div's ID:
+            'viewerDiv',
+            // API's keys:
+            ['CLEF'],
+            {// map's center :
+                // longitude:
+                lon:2.731525,
+                // latitude:
+                lat:45.833333
+            },null,
+            {language:'fr',
+              onView:function(options){
+            		var viewer= this.getViewer();
+            	}
+            }
+        );
+    };
+    //--><!]]></script>
+    <script type="text/javascript" charset="utf-8" src="http://api.ign.fr/geoportail/api/js/VERSION/Geoportal.js"><!-- --></script>
+  </body>
+</html>

@@ -32,11 +32,11 @@ public class CollectServer
 	private Vector<PrintWriter> _tabClients = new Vector<PrintWriter>(); // contiendra tous les flux de sortie vers les clients
 	private Vector<CClient> _sockClients = new Vector<CClient>();
 	private int _nbClients=0; // nombre total de clients connectes
-        public static Logger logger = Logger.getLogger(CollectServer.class.getName());
+    public static Logger logger = Logger.getLogger(CollectServer.class.getName());
 	private static FileHandler fh;
-        private static String n_log = ""; // recevra le nom du fichier du log
-        private static String l_log = ""; // recevra le niveau du logger
-
+    private static String n_log = ""; // recevra le nom du fichier du log
+    private static String l_log = ""; // recevra le niveau du logger
+    public static CollectCLI serverCLI;
 	//** Methode : la premiere methode executee, elle attend les connections **
 	public static void main(String args[]) 
 	{
@@ -49,12 +49,12 @@ public class CollectServer
 			else 
 				port = new Integer(args[0]); // sinon il s'agit du numero de port passe en argument
 
-			new CollectConsole(socketServ); // lance le thread de gestion des commandes
-			// on pourrait creer objet OracleDataBase ici et commun a tous les thread RAF
 			ServerSocket ss = new ServerSocket(port.intValue()); // ouverture d'un socket serveur sur port
       			logger.log(Level.WARNING,"starting on port "+port);
 			printWelcome(port);
-		
+
+			serverCLI = new CollectCLI(socketServ); // lance le thread de gestion des commandes
+
 			while (true) // attente en boucle de connexion (bloquant sur ss.accept)
 			{
 				Socket sc = ss.accept(); // un client se connecte, un nouveau thread client est lance
@@ -78,41 +78,18 @@ public class CollectServer
 		System.out.println("----------------------------------------");
 		System.out.println("Demarre sur le port : "+port.toString());
 	}
-	synchronized public void printCommandes()
-	{		
-		System.out.println("--------------------------------------------------");
-		System.out.println("Liste des commandes possibles:");
-		System.out.println("getinfo: \t Obtenir les indentifiants");
-		System.out.println("getlocation: \t Obtenir la position GPS");
-		System.out.println("getsim: \t Obtenir les parametres SIM ");
-		System.out.println("getimei: \t Obtenir les parametres IMEI");
-		System.out.println("getradio: \t Obtenir les parametres 2G/3G");
-		System.out.println("getversion: \t Obtenir la version du firmware");
-		System.out.println("setconf: \t Configurer les parametres TCP");
-		System.out.println("getconf: \t Obtenir les parametres TCP");
-		System.out.println("settrack: \t Configurer le suivi rapide (30s et 100m) GPS");
-		System.out.println("setnav: \t Configurer le suivi lent (120s) GPS");
-		System.out.println("gettrack: \t Obtenir les parametres du tracking GPS");
-		System.out.println("resettrack: \t Arret du tracking GPS");
-		System.out.println("setevent: \t Configurer le geofencing GPS");
-		System.out.println("resetevent: \t Arret du geofencing GPS");
-		System.out.println("clearbuffer: \t Vider le buffer des donnees GPS");
-		System.out.println("disconnect: \t Fermer les connexions TCP");
-		System.out.println("list: \t\t Liste les devices connectes");
-		System.out.println("total: \t\t Nombre de devices connectes");
-		System.out.println("quit: \t\t Quitter");
-		System.out.println("--------------------------------------------------");
-	}
 
 	//** Methode : envoie le message GETLOCATION a tous les clients **
 	synchronized public void sendAll(String message,String sLast)
 	{
+		logger.log(Level.WARNING,"envoi à tous les tracker : "+message);
 		PrintWriter out; // declaration d'une variable permettant l'envoie de texte vers le client
 		for (int i = 0; i < _tabClients.size(); i++) // parcours de la table des connectes
 		{
 			out =  _tabClients.elementAt(i); // extraction de l'element courant (type PrintWriter)
 			if (out != null) // securite, l'element ne doit pas etre vide
 			{
+				logger.log(Level.INFO,"envoi au tracker " +_sockClients.elementAt(i).getId()+" : "+message);
 				// ecriture du texte passe en parametre (et concatenation d'ue string de fin de chaine si besoin)
 				out.print(message+sLast);
 				out.flush(); // envoi dans le flux de sortie
@@ -120,24 +97,55 @@ public class CollectServer
 		}
 	}
 
+	//** Methode : envoie le message au client passé e paraètre**
+	synchronized public void sendMess(String message,String sLast, int idClient)
+	{
+		logger.log(Level.WARNING,"envoi au tracker "+idClient+" : "+message);
+		PrintWriter out; // declaration d'une variable permettant l'envoie de texte vers le client
+		try {
+			out =  _tabClients.elementAt(idClient); // extraction de l'element courant (type PrintWriter)
+			if (out != null) // securite, l'element ne doit pas etre vide
+			{
+				logger.log(Level.INFO,"envoi au tracker " +_sockClients.elementAt(idClient).getId()+" : "+message);
+				// ecriture du texte passe en parametre (et concatenation d'ue string de fin de chaine si besoin)
+				out.print(message+sLast);
+				out.flush(); // envoi dans le flux de sortie
+				serverCLI._clientCLI.output.println("CollectServer CLI-> Cmd envoyée");
+			}
+		} catch (Exception e) {
+			logger.log(Level.INFO,"envoi de la cmd impossible au client" +idClient+". Id inconnue");
+			serverCLI._clientCLI.output.println("CollectServer CLI-> Tracker Id inconnue");
+			serverCLI._clientCLI.output.flush();
+		}
+		
+	}
+
 	//** Methode : detruit le client no i **
 	synchronized public void delClient(int i)
 	{
-		_nbClients--; // un client en moins ! snif
-		if (_tabClients.elementAt(i) != null) // l'element existe ...
-		{
-			_tabClients.removeElementAt(i); // ... on le supprime
-			try {
-				if (_sockClients.elementAt(i).getSocket() != null) { 
-					Socket sl = _sockClients.elementAt(i).getSocket();
-					if (sl != null)
-						sl.close(); // on ferme la socket client
-					_sockClients.removeElementAt(i); // on supprime le client
+		//on catch l'exception si le client n'existe pas (ArrayOutOfBound)
+		try {
+			 // un client en moins ! snif
+			if (_tabClients.elementAt(i) != null) // l'element existe ...
+			{
+				_tabClients.removeElementAt(i); // ... on le supprime
+				
+				try {
+					if (_sockClients.elementAt(i).getSocket() != null) { 
+						Socket sl = _sockClients.elementAt(i).getSocket();
+						if (sl != null)
+							sl.close(); // on ferme la socket client
+						_sockClients.removeElementAt(i); // on supprime le client
+						_nbClients--;
+						logger.log(Level.WARNING,"socket client " + i + " fermee");
+					}
+				} catch (Exception e) {
+	      				logger.log(Level.WARNING,"erreur fermeture de socket");
+				//	System.out.println("erreur fermeture socket");	
 				}
-			} catch (Exception e) {
-      				logger.log(Level.WARNING,"erreur fermeture de socket");
-			//	System.out.println("erreur fermeture socket");	
 			}
+		} catch (Exception e){
+			logger.log(Level.WARNING,"client " + i + " déjà supprimé");
 		}
 	}
 	synchronized public void updateClient(int indice, int type, String sid)
@@ -148,27 +156,29 @@ public class CollectServer
       			logger.log(Level.INFO,"met a jour client:"+sid);
 		}
 	}
-	synchronized public void listAllClients()
+	synchronized public void listAllClients(PrintWriter output)
 	{
 		
 		for (int i = 0;i < _nbClients;i++) {
 			if (_sockClients.elementAt(i).getSocket() != null) { 
 				if (_sockClients.elementAt(i).getType() == 0)
-					System.out.println("rg:"+i+", id:"+_sockClients.elementAt(i).getId()+", type:nomadic") ;
+					output.println("rg:"+i+", id:"+_sockClients.elementAt(i).getId()+", type:nomadic") ;
 				else
-					System.out.println("rg:"+i+", id:"+_sockClients.elementAt(i).getId()+", type:teltonika") ;
+					output.println("rg:"+i+", id:"+_sockClients.elementAt(i).getId()+", type:teltonika") ;
 			}
 			// on affiche les infos du client sur la console
 		}
 	}
 	synchronized public void delAllClients()
 	{
-		
-		for (int i = 0;i < _nbClients;i++) {
+		int n = _nbClients;
+		for (int i = n - 1 ;i >=0 ;i--) {
 			delClient(i);
+			logger.log(Level.WARNING,"client " +i+ " supprimé");
 		}
 		_nbClients = 0;
 	}
+
 	//** Methode : ajoute un nouveau client dans la liste **
 	synchronized public int addClient(PrintWriter out, Socket s)
 	{
@@ -189,16 +199,16 @@ public class CollectServer
 
 	public static void setLogger()
 	{
-	    	FileHandler fh;
-                Properties props = new Properties();
-                try {
-                        // le fichier de proprietes doit se trouve a la racine du package ws
-                        props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("geotracker.properties"));
-                        n_log = props.getProperty("LOG");
-                } catch (IOException e) {
-                        e.printStackTrace();
-                        System.out.println("impossible de trouver le fichier properties");
-                }
+	    FileHandler fh;
+        Properties props = new Properties();
+        try {
+            // le fichier de proprietes doit se trouve a la racine du package ws
+            props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("geotracker.properties"));
+            n_log = props.getProperty("LOG");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("impossible de trouver le fichier properties");
+        }
 
 		// pour stopper les logs sur la console ou les parents
 		logger.setUseParentHandlers(false);

@@ -1,0 +1,226 @@
+#!/usr/bin/perl -T
+#
+# (c) 2008 IGN - Didier.Richard@ign.fr
+# License : http://creativecommons.org/licenses/by-nc-sa/2.0/fr/
+#
+#use diagnostics;
+use strict;
+use warnings;
+
+# modules
+use CGI qw/:cgi/;# pour dialoguer sur http
+$CGI::POST_MAX=1024 * 1000;  # max 1000Kb posts
+use LWP::UserAgent;
+use HTTP::Headers;
+use HTTP::Message;
+use HTTP::Request;
+use HTTP::Response;
+use Encode;
+use IO::Uncompress::Unzip qw(unzip $UnzipError);
+
+#  variables globales
+our $VERSION= '0.0.1';
+
+# TODO : fichier de configuration par défaut
+# il peut être écrasé par la directive SetPerlVar
+my $configfile= '';
+
+#
+# Sortie en erreur
+#
+sub notify_proxy_failure {
+    my ($cgi, $status, $msg)= @_;
+    print $cgi->header(
+        -type           => 'text/plain;charset:utf-8',
+        -status         => "$status",
+        -Content_Length => defined($msg)? length($msg) : 0
+    );
+    if (defined($msg)) {
+        print $msg;
+    }
+    exit 0;
+}# notify_proxy_failure
+
+#
+# Proxy LWP (Web)
+#
+sub proxyfy_remote {
+    my ($cgi, $url)= @_;
+    my $hds= HTTP::Headers->new() or notify_proxy_failure($cgi,500);
+    my @content_types= (
+        'application/vnd.google-earth.kml+xml',
+        'application/vnd.google-earth.kml',
+        'application/vnd.google-earth.kmz',
+        'application/vnd.ogc.wms_xml',
+        'application/vnd.ogc.wfs_xml',
+        'application/vnd.ogc.gml',
+        'application/soap+xml',
+        'application/xml',
+        'text/xml'
+    );
+    $hds->header(Accept => \@content_types);
+    for my $h ('Pragma', 'Cache-Control', 'Accept-Language', 'Keep-Alive',
+               'Accept-Encoding', 'Connection', 'SOAPAction', 'Accept-Charset') {
+        my $hv= $cgi->http($h);
+        if (defined($hv)) {
+            $hds->header($h => $hv);
+        }
+    }
+    $hds->referer($cgi->referer()) if defined($cgi->referer());
+    my $rqst= HTTP::Request->new($cgi->request_method(), $url, $hds) or notify_proxy_failure($cgi,500);;
+    my $xml;
+    if ($cgi->request_method() eq 'POST') {
+        $xml= $cgi->param('POSTDATA');
+        if (!defined($xml)) {
+            $xml= '';
+            $rqst->header('Content-Type', $cgi->content_type());
+            for my $k ($cgi->param) {
+                my @v= $cgi->param($k);
+                $xml.= $k.'='.join(',',@v).'&';
+            }
+        }
+        $rqst->content($xml);
+        $rqst->content_length(length($xml));
+    } else {
+        $xml= $cgi->query_string;
+    }
+    my $bot= LWP::UserAgent->new() or notify_proxy_failure($cgi,500);
+    $bot->agent($cgi->user_agent()) if defined($cgi->user_agent());
+    $bot->max_size(1000*1024); # 1Mo
+    #$bot->show_progress(0);
+    $bot->env_proxy;#if behind an enterprise proxy
+    my $resp= $bot->request($rqst);
+    if (!$resp->is_success) {
+        notify_proxy_failure($cgi,400,'remote('.$xml.') failed : '.$resp->status_line);# RC_BAD_REQUEST
+    }
+
+    my $content= $resp->content_ref;
+    my $content_length= $resp->header('Content-Length');
+    my $content_type= $resp->header('Content-Type');
+    if (!defined($content_type)) {
+        notify_proxy_failure($cgi,400,'empty content-type ('.
+                            $$content.') for ('.$xml.')');# RC_BAD_REQUEST
+    }
+    chomp($content_type);
+    $content_type=~s/\x0d//g;
+    if ($content_type!~m/^ *([^;]+)/i) {
+        notify_proxy_failure($cgi,400,'unknown content-type : '.$content_type.' ('.
+                            $$content.') for ('.$xml.')');# RC_BAD_REQUEST
+    }
+    my ($mimetype)= split(/,/, $1);             # seulement le premier ?
+    $mimetype=~s/\x0d//g;
+    $mimetype=~s/\x0a//g;
+    if (scalar(grep {$_=~m{^\Q$mimetype\E$}} @content_types)==0) {
+        notify_proxy_failure($cgi,400,'unknown mime-type : '.$mimetype.' ('.
+                            $$content.') for ('.$xml.')');# RC_BAD_REQUEST
+    }
+    my $charset= 'UTF-8';
+    if ($content_type=~m/^.*; *charset=(.*)$/i) {
+        $charset= $1;
+        $charset=~s/\x0d//g;
+        $charset=~s/\x0a//g;
+    }
+    my $uncompressIt= 0;
+    if ($mimetype eq 'application/vnd.google-earth.kmz') {
+        # unzip it :
+        $mimetype= 'application/vnd.google-earth.kml+xml';
+        $uncompressIt= 1;
+    }
+    if ($resp->header('Content-Encoding') eq 'gzip') {
+        $uncompressIt= 1;
+    }
+    if ($uncompressIt) {
+        my $unzip_returned_content= '';
+        my $uz= new IO::Uncompress::Unzip $content, InputLength => $content_length, Append => 1
+                or notify_proxy_failure($cgi,500);
+        my $unzip_returned_content_length= 0;
+        my $read_count= 0;
+        while (($read_count= $uz->read($unzip_returned_content))>0) {
+            $unzip_returned_content_length+= $read_count;
+        }
+        # read_count < 0 : error
+        # read_count = 0 : eof
+        notify_proxy_failure($cgi,500) if $read_count!=0;
+        $content= \$unzip_returned_content;
+        $content_length= $unzip_returned_content_length;
+    }
+    print $cgi->header(
+        -type   => "$mimetype;charset=$charset",
+        -Content_Length => $content_length
+    );
+    print $$content;
+}# proxyfy_remote
+
+#
+# Proxy LWP (local)
+#
+sub proxyfy_local {
+    my ($cgi, $url)= @_;
+    my $hds= HTTP::Headers->new() or notify_proxy_failure($cgi,500);
+    my $rqst= HTTP::Request->new('GET', $url, $hds) or notify_proxy_failure($cgi,500);;
+    my $bot= LWP::UserAgent->new() or notify_proxy_failure($cgi,500);
+    $bot->max_size(1000*1024); # 1Mo
+    #$bot->show_progress(0);
+    my $resp= $bot->request($rqst);
+    if (!$resp->is_success) {
+        notify_proxy_failure($cgi,400,'local('.$url.') failed : '.$resp->status_line);# RC_BAD_REQUEST
+    }
+    my $mimetype= 'text/xml';
+    my $charset= 'UTF-8';
+    my $content= $resp->content_ref;
+    my $content_length= $resp->header('Content-Length');
+    if ($url=~m/\.kml$/i) {
+        $mimetype= 'application/vnd.google-earth.kml+xml';
+    } elsif ($url=~m/\.kmz$/i) {
+        # unzip it :
+        $mimetype= 'application/vnd.google-earth.kml+xml';
+        my $unzip_returned_content= '';
+        my $uz= new IO::Uncompress::Unzip $content, InputLength => $content_length, Append => 1
+                or notify_proxy_failure($cgi,500);
+        my $unzip_returned_content_length= 0;
+        my $read_count= 0;
+        while (($read_count= $uz->read($unzip_returned_content))>0) {
+            $unzip_returned_content_length+= $read_count;
+        }
+        # read_count < 0 : error
+        # read_count = 0 : eof
+        notify_proxy_failure($cgi,500) if $read_count!=0;
+        $content= \$unzip_returned_content;
+        $content_length= $unzip_returned_content_length;
+    } elsif ($url=~m/\.js$/i) {
+        $mimetype= 'application/javascript';
+    }
+
+    print $cgi->header(
+        -type           => "$mimetype;charset=$charset",
+        -Content_Length => $content_length,
+    );
+    print $$content;
+}# proxyfy_local
+
+#
+# Programme principal :
+#
+# On récupère la GlobalRequest en premier
+my $gr= undef;
+my $cgi= undef;
+if ($ENV{MOD_PERL}) {
+    $gr= shift @_;
+    $cgi= CGI->new($gr);
+    $configfile= $gr->dir_config('configfile');
+} else {
+    $cgi= CGI->new();
+}
+my $url;
+if ($cgi->request_method() eq 'GET') {
+    $url= $cgi->url_param('url');
+} elsif ($cgi->request_method() eq 'POST') {
+    $url= $cgi->url_param('url');
+} else {
+    notify_proxy_failure($cgi,400,'unknown method : '.$cgi->request_method());# RC_BAD_REQUEST
+}
+if ($url=~m/^https?:\/\//) {
+    proxyfy_remote($cgi,$url);
+} else {
+    proxyfy_local($cgi,$url);
+}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>geoportalMap_simple1.5.html (1.5)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    h1 {
+        text-align:center;
+        font-size:0.75em;
+        font-style: italic;
+        width:800px;
+    }
+    div#example_explain {
+        margin:0px 0px 10px 0px;
+        border: thin solid #595E61;
+        width:800px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+        color: #595E61;
+    }
+    form#gpLangChange {
+        border:0px;
+        margin:0px;
+        padding:0px;
+    }
+    div#viewerDiv1, div#viewerDiv2 {
+        width:800px;
+        height:600px;
+        background-color:lightgrey;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:800px;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    /*]]>*/--></style>
+  </head>
+  <body>
+    <h1 id="example_title">Cartes simples (1.5)</h1>
+    <div id="viewerDiv1"></div>
+    <br/>
+    <div id="viewerDiv2"></div>
+    <div id="example_explain">Cette carte montre comment insérer très rapidement les données du Géoportail dans une page web&nbsp;: appels en cascade à <i>Geoportal.load()</i>.</div>
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank">Mentions Légales</a> - &copy;IGN 2008-2013</div>
+    
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+    var iv1= null, iv2= null;
+    var load1= function() {
+        iv1= Geoportal.load(
+            // div's ID:
+            'viewerDiv1',
+            // API's keys:
+            ['nhf8wztv3m9wglcda6n6cbuf'],
+            {// map's center :
+                // longitude:
+                lon:2.731525,
+                // latitude:
+                lat:45.833333
+            },
+            5,
+            {
+                language:'fr',
+                onView:function() {
+                    load2();
+                }
+            }
+        );
+    };
+    var load2= function() {
+        iv2= Geoportal.load(
+            // div's ID:
+            'viewerDiv2',
+            // API's keys:
+            ['nhf8wztv3m9wglcda6n6cbuf'],
+            {// map's center :
+                // longitude:
+                lon:2.731525,
+                // latitude:
+                lat:45.833333
+            },
+            10,
+            {
+                language:'fr'
+            }
+        );
+    };
+
+/*
+ *  Dans une page plus complexe (CMS, etc ...), l'utilisation des
+ *  EventListener est plutôt conseillée :
+ */
+/* 
+    function loadPage(e) {
+        // Remove it for Gecko based browsers
+        if (window.removeEventListener && e.eventPhase==3) window.removeEventListener("load",loadPage,false);
+        // and for IE and Opera 4.x but execute calls 
+        else if(window.detachEvent) window.detachEvent("onload",loadPage);
+        load1();
+    }
+
+    if(window.addEventListener) window.addEventListener("load",loadPage,false);
+    else if (window.attachEvent) window.attachEvent("onload",loadPage);
+ */
+
+    window.onload= load1;
+    //--><!]]></script>
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/Geoportal.js"><!-- --></script>
+  </body>
+</html>

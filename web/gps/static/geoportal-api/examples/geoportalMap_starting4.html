@@ -1,0 +1,1039 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>geoportalMap_starting (4)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <!-- include CSS for easying overwriting of styles : -->
+    <!-- OpenLayers styles : -->
+    <link id="__OpenLayersCss__" href="/geoportail/api/js/2.0.3/theme/default/style.css" type="text/css" rel="stylesheet"/>
+    <!--[if lte IE 6]>
+    <link id="__IE6OpenLayersCss__" href="/geoportail/api/js/2.0.3/theme/default/ie6-style.css" type="text/css" rel="stylesheet"/>
+    <![endif]-->
+    <link id="__FramedCloudOpenLayersCss__" href="/geoportail/api/js/2.0.3/theme/default/framedCloud.css" type="text/css" rel="stylesheet"/>
+    <link id="__GeoportalCss__" href="/geoportail/api/js/2.0.3/theme/geoportal/style.css" type="text/css" rel="stylesheet"/>
+    <!--[if lte IE 6]>
+    <link id="__IE6GeoportalCss__" href="/geoportail/api/js/2.0.3/theme/geoportal/ie6-style.css" type="text/css" rel="stylesheet"/>
+    <![endif]-->
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    h1 {
+        text-align:center;
+        font-size:0.75em;
+        font-style: italic;
+        width:1000px;
+    }
+    div#example_explain {
+        margin:0px 0px 10px 0px;
+        border: thin solid #595E61;
+        width:1000px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+        color: #595E61;
+    }
+    div#viewerDiv {
+        width:1000px;
+        height:700px;
+        background-color:white;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:1000px;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    .olPopup .olFramedCloudPopupContent .gpPopupHead {
+        font-size:12px;
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+    }
+    .olPopup .olFramedCloudPopupContent .gpPopupHead input {
+        font-size:12px;
+        background-color:#CCCCFF;
+        color:#006699;
+        border: 1px outset;
+        margin: 0px;
+        padding: 0px;
+    }
+    .olPopup .olFramedCloudPopupContent .gpPopupBody {
+        font-size:12px;
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+    }
+    .olPopup .olFramedCloudPopupContent .gpPopupBody label {
+        font-size:12px;
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+    }
+    .olPopup .olFramedCloudPopupContent .gpPopupBody input {
+        font-size:12px;
+        border: 1px inset;
+        margin: 0px;
+        padding: 0px;
+    }
+    .olPopup .olFramedCloudPopupContent .gpPopupBody textarea {
+        font-size:12px;
+        border: 1px inset;
+        margin: 0px;
+        padding: 0px;
+    }
+    .olPopupCloseBox {
+        background-image:url("/geoportail/api/js/2.0.3/theme/geoportal/img/ico_win_close.gif")!important;
+    }
+    .gpControlLayerToolbar .gpControlAddImageLayerItemActive {
+        background-image:url("/geoportail/api/js/2.0.3/theme/geoportal/img/picto_template_off.gif");
+    }
+    .gpControlLayerToolbar .gpControlAddImageLayerItemInactive {
+        background-image:url("/geoportail/api/js/2.0.3/theme/geoportal/img/picto_template_off.gif");
+        cursor:auto;
+    }
+    .gpControlMousePosition {
+        left:15%;
+    }
+    /*]]>*/--></style>
+  </head>
+  <body>
+    <h1 id="example_title">Créer son plan d'accès et le publier</h1>
+    <div id="viewerDiv"></div>
+    <div id="example_explain">Montre comment saisir un itinéraire simple et le publier avec l'API. Pour faire fonctionner cet exemple, il suffit de copier/coller le code sur votre serveur Web.</div>
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank">Mentions Légales</a> - &copy;IGN 2008-2013</div>
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+    /**
+     * Property: viewer
+     * {<Geoportal.Viewer>} the viewer global instance.
+     */
+    var viewer= null;
+
+    if (window.__Geoportal$timer===undefined) {
+        var __Geoportal$timer= null;
+    }
+
+    /**
+     * Function: beforeFeatureAddedLayerListener
+     * Unselect all features except the one accessed through the object
+     * parameter. Assign "select" rendering. Called before the feature is
+     * drawn.
+     *
+     * Parameters:
+     * object - {Object}
+     *
+     * Returns:
+     * {Boolean} true
+     */
+    function beforeFeatureAddedLayerListener(object) {
+        if (object.feature.layer.format) {
+            // KML, GPX, OSM
+            return true;
+        }
+        unselectAll(object.feature);
+        // add attributes :
+        if (object.feature.layer.schema) {
+            for (var i= 0, l= object.feature.layer.schema.length; i<l; i++) {
+                var a= object.feature.layer.schema[i];
+                if (typeof(object.feature.attributes[a.attributeName])=='undefined') {
+                    object.feature.attributes[a.attributeName]= a.defaultValue;
+                }
+            }
+        }
+        setStyle(object.feature,
+            //object.feature.attributes['icon'] ?
+            //    object.feature.attributes['icon']
+            '',
+            true
+        );
+        onSelectCallback(object.feature);
+        return true;
+    }
+
+    /**
+     * Function: featureAddedLayerListener
+     * Push the feature accessed through the object parameter into the
+     * underlaying layer selectedFeatures list.
+     *
+     * Parameters:
+     * object - {Object}
+     *
+     * Returns:
+     * {Boolean} true
+     */
+    function featureAddedLayerListener(object) {
+        if (object.feature.layer.format) {
+            // KML, GPX
+            return true;
+        }
+        if (OpenLayers.Util.indexOf(object.feature.layer.selectedFeatures,object.feature)==-1) {
+            object.feature.layer.selectedFeatures.push(object.feature);
+        }
+        return true;
+    }
+
+    /**
+     * Function: beforeFeatureSelectedLayerListener
+     * Unselect all features except the one accessed through the object
+     * parameter. Assign "select" rendering. Called before the feature is
+     * drawn.
+     *
+     * Parameters:
+     * object - {Object}
+     *      - object instanceof OpenLayers.Layers.Vector ;
+     *      - object instanceof OpenLayers.Control.ModifyFeature (then raise
+     *      "beforefeaturemodified");
+     *
+     * Returns:
+     * {Boolean} true
+     */
+    function beforeFeatureSelectedLayerListener(object) {
+        unselectAll(object.feature);
+        setStyle(object.feature,
+            //object.feature.attributes['icon'] ?
+            //    object.feature.attributes['icon']
+            //:
+            '',
+            true
+        );
+        return true;
+    }
+
+    /**
+     * Function: featureSelectedLayerListener
+     * Print out the selected feature.
+     *
+     * Parameters:
+     * object - {Object}
+     *      - object instanceof OpenLayers.Layers.Vector ;
+     *      - object instanceof OpenLayers.Control.ModifyFeature ;
+     *
+     * Returns:
+     * {Boolean} true
+     */
+    function featureSelectedLayerListener(object) {
+        return true;
+    }
+
+    /**
+     * Function: featureUnselectedLayerListener
+     * Raised by OpenLayers.Control.SelectFeature.unselect().
+     *
+     * Parameters:
+     * object - {Object}
+     *      - object instanceof OpenLayers.Layers.Vector ;
+     *      - object instanceof OpenLayers.Control.ModifyFeature : catch by
+     *      OpenLayers.Control.ModifyFeature.unselectFeature() ;
+     *
+     * Returns:
+     * {Boolean} true
+     */
+    function featureUnselectedLayerListener(object) {
+        Geoportal.Control.unselectFeature(object.feature);
+        setStyle(
+            object.feature,
+            //feature.attributes['icon'] ?
+            //    feature.attributes['icon']
+            //:
+                '',
+            false
+        );
+        object.feature.layer.drawFeature(object.feature,'default');
+        return true;
+    }
+
+    /**
+     * Function: beforeFeatureModifiedModifyFeatureListener
+     * Unselect features except the one that is going to be modified.
+     *
+     * Parameters:
+     * object - {Object}
+     *
+     * Returns:
+     * {Boolean} true
+     */
+    function beforeFeatureModifiedModifyFeatureListener(object) {
+        if (!object || !object.feature) {
+            return;
+        }
+        unselectAll(object.feature);
+        return true;
+    }
+
+    /**
+     * Function: featureModifiedModifyFeatureListener
+     * Print out the new feature.
+     *
+     * Parameters:
+     * object - {Object}
+     *
+     * Returns:
+     * {Boolean} true
+     */
+    function featureModifiedModifyFeatureListener(object) {
+        return true;
+    }
+
+    /**
+     * Function: afterFeatureModifiedModifyFeatureListener
+     * FIXME : mainly called with object.feature being the unselected feature
+     * (See OpenLayers.Control.ModifyFeature.unselectFeature()).
+     *
+     * Parameters:
+     * object - {Object} object instanceof OpenLayers.Feature.Vector ;
+     *
+     * Returns:
+     * {Boolean} true
+     */
+    function afterFeatureModifiedModifyFeatureListener(object) {
+        return true;
+    }
+
+    /**
+     * Function: featureAddedDrawFeatureListener
+     * Assigns the feature's state to *OpenLayers.State.INSERT* and print out
+     * the feature.
+     *
+     * Parameters:
+     * object - {Object}
+     *
+     * Returns:
+     * {Boolean} true
+     */
+    function featureAddedDrawFeatureListener(object) {
+        object.feature.state= OpenLayers.State.INSERT;
+        return true;
+    }
+
+    /**
+     * Function: onStartDragFeatureCallback
+     * Callback when a feature gets dragged.
+     *      Called by <OpenLayers.Control.DragFeature.downFeature>().
+     *      Unselect all other features. Add the feature to the selected list
+     *      of features, set rendering to "select", draw the feature and print
+     *      the feature out.
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} feature being selected.
+     * px - {<OpenLayers.Pixel>} pixel location of mouse event.
+     */
+    function onStartDragFeatureCallback(feature, px) {
+        if (!feature) {
+            return;
+        }
+        unselectAll(feature);
+        feature.layer.selectedFeatures.push(feature);
+        setStyle(
+            feature,
+            //feature.attributes['icon'] ?
+            //    feature.attributes['icon']
+            //:
+            '',
+            true
+        );
+        feature.layer.drawFeature(feature,'select');
+    }
+
+    /**
+     * Function: featureDeleteDeleteFeatureListener
+     * Callback when a feature gets deleted.
+     *      Called by <Geoportal.Control.DeleteFeature.deleteFeature>().
+     *
+     * Parameters:
+     * object - {Object} object instanceof OpenLayers.Feature.Vector ;
+     *
+     * Returns:
+     * {Boolean} true
+     */
+    function featureDeleteDeleteFeatureListener(object) {
+        return true;
+    }
+
+    /**
+     * Function: onSelectCallback
+     * Callback when a feature gets selected.
+     *      Called by <OpenLayers.Control.SelectFeature.select>().
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} currently selected object.
+     */
+    function onSelectCallback(feature) {
+        if (feature && feature.layer && feature.layer.map) {
+            if (!feature.popup) {
+                var bA= function(n,f) { return '__featureInfo'+n+f.id+'__'; };
+                var ll= feature.geometry.getBounds().getCenterLonLat();
+                var nm= '';
+                var atts= '';
+                for (var i= 0, l= feature.layer.schema.length; i<l; i++) {
+                    var a= feature.layer.schema[i];
+                    var id= bA(a.attributeName,feature.id);
+                    var v= (feature.attributes[a.attributeName]?
+                        feature.attributes[a.attributeName]
+                    :   a.defaultValue || '').replace(/'/g,"&#39;");
+                    if (a.attributeName==='name') {
+                        nm= '<input type="text" size="22" value="'+v+'" id="'+id+'" name="'+id+'"/>';
+                        continue;
+                    }
+                    var h= '<label id="lbl'+id+'" for="'+id+'">'+a.attributeName+'</label>&nbsp;:<br/>';
+                    if (a.type==='text') {
+                        h+= '<textarea id="'+id+'" name="'+id+'" rows="5" cols="25">' + v + '</textarea>';
+                    } else {
+                        h+= '<input type="text" size="22" value="'+v+'" id="'+id+'" name="'+id+'"/>';
+                    }
+                    h+= '<br/>';
+                    atts+= h;
+                }
+                feature.popup= new OpenLayers.Popup.FramedCloud(
+                    "chicken",
+                    ll,
+                    null,
+                    "<form id='edit"+ bA('',feature.id) + "' action='javascript:(void)null'>" +
+                        "<div class='gpPopupHead'>" + nm + "</div>" +
+                        "<div class='gpPopupBody'>" + atts + "</div>" +
+                    "</form>",
+                    null,
+                    true,
+                    closeFeatureInfo);
+                feature.popup.autoSize= true;
+                feature.popup.minSize= new OpenLayers.Size(200, 120);
+                feature.popup.maxSize= new OpenLayers.Size(200, 200);
+                feature.popup.feature= feature;//mimic Geoportal.Popup (See closeFeatureInfo)
+            }
+            if (feature.popup) {
+                feature.layer.map.addPopup(feature.popup,true);
+                var kbControl= viewer.getVariable('kbControl');
+                for (var i= 0, l= feature.layer.schema.length; i<l; i++) {
+                    var a= feature.layer.schema[i];
+                    var id= bA(a.attributeName,feature.id);
+                    var npt= OpenLayers.Util.getElement(id);
+                    // closure for capturing each attribute and DOM element :
+                    (function(att,el) {
+                        el.onfocus= function() {
+                            if (kbControl && kbControl.active) {
+                                kbControl.deactivate();
+                            }
+                        };
+                        el.onblur= function() {
+                            if (kbControl && !kbControl.active) {
+                                kbControl.activate();
+                            }
+                            if (this.value) {//WARNING: text/textarea ok - select ! ok
+                                feature.attributes[att.attributeName]=
+                                    this.value.replace(/&#039;/g,"'").replace(/\r/g,"_br_") ||  att.defautValue || '';
+                            }
+                            this.blur();
+                        };
+                    })(a,npt);
+                }
+            }
+        }
+    }
+
+    /**
+     * Function: onUnselectCallback
+     * Callback when a feature gets deselected.
+     *      Called by <OpenLayers.Control.SelectFeature.unselect>().
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} currently selected object.
+     */
+    function onUnselectCallback(feature) {
+        Geoportal.Control.unselectFeature(feature);
+        setStyle(
+            feature,
+            //feature.attributes['icon'] ?
+            //    feature.attributes['icon']
+            //:
+                '',
+            false
+        );
+        feature.layer.drawFeature(feature,'default');
+    }
+
+    /**
+     * Function: closeFeatureInfo
+     * Callback when a popup is closed.
+     *
+     *  Parameters:
+     * evt - {<OpenLayers.Event>}
+     */
+    function closeFeatureInfo(evt) {
+        OpenLayers.Event.stop(evt);
+        this.hide();//this===OpenLayers.Popup
+        if (OpenLayers.Util.getBrowserName() == 'firefox') {
+            if (this.map && this.map.events) {
+                this.map.events.unregister("movestart", this, this.onMoveStartPopup);//See OpenLayers patch
+                this.map.events.unregister("moveend", this, this.onMoveEndPopup);
+            }
+        }
+        if (this.feature) {
+            this.feature.layer.drawFeature(this.feature, "default");
+            OpenLayers.Util.removeItem(this.feature.layer.selectedFeatures, this.feature);
+            onUnselectCallback(this.feature);
+        }
+    }
+
+    /**
+     * Function: unselectAll
+     * Unselect all currently selected features.
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} the feature being selected.
+     */
+    function unselectAll(feature) {
+        var cntrls= viewer.getMap().getControlsByClass('Geoportal.Control.EditingToolbar');
+        for (var i= 0, il= cntrls.length; i<il; i++) {
+            var p= cntrls[i];
+            var sa= p.getControlsByClass('OpenLayers.Control.SelectFeature');
+            if (!(sa && sa.length>0 && sa[0])) {
+                continue;
+            }
+            var s= sa[0];
+            if (p.controls[0].layer != feature.layer) {
+                s.unselectAll();
+            } else {
+                s.unselectAll({except:feature});
+            }
+        }
+    }
+
+    /**
+     * Function: setStyle
+     * Assigns styles on selection/deselection.
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} feature being
+     *      selected/unselected.
+     * ico - {String} icon acronym. If none, null or empty.
+     * selectIt - {Boolean} true if the feature is being selected, false
+     *      otherwise.
+     */
+    function setStyle(feature,ico,selectIt) {
+        if (!feature.layer.format ||
+            !feature.layer.format.prototype ||
+            !feature.layer.format.prototype.CLASS_NAME.match(/.*\.Format\.(KML|GPX)$/)) {
+            // Point :
+            //if (feature.geometry.CLASS_NAME.search(/Point$/i)!=-1) {
+            //    if (ico && ico.length>0) {
+            //        // FIXME: url ?
+            //        if (!feature.style) {
+            //            // IE does like .default. notation ...
+            //            feature.style= new OpenLayers.Style(feature.layer.styleMap.styles['default'].defaultStyle);
+            //        }
+            //        feature.style.externalGraphic= "icon/icn"+ico+".gif";
+            //        feature.style.fillOpacity= 1;
+            //        if (selectIt) {
+            //            feature.style.pointRadius= 12;
+            //        } else {
+            //            feature.style.pointRadius=  8;
+            //        }
+            //    } else {
+            //        if (feature.style) {
+            //            feature.style.destroy();
+            //            feature.style= null;
+            //        }
+            //    }
+            //}
+            // by default, use feature.layer.styleMap.styles :
+            if (selectIt) {
+                feature.renderIntent= 'select';
+            } else {
+                feature.renderIntent= 'default';
+            }
+        }
+        //force redraw later (especially because of label display) :
+        feature.layer.drawFeature(feature,{display:'none'});
+    }
+
+    /**
+     * Function: addTools
+     * Call when a <Geoportal.Control.EditingToolbar> is activated to add new
+     * tools to <Geoportal.Control.BasicToolbar>.
+     *
+     * Parameters:
+     * evt - {<OpenLayers.Event>} evt.object holds the activated control.
+     */
+    function addTools(evt) {
+        if (!evt || !evt.object) { return; }
+        var blc= evt.object.map.getControlsBy('id',evt.object.id.replace(/edit/,'basic'));
+        if (blc==0) { return; }
+        blc= blc[0];
+        var cs= /*blc.getControlsByClass('Geoportal.Control.AddAttributeToLayer');
+        if (cs.length!=0) { return; }
+        var dl= new Geoportal.Control.AddAttributeToLayer(blc.layer,{
+            title: 'gpControlAddAttributeToLayer.title',
+            defaultAttributes:{
+                'name':{
+                    defaultValue: "Libellé de l'anomalie",
+                    persistent: true
+                },
+                'description':{
+                    defaultValue: "Aucune",
+                    type: 'text',
+                    persistent:true
+                }
+            }});
+        blc.addControls([dl]);
+        cs= */blc.getControlsByClass('Geoportal.Control.LayerStyling');
+        if (cs.length!=0) { return; }
+        dl= new Geoportal.Control.LayerStyling(blc.layer,{
+            title: 'gpControlLayerStyling.title'
+        });
+        blc.addControls([dl]);
+        cs= blc.getControlsByClass('Geoportal.Control.SaveLayer');
+        if (cs.length!=0) { return; }
+        dl= new Geoportal.Control.SaveLayer(blc.layer,{
+            title: 'gpControlSaveLayer.title',
+            url:'/geoportail/api/save',
+            supportedFormats: {
+                kml: {
+                    formatClass: OpenLayers.Format.KML,
+                    options:{
+                        mime: 'application/vnd.google-earth.kml'
+                    }
+                }
+            },
+            supportedProjections: {
+                kml:[
+                    'CRS:84'
+                ]
+            }
+        });
+        blc.addControls([dl]);
+        blc.activateControl(blc.getControlsByClass('Geoportal.Control.PanelToggle')[0]);//open toggle
+    }
+
+    /**
+     * Function: loadInterface
+     * User interface initialization.
+     */
+    function loadInterface() {
+        // add "Print Map" :
+        var nv= viewer.getMap().getControlsByClass('Geoportal.Control.NavToolbar')[0];
+        nv.addControls([new Geoportal.Control.PrintMap()]);
+
+        var tbx= viewer.getMap().getControlsByClass('Geoportal.Control.ToolBox')[0];
+
+        // add "Search Toolbar" to allow use's location :
+        var searchbar= new Geoportal.Control.SearchToolbar({
+            div: OpenLayers.Util.getElement(tbx.id+'_search'),
+            // toponyms search engine :
+            geonamesOptions: {
+                setZoom: Geoportal.Control.LocationUtilityService.GeoNames.setZoomForBDNyme,
+                layerOptions: {
+                    name: 'PositionOfInterest:OPENLS;Geocode',
+                    formatOptions: {
+                    }
+                }
+            },
+            // address search engine :
+            geocodeOptions: {
+                layerOptions: {
+                name: 'StreetAddress:OPENLS;Geocode',
+                    formatOptions: {
+                    }
+                },
+                // configure display of results' type :
+                matchTypes: [
+                    {re:/city/i,    src:Geoportal.Util.getImagesLocation()+'OLScity.gif'},
+                    {re:/street$/i, src:Geoportal.Util.getImagesLocation()+'OLSstreet.gif'},
+                    {re:/number/i,  src:Geoportal.Util.getImagesLocation()+'OLSstreetnumber.gif'},
+                    {re:/enhanced/i,src:Geoportal.Util.getImagesLocation()+'OLSstreetenhanced.gif'},
+                    {re:null,       src:Geoportal.Util.getImagesLocation()+'OLSstreet.gif'}
+                ]
+            }
+        });
+        viewer.getMap().addControl(searchbar);
+
+        // add "Layer Toolbar" to digitize path :
+        var vevnts= {
+            "beforefeatureadded"    : beforeFeatureAddedLayerListener,
+            "featureadded"          : featureAddedLayerListener,
+            "beforefeatureselected" : beforeFeatureSelectedLayerListener,
+            "featureselected"       : featureSelectedLayerListener,
+            "featureunselected"     : featureUnselectedLayerListener,
+            // sounds like "beforefeatureunselected" event is missing !
+            "beforefeaturemodified" : beforeFeatureModifiedModifyFeatureListener,
+            "featuremodified"       : featureModifiedModifyFeatureListener,
+            "afterfeaturemodified"  : afterFeatureModifiedModifyFeatureListener
+        };
+        var lblOpts= {
+            label:"${getName}",
+            labelAlign: "rt",
+            labelXOffset: 20,
+            labelYOffset: 20,
+            labelHaloColor:'white',
+            labelHaloWidth:'2px',
+            fontColor:'black',
+            fontWeight:'normal',
+            fontSize:'12px',
+            fontFamily:'Courier New, monospace'
+        };
+        var ctxOpts= {
+            context:{
+                getName: function(f) {
+                    if (f && f.attributes && f.attributes['name']) {
+                        return f.attributes['name'];
+                    }
+                    return '';
+                }
+            }
+        };
+        var defOpts= OpenLayers.Util.applyDefaults({
+            fillColor: "#99CCFF",
+            strokeColor: "#99CCFF",
+            cursor: "pointer"
+        },
+            OpenLayers.Feature.Vector.style["default"]
+        );
+        var selOpts= OpenLayers.Util.applyDefaults({
+            fillColor: "#99CCFF",
+            strokeColor: "#99CCFF",
+            cursor: "pointer"
+        },
+            OpenLayers.Feature.Vector.style["select"]
+        );
+        var tmpOpts= OpenLayers.Util.applyDefaults({
+            fillColor: "#99CCFF",
+            strokeColor: "#99CCFF",
+            cursor: "pointer"
+        },
+            OpenLayers.Feature.Vector.style["temporary"]
+        );
+        var addLbar= new Geoportal.Control.LayerToolbar({
+            div: OpenLayers.Util.getElement(tbx.id+'_addlyr'),
+            // Geoportal.Control.AddVectorLayer options :
+            addVectorLayerOptions: {
+                supportedClasses: [
+                    //'OpenLayers.Geometry.Point',
+                    'OpenLayers.Geometry.LineString',   // allow digitizing linestring
+                    //'OpenLayers.Geometry.Polygon',
+                    'OpenLayers.Format.KML',            // allow importing KML
+                    //'Geoportal.Format.GPX',
+                    //'OpenLayers.Format.OSM'
+                ],
+                // OpenLayers.Layer.Vector options :
+                styleMapTemplates: {
+                    //"OpenLayers.Geometry.Point"     :
+                    //    new OpenLayers.StyleMap({
+                    //        "default"   : new OpenLayers.Style(
+                    //            OpenLayers.Util.applyDefaults(
+                    //                OpenLayers.Util.applyDefaults({pointRadius:  8}, defOpts),
+                    //                lblOpts
+                    //            ),
+                    //            ctxOpts
+                    //        ),
+                    //        "select"    : new OpenLayers.Style(
+                    //            OpenLayers.Util.applyDefaults(
+                    //                OpenLayers.Util.applyDefaults({pointRadius: 12}, selOpts),
+                    //                lblOpts
+                    //            ),
+                    //            ctxOpts
+                    //        ),
+                    //        "temporary" : new OpenLayers.Style(
+                    //            OpenLayers.Util.applyDefaults(
+                    //                OpenLayers.Util.applyDefaults({}, tmpOpts),
+                    //                lblOpts
+                    //            ),
+                    //            ctxOpts
+                    //        )
+                    //    },{extendDefault:false}),
+                    "OpenLayers.Geometry.LineString":
+                        new OpenLayers.StyleMap({
+                            "default"   : new OpenLayers.Style(
+                                OpenLayers.Util.applyDefaults(
+                                    OpenLayers.Util.applyDefaults({strokeWidth: 2}, defOpts),
+                                    lblOpts
+                                ),
+                                ctxOpts
+                            ),
+                            "select"    : new OpenLayers.Style(
+                                OpenLayers.Util.applyDefaults(
+                                    OpenLayers.Util.applyDefaults({strokeWidth: 4}, selOpts),
+                                    lblOpts
+                                ),
+                                ctxOpts
+                            ),
+                            "temporary" : new OpenLayers.Style(
+                                OpenLayers.Util.applyDefaults(
+                                    OpenLayers.Util.applyDefaults({}, tmpOpts),
+                                    lblOpts
+                                ),
+                                ctxOpts
+                            )
+                        },{extendDefault:false}),
+                    //"OpenLayers.Geometry.Polygon"   :
+                    //    new OpenLayers.StyleMap({
+                    //        "default"   : new OpenLayers.Style(
+                    //            OpenLayers.Util.applyDefaults(
+                    //                OpenLayers.Util.applyDefaults({strokeWidth: 2}, defOpts),
+                    //                lblOpts
+                    //            ),
+                    //            ctxOpts
+                    //        ),
+                    //        "select"    : new OpenLayers.Style(
+                    //            OpenLayers.Util.applyDefaults(
+                    //                OpenLayers.Util.applyDefaults({strokeWidth: 4}, selOpts),
+                    //                lblOpts
+                    //            ),
+                    //            ctxOpts
+                    //        ),
+                    //        "temporary" : new OpenLayers.Style(
+                    //            OpenLayers.Util.applyDefaults(
+                    //                OpenLayers.Util.applyDefaults({}, tmpOpts),
+                    //                lblOpts
+                    //            ),
+                    //            ctxOpts
+                    //        )
+                    //    },{extendDefault:false}),
+                    "OpenLayers.Format.KML"         :
+                        new OpenLayers.StyleMap({
+                            "default"   : new OpenLayers.Style(
+                                OpenLayers.Util.applyDefaults({strokeWidth: 2, pointRadius: 8}, defOpts)
+                            ),
+                            "select"    : new OpenLayers.Style(
+                                OpenLayers.Util.applyDefaults({strokeWidth: 4, pointRadius:12}, selOpts)
+                            ),
+                            "temporary" : new OpenLayers.Style(
+                                OpenLayers.Util.applyDefaults({}, tmpOpts)
+                            )
+                        },{extendDefault:false})//,
+                    //"Geoportal.Format.GPX"          :
+                    //    new OpenLayers.StyleMap({
+                    //        "default"   : new OpenLayers.Style(
+                    //            OpenLayers.Util.applyDefaults({strokeWidth: 2, pointRadius: 8}, defOpts)
+                    //        ),
+                    //        "select"    : new OpenLayers.Style(
+                    //            OpenLayers.Util.applyDefaults({strokeWidth: 4, pointRadius:12}, selOpts)
+                    //        ),
+                    //        "temporary" : new OpenLayers.Style(
+                    //            OpenLayers.Util.applyDefaults({}, tmpOpts)
+                    //        )
+                    //    },{extendDefault:false}),
+                    //"OpenLayers.Format.OSM"          :
+                    //    new OpenLayers.StyleMap({
+                    //        "default"   : new OpenLayers.Style(
+                    //            OpenLayers.Util.applyDefaults({strokeWidth: 2, pointRadius: 8}, defOpts)
+                    //        ),
+                    //        "select"    : new OpenLayers.Style(
+                    //            OpenLayers.Util.applyDefaults({strokeWidth: 4, pointRadius:12}, selOpts)
+                    //        ),
+                    //        "temporary" : new OpenLayers.Style(
+                    //            OpenLayers.Util.applyDefaults({}, tmpOpts)
+                    //        )
+                    //    },{extendDefault:false})
+                },
+                layerVectorOptions: {
+                    //'OpenLayers.Geometry.Point':{
+                    //    eventListeners: vevnts
+                    //},
+                    'OpenLayers.Geometry.LineString':{
+                        eventListeners: vevnts
+                    }//,
+                    //'OpenLayers.Geometry.Polygon':{
+                    //    eventListeners: vevnts
+                    //}
+                },
+                // Geoportal.Control.EditingToolbar options :
+                drawFeatureOptions: {
+                    //'OpenLayers.Geometry.Point':{
+                    //    eventListeners: {
+                    //        "featureadded": featureAddedDrawFeatureListener
+                    //    }
+                    //},
+                    'OpenLayers.Geometry.LineString':{
+                        eventListeners: {
+                            "featureadded": featureAddedDrawFeatureListener
+                        }
+                    }//,
+                    //'OpenLayers.Geometry.Polygon':{
+                    //    eventListeners: {
+                    //        "featureadded": featureAddedDrawFeatureListener
+                    //    }
+                    //}
+                },
+                dragFeatureOptions: {
+                    //'OpenLayers.Geometry.Point':{
+                    //    onStart: onStartDragFeatureCallback
+                    //},
+                    'OpenLayers.Geometry.LineString':{
+                        onStart: onStartDragFeatureCallback
+                    }//,
+                    //'OpenLayers.Geometry.Polygon':{
+                    //    onStart: onStartDragFeatureCallback
+                    //}
+                },
+                modifyFeatureOptions: {
+                    //'OpenLayers.Geometry.Point':{
+                    //    eventListeners: {
+                    //    }
+                    //},
+                    //'OpenLayers.Geometry.LineString':{
+                    //    eventListeners: {
+                    //    }
+                    //},
+                    //'OpenLayers.Geometry.Polygon':{
+                    //    eventListeners: {
+                    //    }
+                    //}
+                },
+                deleteFeatureOptions: {
+                    //'OpenLayers.Geometry.Point':{
+                    //    eventListeners: {
+                    //        "featuredeleted": featureDeleteDeleteFeatureListener
+                    //    }
+                    //},
+                    'OpenLayers.Geometry.LineString':{
+                        eventListeners: {
+                            "featuredeleted": featureDeleteDeleteFeatureListener
+                        }
+                    }//,
+                    //'OpenLayers.Geometry.Polygon':{
+                    //    eventListeners: {
+                    //        "featuredeleted": featureDeleteDeleteFeatureListener
+                    //    }
+                    //}
+                },
+                selectFeatureOptions: {
+                    //'OpenLayers.Geometry.Point':{
+                    //    onSelect: onSelectCallback,
+                    //    onUnselect: onUnselectCallback,
+                    //    hover: false
+                    //},
+                    'OpenLayers.Geometry.LineString':{
+                        onSelect: onSelectCallback,
+                        onUnselect: onUnselectCallback,
+                        hover: false
+                    }//,
+                    //'OpenLayers.Geometry.Polygon':{
+                    //    onSelect: onSelectCallback,
+                    //    onUnselect: onUnselectCallback,
+                    //    hover: false
+                    //}
+                },
+                editingToolbarOptions: {
+                    //'OpenLayers.Geometry.Point':{
+                    //    eventListeners: {
+                    //        "activate" : addTools
+                    //    }
+                    //},
+                    'OpenLayers.Geometry.LineString':{
+                        eventListeners: {
+                            "activate" : addTools
+                        }
+                    }//,
+                    //'OpenLayers.Geometry.Polygon':{
+                    //    eventListeners: {
+                    //        "activate" : addTools
+                    //    }
+                    //}
+                }
+            }
+        });
+        viewer.getMap().addControl(addLbar);
+
+        // activate the navigation :
+        var nvc= viewer.getMap().getControlsByClass('Geoportal.Control.NavToolbar')[0];
+        nvc.activateControl(nvc.getControlsByClass('OpenLayers.Control.Navigation')[0]);
+
+        //IGN Saint Mande:
+        viewer.getMap().setCenterAtLonLat(2.424, 48.844, 13);
+    }
+
+    /**
+     * Function: initMap
+     * Load the application. Called when all information have been loaded by
+     * <loadAPI>().
+     */
+    function initMap() {
+
+        //The api is loaded at this step
+        //L'api est chargée à cette étape
+
+        // ensure french
+        OpenLayers.Lang.setCode('fr');
+
+        //options for creating viewer:
+        var options= {
+            // default value
+            // valeur par défaut
+            //mode:'normal',
+            // default value
+            // valeur par défaut
+            //territory:'FXX',
+            // default value
+            // valeur par défaut
+            //displayProjection:'IGNF:RGF93G'
+            // only usefull when loading external resources
+            // utile uniquement pour charger des resources externes
+            proxy:'/geoportail/api/xmlproxy'+'?url='
+        };
+
+        // viewer creation of type <Geoportal.Viewer>
+        // création du visualiseur du type <Geoportal.Viewer>
+        //                                       HTML div id, options
+        viewer= new Geoportal.Viewer.Default('viewerDiv',OpenLayers.Util.extend(
+            options,
+            // API keys configuration variable set by <Geoportal.GeoRMHandler.getConfig>
+            // variable contenant la configuration des clefs API remplie par <Geoportal.GeoRMHandler.getConfig>
+            window.gGEOPORTALRIGHTSMANAGEMENT===undefined? {'apiKey':key} : gGEOPORTALRIGHTSMANAGEMENT)
+        );
+        if (!viewer) {
+            // problem ...
+            OpenLayers.Console.error('Création de la carte échouée');
+            return;
+        }
+
+        // display reference datasetsD, full opacity
+        // affiche les données de référence en pleine opacité
+        // add photos and maps, full opacity
+        // ajout des photos et cartes en pleine opacité
+        viewer.addGeoportalLayers([
+            'ORTHOIMAGERY.ORTHOPHOTOS',
+            'GEOGRAPHICALGRIDSYSTEMS.MAPS'
+        ],{
+            global:{
+                opacity:1.0
+            }
+        });
+        var kbControl= viewer.getMap().getControlsByClass(OpenLayers.Control.KeyboardDefaults.prototype.CLASS_NAME)[0];
+        viewer.setVariable('kbControl', kbControl);
+        loadInterface();
+    }
+
+    /**
+     * Function: loadAPI
+     * Load the configuration related with the API keys.
+     * Called on "onload" event.
+     * Call <initMap>() function to load the interface.
+     */
+    function loadAPI() {
+        // wait for all classes to be loaded
+        // on attend que les classes soient chargées
+        if (__Geoportal$timer!=null) {
+            window.clearTimeout(__Geoportal$timer);
+            __Geoportal$timer= null;
+        }
+        if (typeof(OpenLayers)=='undefined'              ||
+            typeof(Geoportal)=='undefined'               ||
+            typeof(Geoportal.Viewer)=='undefined'        ||
+            typeof(Geoportal.Viewer.Default)=='undefined') {
+            __Geoportal$timer= window.setTimeout('loadAPI();', 300);
+            return;
+        }
+
+
+        // load API keys configuration, then load the interface
+        // on charge la configuration de la clef API, puis on charge l'application
+        Geoportal.GeoRMHandler.getConfig(['nhf8wztv3m9wglcda6n6cbuf'], null,null, {
+            onContractsComplete: initMap
+        });
+    }
+
+    window.onload= loadAPI;
+    //--><!]]></script>
+    
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/Geoportal.js"><!-- --></script>
+  </body>
+</html>

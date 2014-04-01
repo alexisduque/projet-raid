@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <title>Openscales et l'API Géoportail (minimum)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css" media="screen"><!--/*--><![CDATA[/*><!--*/
+    html, body    { height:100%; }
+    body { margin:0; padding:0; overflow:auto; text-align:center;
+           background-color: #9F9F9F; }
+    #flashContent { display:none; }
+    h1 {
+        text-align:center;
+        font-size:0.75em;
+        font-style: italic;
+    }
+    div#example_explain {
+        margin:10px 0px 10px 0px;
+        border: thin solid #595E61;
+        width:800px;
+        position:relative;
+        left:0px;
+        top:0px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+        color: #595E61;
+    }
+    form#gpLangChange {
+        border:0px;
+        margin:0px;
+        padding:0px;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:800px;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    /*]]>*/--></style>
+</head>
+<body>
+    <h1 id="example_title">API Geoportail minimum en Flex avec Openscales</h1>
+    <!-- SWFObject's dynamic embed method replaces this alternative HTML content with Flash content when enough
+         JavaScript and Flash plug-in support is available. The div is initially hidden so that it doesn't show
+         when JavaScript is disabled.
+      -->
+    <div align="left">
+        <div id="flashContent">
+            <p>
+                To view this page ensure that Adobe Flash Player version
+                10.0.0 or greater is installed.
+            </p>
+            <script type="text/javascript"><!--//--><![CDATA[//><!--
+                var pageHost = ((document.location.protocol == "https:") ? "https://" :    "http://");
+                document.write("<a href='http://www.adobe.com/go/getflashplayer'><img src='"
+                                + pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>" );
+            //--><!]]></script>
+        </div>
+        <br/>
+    </div>
+    <div id="example_explain">Cet exemple illustre l'utilisation de la bibliothèque <a href="http://openscales.org" alt="Openscales" title="Openscales" target="_blank">Openscales</a> qui contient les éléments de GeoDRM pour se connecter aux flux Géoportail. C'est l'API Géoportail minimum en Flex.</div>
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank">Mentions Legales</a> - &copy;IGN 2008-2013</div>
+    <noscript>
+        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="geoportalFxMin">
+            <param name="movie" value="geoportalFxMin.swf" />
+            <param name="flashvars" value=""/>
+            <param name="quality" value="high" />
+            <param name="bgcolor" value="#ffffff" />
+            <param name="allowScriptAccess" value="sameDomain" />
+            <param name="allowFullScreen" value="true" />
+            <!--[if !IE]>-->
+            <object type="application/x-shockwave-flash" data="geoportalFxMin.swf" width="100%" height="100%">
+                <param name="quality" value="high" />
+                <param name="bgcolor" value="#ffffff" />
+                <param name="allowScriptAccess" value="sameDomain" />
+                <param name="allowFullScreen" value="true" />
+            <!--<![endif]-->
+            <!--[if gte IE 6]>-->
+                <p>
+                    Either scripts and active content are not permitted to run or Adobe Flash Player version
+                    10.0.0 or greater is not installed.
+                </p>
+            <!--<![endif]-->
+                <a href="http://www.adobe.com/go/getflashplayer">
+                    <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash Player" />
+                </a>
+            <!--[if !IE]>-->
+            </object>
+            <!--<![endif]-->
+        </object>
+    </noscript>
+    <!-- Paramétrage de l'API Géoportail Flex -->
+    <!-- Dans l'objet flashvars, précisez votre clé API, votre proxy et au besoin l'url du/des fichiers KML à afficher sur la carte-->
+    <!-- Dans la méthode embedSWF() changer la taille par défaut de la fenêtre cartographique (facultatif)-->
+    <script type="text/javascript" src="js/flex/swfobject.js"><!--//--><![CDATA[//><!--//--><!]]></script>
+    <script type="text/javascript">
+        // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection.
+        var swfVersionStr = "10.0.0";
+        // To use express install, set to playerProductInstall.swf, otherwise the empty string.
+        var xiSwfUrlStr = "playerProductInstall.swf";
+        /* Changer les variables key, proxy et kmlLayers selon le besoin  */
+        var flashvars = {
+            key:'nhf8wztv3m9wglcda6n6cbuf',
+            host:'http://jeton-api.ign.fr',
+            wmsc:'http://wxs.ign.fr/geoportail/wmsc'
+        };
+        var params = {};
+        params.quality = "high";
+        params.bgcolor = "#ffffff";
+        params.allowscriptaccess = "sameDomain";
+        params.allowfullscreen = "true";
+        var attributes = {};
+        attributes.id = "geoportalFxMin";
+        attributes.name = "geoportalFxMin";
+        //attributes.align = "middle";
+        swfobject.embedSWF(
+            "geoportalFxMin.swf", "flashContent",
+            /* Régler ici la taille de la fenêtre cartographique : width / height  */
+            "800px", "600px",
+            swfVersionStr, xiSwfUrlStr,
+            flashvars, params, attributes);
+        // JavaScript enabled so display the flashContent div in case it is not replaced with a swf object.
+        swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+    //--><!]]></script>
+</body>
+</html>

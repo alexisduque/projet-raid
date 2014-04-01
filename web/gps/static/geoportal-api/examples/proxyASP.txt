@@ -1,0 +1,36 @@
+<%@ LANGUAGE=JScript %>
+<%
+    //Création de l'objet composant
+    var objHTTP =Server.CreateObject("Coalesys.CSHttpClient.1");
+
+    //Déclaration de variables
+    var HTTPResponseBody = new String();
+    var HTTPResponseHeaders = new String();
+    var HTTPResponseStatus = new String();
+
+    //On récupère l'URL à requêter sur Internet
+    objHTTP.RequestURL = String(Request.Querystring).substr(4);
+
+    //Éventuellement on précise la passerelle vers Internet
+    //Cas d'un réseau local
+    //objHTTP.ProxyAddress = "<adresse_du_proxy>";
+    objHTTP.ProxyPort = <port_du_proxy>;
+    objHTTP.AppendHost = true;
+
+    //On lance la requête HTTP
+    objHTTP.Execute("GET");
+
+    //On récupère le statut de la réponse
+    HTTPResponseStatus = objHTTP.ResponseStatus;
+
+    //On récupère les headers de la réponse
+    HTTPResponseHeaders = objHTTP.ResponseHeaders;
+
+    //On récupère le contenu de la réponse
+    HTTPResponseBody = objHTTP.ResponseBody(0);
+
+    //On écrit ce contenu tel quel
+    //En précisant qu'il s'agit de XML
+    Response.ContentType = "text/xml";
+    Response.write(HTTPResponseBody);
+%>

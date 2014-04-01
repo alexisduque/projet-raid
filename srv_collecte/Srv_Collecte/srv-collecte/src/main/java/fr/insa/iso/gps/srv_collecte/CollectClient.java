@@ -61,9 +61,9 @@ class CollectClient extends Thread
 	private int deviceType = 0; // 0 -> device nomadic 1-> device teltonika 
 	private GPSNomadic nClient;
 	private GPSTeltonika tClient;
-        private static FileHandler fh;
-        private static String n_log = ""; // recevra le nom du fichier du log
-        private static String l_log = ""; // recevra le niveau du logger
+    private static FileHandler fh;
+    private static String n_log = ""; // recevra le nom du fichier du log
+    private static String l_log = ""; // recevra le niveau du logger
   	public static Logger logger = Logger.getLogger(CollectServer.class.getName());
 
 
@@ -144,8 +144,17 @@ class CollectClient extends Thread
 					// on ajoute le type du device et son id
 					// a la table des clients du serveur
 					_socketServ.updateClient(_numClient, deviceType, _id_Device); // on met a jour le client de la liste
-					n_Service.insertPosition(nClient.getMessage());
-
+					//si le message commence par $0K(message du GPS) on redirige vers CLI
+					if (nClient.getMessage().startsWith("$")) {
+						logger.log(Level.WARNING,"recu du tracker("+nClient._numClient+") reponse CLI");
+						logger.log(Level.INFO,"recu du tracker("+nClient._numClient+"): "+nClient.getMessage());
+						_socketServ.serverCLI._clientCLI.output.println("Tracker "+nClient._numClient+ " -> "+ nClient.getMessage());
+						_socketServ.serverCLI._clientCLI.output.flush();
+						logger.log(Level.INFO,"envoi de: "+nClient.getMessage()+" au client CLI");
+						// TODO : envoyé la réponse du trcker au client CLI
+					} else {
+						n_Service.insertPosition(nClient.getMessage());
+					}
 					continue;
 				}
 				// traitement specifique pour les devices teltonika

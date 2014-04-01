@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>advanced_integration.html</title>
+    <!-- indicates UTF-8 to get proper display of API labels : -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
+    <!-- include CSS for easying overwriting of styles : -->
+    <!-- OpenLayers styles : -->
+    <link id="__OpenLayersCss__" rel="stylesheet" type="text/css" href="http://api.ign.fr/geoportail/api/js/2.0.3/theme/default/style.css"/>
+    <!--[if lte IE 6]>
+    <link id="__IE6OpenLayersCss__" rel="stylesheet" type="text/css" href="http://api.ign.fr/geoportail/api/js/2.0.3/theme/default/ie6-style.css"/>
+    <![endif]-->
+    <!-- if OpenLayer.Layer.Google is used : -->
+    <!--
+    <link id="__GoogleOpenLayersCss__" rel="stylesheet" type="text/css" href="http://api.ign.fr/geoportail/api/js/2.0.3/theme/default/google.css"/>
+      -->
+    <!-- if OpenLayers.Popup.FramedCloud is used : -->
+    <!--
+    <link id="__FramedCloudOpenLayersCss__" rel="stylesheet" type="text/css" href="http://api.ign.fr/geoportail/api/js/2.0.3/theme/default/framedCloud.css"/>
+      -->
+    <link id="__GeoportalCss__" rel="stylesheet" type="text/css" href="http://api.ign.fr/geoportail/api/js/2.0.3/theme/geoportal/style.css"/>
+    <!--[if lte IE 6]>
+    <link id="__IE6GeoportalCss__" href="http://api.ign.fr/geoportail/api/js/2.0.3/theme/geoportal/ie6-style.css" type="text/css" rel="stylesheet"/>
+    <![endif]-->
+    <!-- if Geoportal.Viewer.Standard is used : -->
+    <!--
+    <link id="__StandardCss__" rel="stylesheet" type="text/css" href="http://api.ign.fr/geoportail/api/js/2.0.3/theme/geoportal/standard.css"/>
+      -->
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    /* overwritten styles or new styles : */
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:800px;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    /*]]>*/--></style>
+</head>
+<body>                                         
+    <div id="viewerDiv" style="width:800px;height:600px;"></div>    <!-- the map div -->
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" target="_blank">Terms of Use</a> - &copy;IGN 2008-2013</div>
+    <!-- Application script : -->
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+
+    if (window.__Geoportal$timer===undefined) {
+        var __Geoportal$timer= null;
+    }
+
+    // onload event will call myOnLoad :
+    function myOnLoad() {
+        if (__Geoportal$timer!=null) {
+            window.clearTimeout(__Geoportal$timer);
+            __Geoportal$timer= null;
+        }
+        var f;
+        var C= ['OpenLayers', 'Geoportal', 'Geoportal.Viewer', 'Geoportal.Viewer.Default'];
+        for (var i= 0, l= C.length; i<l; i++) {
+            try {
+                f= eval(C[i]);
+            } catch (e) {
+                f= undefined;
+            }
+            if (typeof(f)==='undefined') {
+                __Geoportal$timer= window.setTimeout('myOnLoad();', 300);
+                return;
+            }
+        }
+
+        // load API keys configuration, then load the interface
+        Geoportal.GeoRMHandler.getConfig(['KEY'], null, null, {
+            onContractsComplete: initGeoportalMap
+        });
+    }
+
+    viewer= null;
+
+    function initGeoportalMap() {
+        // build a new viewer :
+        viewer= new Geoportal.Viewer.Default(       // Default viewer (one could use Geoportal.Viewer.Standard)
+            "viewerDiv",                            // div id where to display dataset
+            OpenLayers.Util.extend({                // viewer parameters :
+                //mode:MODE,                        // default value : 'normal'
+                //territory:TERRITORY,              // default value : 'FXX'
+                displayProjection:DISPLAYCRS,       // default value : 'CRS:84'
+                //proxy:PROXY+'?url=',              // if deemed necessary (KML, etc ... not in the same domain)
+                nameInstance:'viewer'},
+                gGEOPORTALRIGHTSMANAGEMENT          // API configuration with regard to the API key
+            )
+        );
+        if (!viewer) {
+            alert(OpenLayers.i18n('failed loading viewer'));
+            return;
+        }
+        viewer.addGeoportalLayers();                    // load all available layers
+        // default center and zoom location :
+        viewer.getMap().setCenter(viewer.viewerOptions.defaultCenter,viewer.viewerOptions.defaultZoom);
+    }
+
+    window.onload= myOnLoad;                            // call myOnLoad when onload event is fired
+    //--><!]]></script>
+    <!-- get compressed API for release 2.0.3 : -->
+    <script type="text/javascript" src="http://api.ign.fr/geoportail/api/js/2.0.3/Geoportal.js"><!--//--><![CDATA[//><!--
+    //--><!]]></script>
+</body>
+</html>

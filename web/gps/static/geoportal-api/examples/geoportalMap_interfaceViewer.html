@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>geoportalMap_interfaceViewer.html (1)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    h1 {
+        text-align:center;
+        font-size:0.75em;
+        font-style: italic;
+        width:800px;
+    }
+    div#example_explain {
+        margin:0px 0px 10px 0px;
+        border: thin solid #595E61;
+        width:800px;
+        position:relative;
+        left:0px;
+        top:0px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+        color: #595E61;
+    }
+    form#gpLangChange {
+        border:0px;
+        margin:0px;
+        padding:0px;
+    }
+    div#viewerDiv {
+        width:800px;
+        height:600px;
+        background-color:white;
+        background-image:url(img/loading.gif);
+        background-position:center center;
+        background-repeat:no-repeat;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:800px;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    div#exemple_button {
+        left: 850px;
+        position: absolute;
+        top: 20px;
+        background-color:white;
+        width:405px;
+    }
+    #results {
+        display: block;
+        width:690px;
+        height:100px;
+        clear:both;
+        overflow-y:scroll;
+        border:3px Silver groove;
+        margin:0px 0px 10px 50px;
+        padding-top:2px;
+    }
+    #txt_prsresult {
+        display:block;
+        color:white;
+        text-align:center;
+        background-color:#336699;
+        border:2px Silver ridge;
+        padding:1px 0px 1px 0px;
+        margin:10px 0px 0px 50px;
+        width:694px;
+    }
+    #addressInput {
+        width: 200px;
+    }
+    #txt_bt_outil, #txt_geocod,#txt_layer,#txt_dltLayer,#txt_comp {
+        display:block;
+        color:white;
+        text-align:center;
+        background-color:#336699;
+        border:1px Silver groove;
+        padding:1px 0px 1px 0px;
+    }
+    #bt_outil, #bt_geocod, #bt_layer, #bt_comp,#bt_othercouch {
+        display:block;
+        background-color:white;
+        border:2px Silver solid;
+        padding:5px 5px 5px 5px;
+    }
+    #txt_compNav,#bt_NavAd,#bt_NavSup,#txt_compLyC,#bt_CdCA,#bt_CdCS,#txt_compTOS,#bt_URL,#txt_layerSwt,
+    #bt_GdcA,#bt_GdcR,#txt_toolbx,#bt_BaoA,#bt_BaoR,#txt_idxLayer,#bt_descouch,#bt_montcouch,#txt_chcgeop,
+    #bt_addgeop,#bt_delgeop,#txt_plchcwms,#bt_addplsWms,#bt_delplsWms,#txt_lng,#bt_lngFr,#bt_lngEn,#txt_sze,
+    #bt_chgsz,#bt_rmvsz,#bt_ajwms,#bt_supwms,#txt_vsbwms,#bt_vsbOn,#bt_vsbOff,#txt_center, #bt_ctr_fr,
+    #bt_ctr_prs,#txt_zoom, #bt_z9,#bt_z7, #bt_z5,#bt_z3 {
+        margin-top:4px;
+        margin-bottom:4px;
+        display:inline-block;
+    }
+    #txt_center,#txt_zoom,#txt_lng,#txt_sze {
+        margin-left:5px;
+        margin-right:10px;
+    }
+    #txt_toolbx {
+        margin-left:60px;
+        margin-right:45px;
+    }
+    #bt_ctr_prs,#bt_z3,#bt_lngEn {
+        margin-right:150px;
+    }
+    #txt_vsbwms, #txt_compNav {
+        margin-right:10px;
+    }
+    #txt_opcLayer, #txt_layerSwt {
+        margin-right:25px;
+    }
+    #bt_vsbOff,#bt_rmvsz {
+        margin-right:20px;
+    }
+    #txt_chcgeop {
+        margin-right:40px;
+    }
+    #txt_compLyC {
+        margin-right:45px;
+    }
+    #bt_ajwms {
+        margin-left:100px;
+    }
+    #txt_opcLayer,#bt_opct0,#bt_opct30,#bt_opct60,#bt_opct90 {
+        margin-top:15px;
+        margin-bottom:4px;
+        display:inline-block;
+    }
+    #txt_adrss,#addressInput,#bt_adrss,#txt_localt,#placeInput,#bt_localt {
+        margin:3px 0px 3px 5px;
+        display:inline-block;
+    }
+    #placeInput {
+        padding-right:20px;
+    }
+    /*]]>*/--></style>
+</head>
+<body>
+  <h1 id="example_title">InterfaceViewer</h1>
+  <div id="viewerDiv"></div>
+  <div id='txt_prsresult'>Evènements remontés par l'API</div>
+  <div id="results">
+    <ul id="events"></ul>
+  </div>
+  <div id="exemple_button">
+    <div id='txt_bt_outil'>Boite à outils</div>
+    <div id='bt_outil'>
+      <div id='txt_lng'>Langue</div>
+      <button id='bt_lngFr' onclick="iv.setLanguage('FR');" >FR</button>
+      <button id='bt_lngEn' onclick="iv.setLanguage('EN');" >ENG</button>
+      <div id='txt_center'>Centrer sur</div>
+      <button id='bt_ctr_fr' onclick="iv.setCenter(2.731525,45.833333);" >France</button>
+      <button id='bt_ctr_prs' onclick='centerToSexa()' >Paris </button>
+      <div id='txt_zoom'>Zoom</div>
+      <button id='bt_z9' onclick="iv.setZoom(9);" >9</button>
+      <button id='bt_z7' onclick="iv.setZoom(7);" >7</button>
+      <button id='bt_z5' onclick="iv.setZoom(5);" >5</button>
+      <button id='bt_z3' onclick="iv.setZoom(3);" >3</button>
+      <div id='txt_sze'>Taille de la carte</div>
+      <button id='bt_chgsz' onclick="iv.setSize(500,300);" >Modifier</button>
+      <button id='bt_rmvsz' onclick="iv.setSize(800,600);" >Annuler</button>
+    </div>
+    <div id='txt_geocod'>Géocodage</div>
+    <div id='bt_geocod'>
+      <div id='txt_adrss'>Adresse</div>
+      <input type="text" value='numéro, voie, code postal, ville' id='addressInput'>
+      <button id='bt_adrss' onclick='centerToLocation()'>J'y vais</button>
+      <div id='txt_localt'>Localité</div>
+      <input type="text" value='Nom de la localité' id='placeInput'>
+      <button id='bt_localt'onclick='centerToPlace()'>J'y vais</button>
+    </div>
+    <div id='txt_layer'>Couche WMS (Eaux potables)</div>
+    <div id='bt_layer'>
+      <button id='bt_ajwms' onclick='addWMSLayer()' >Ajouter</button>
+      <button id='bt_supwms' onclick="iv.removeLayer('Eaux potables');" >Supprimer</button>
+      <div id='txt_opcLayer'>Modifier l'opacité</div>
+      <button id='bt_opct0' onclick="iv.setLayerOpacity('Eaux potables', 0);" >0</button>
+      <button id='bt_opct30' onclick="iv.setLayerOpacity('Eaux potables', 0.3);" >30</button>
+      <button id='bt_opct60' onclick="iv.setLayerOpacity('Eaux potables', 0.6);" >60</button>
+      <button id='bt_opct90' onclick="iv.setLayerOpacity('Eaux potables', 1);" >100</button>
+      <div id='txt_vsbwms'>Modifier la visibilité</div>
+      <button id='bt_vsbOn' onclick="iv.setLayerVisibility('Eaux potables', true);" >Montrer</button>
+      <button id='bt_vsbOff' onclick="iv.setLayerVisibility('Eaux potables', false);" >Masquer</button>
+      <div id='txt_idxLayer'>Position de la couche</div>
+      <button id='bt_descouch' onclick="iv.moveLayerDown('Eaux potables');">Descendre</button>
+      <button id='bt_montcouch' onclick="iv.moveLayerUp('Eaux potables');">Monter</button>
+    </div>
+    <div id='txt_dltLayer'>Autres couches</div>
+    <div id='bt_othercouch'>
+      <div id='txt_chcgeop'>Couche Geoportail</div>
+      <button id='bt_addgeop' onclick="iv.addGeoportalLayer({name:'ADMINISTRATIVEUNITS.BOUNDARIES'});" >Ajouter</button>
+      <button id='bt_delgeop' onclick="iv.removeGeoportalLayer('ADMINISTRATIVEUNITS.BOUNDARIES');" >Supprimer</button>
+      <div id='txt_plchcwms'>Plusieurs couches WMS</div>
+      <button id='bt_addplsWms' onclick="addWMSLayers()" >Ajouter</button>
+      <button id='bt_delplsWms' onclick="iv.removeLayer('Rivières principales');iv.removeLayer('Masse d\'eau cotière');" >Supprimer</button>
+    </div>
+    <div id='txt_comp'>Composants</div>
+    <div id='bt_comp'>
+      <div id='txt_toolbx'>Boite à outils</div>
+      <button id='bt_BaoA' onclick="iv.iconifyComponent(getToolBoxId(),false);" >Agrandir</button>
+      <button id='bt_BaoR' onclick="iv.iconifyComponent(getToolBoxId(),true);" >Réduire</button>
+      <div id='txt_compLyC'>Catalogue de couche</div>
+      <button id='bt_CdCA' onclick="iv.addComponent('Geoportal.Component.LayerCatalog')" >Ajouter</button>
+      <button id='bt_CdCS' onclick="iv.removeComponent(getLayerCatalogControlId())" >Supprimer</button>
+      <div id='txt_layerSwt'>Gestionnaire de couche</div>
+      <button id='bt_GdcA' onclick="iv.iconifyComponent(getLayerSwitcherId(),false);" >Agrandir</button>
+      <button id='bt_GdcR' onclick="iv.iconifyComponent(getLayerSwitcherId(),true);" >Réduire</button>
+      <div id='txt_compNav'>Navigation avec la souris</div>
+      <button id='bt_NavAd' onclick="iv.addComponent('Geoportal.Component.Navigation.MouseNavigation')" >Ajouter</button>
+      <button id='bt_NavSup' onclick="iv.removeComponent(getNavigationControlId())" >Supprimer</button>
+      <div id='txt_compTOS'>Conditions générales d'utilisation</div>
+      <button id='bt_URL' onclick="modifyTOS()" >Modifier l'URL</button>
+    </div>
+  </div>
+  <div id="example_explain"></div>
+  <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank">Mentions Légales</a> - &copy;IGN 2008-2013</div>
+  
+  <script type="text/javascript" src="js/geoportalMap_interfaceViewer.js"><!-- --></script>
+  <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/Geoportal.js"><!-- --></script>
+</body>
+</html>

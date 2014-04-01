@@ -51,10 +51,10 @@ public class PostgreSQLDataBase{
 			logger.log(Level.INFO,"url="+m_Url);
 			logger.log(Level.INFO,"driver="+m_Driver);
 
-			System.out.println("user="+m_UserName+" pass="+m_Password);
+			//System.out.println("user="+m_UserName+" pass="+m_Password);
 			//Class.forName(getDriver());
 			Class.forName(m_Driver);
-			System.out.println("driver="+m_Driver);
+			//System.out.println("driver="+m_Driver);
 			//m_Connection = DriverManager.getConnection(getUrl(), getUserName(), getPassword());
 			m_Connection = DriverManager.getConnection(m_Url, m_UserName, m_Password);
 			m_Statement = m_Connection.createStatement();

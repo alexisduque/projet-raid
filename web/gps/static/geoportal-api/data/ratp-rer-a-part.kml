@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Document>
+  <name>Stations RER A (part)</name>
+  <Style id="rer">
+    <IconStyle>
+      <scale>1.00</scale>
+      <Icon>
+        <href>img/rerA.gif</href>
+        <w>21</w>
+        <h>21</h>
+      </Icon>
+    </IconStyle>
+    <LabelStyle>
+      <color>ffffffff</color>
+      <scale>0.8</scale>
+    </LabelStyle>
+  </Style>
+  <Folder>
+    <name>Ligne A (3 stations)</name>
+    <Placemark>
+      <name><![CDATA[Vincennes]]></name>
+      <description><![CDATA[Vincennes - RER A]]></description>
+      <styleUrl>#rer</styleUrl>
+      <Point>
+        <coordinates>2.432837664730172,48.84739352145903,0</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Nation]]></name>
+      <description><![CDATA[Nation - RER A]]></description>
+      <styleUrl>#rer</styleUrl>
+      <Point>
+        <coordinates>2.394631757681339,48.8488474016095,0</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name><![CDATA[Gare de Lyon]]></name>
+      <description><![CDATA[Gare de Lyon - RER A]]></description>
+      <styleUrl>#rer</styleUrl>
+      <Point>
+        <coordinates>2.372698704924972,48.84522295128619,0</coordinates>
+      </Point>
+    </Placemark>
+  </Folder>
+</Document>
+</kml>

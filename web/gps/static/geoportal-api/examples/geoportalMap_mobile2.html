@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>geoportalMap_mobile2.html</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <!-- include CSS for easying overwriting of styles : -->
+    <!-- JQuery Mobile styles : -->
+    <link id="__JQueryMobileCss__" rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css"/>
+    <!-- OpenLayers styles : -->
+    <link id="__OpenLayersCss__" rel="stylesheet" type="text/css" href="/geoportail/api/js/2.0.3/theme/default/style.css"/>
+    <!-- if OpenLayer.Layer.Google is used : -->
+    <!--
+    <link id="__GoogleOpenLayersCss__" rel="stylesheet" type="text/css" href="/geoportail/api/js/2.0.3/theme/default/google.css"/>
+      -->
+    <!-- if OpenLayers.Popup.FramedCloud is used : -->
+    <!--
+    <link id="__FramedCloudOpenLayersCss__" rel="stylesheet" type="text/css" href="/geoportail/api/js/2.0.3/theme/default/framedCloud.css"/>
+      -->
+    <link id="__GeoportalCss__" rel="stylesheet" type="text/css" href="/geoportail/api/js/2.0.3/theme/geoportal/style.css"/>
+    <link id="__GeoportalMobileCss__" rel="stylesheet" type="text/css" href="/geoportail/api/js/2.0.3/theme/mobile/style.css"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    /* example specific : */
+    div#example_explain {
+        margin:0px 0px 10px 0px;
+        text-align:justify;
+        font-size:0.75em;
+        font-style:italic;
+        color:#595E61;
+        bottom:0px;
+        padding:1em;
+    }
+    div#viewerDiv {
+        width:100%;
+        height:100%;
+        position:relative;
+        background-color:white;
+        background-image:url(/geoportail/api/js/2.0.3/theme/geoportal/img/loading.gif);
+        background-position:center center;
+        background-repeat:no-repeat;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        position:relative;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:white;
+    }
+    div#footer a:hover {
+        font-weight:bold;
+    }
+    div#code a, div#code a:link, div#code a:visited, div#code a:hover {
+        text-decoration:none;
+        color:#595E61;
+    }
+    div#code {
+        margin:0px 0px 10px 0px;
+        width:100%;
+        position:relative;
+        left:0px;
+        top:0px;
+        text-align:justify;
+        font-size:0.75em;
+        font-style:italic;
+        display:none;
+    }
+    /* mobile specific : */
+    @media only screen and (orientation: landscape) and (max-width: 600px) {
+        div#example_explain {
+            font-size:12px;
+        }
+    }
+    @media only screen and (max-width: 600px) {
+        html, body {
+            height: 117%;
+        }
+    }
+    /* JQuery specific : */
+
+    /* from JQuery Mobile : */
+    .ui-icon, .ui-icon-searchfield:after {
+        background-image: url(img/icons-18-green.png);
+    }
+    @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+           only screen and (min--moz-device-pixel-ratio: 1.5),
+           only screen and (min-resolution: 240dpi) {
+        .ui-icon-plus, .ui-icon-minus, .ui-icon-delete, .ui-icon-arrow-r,
+        .ui-icon-arrow-l, .ui-icon-arrow-u, .ui-icon-arrow-d, .ui-icon-check,
+        .ui-icon-gear, .ui-icon-refresh, .ui-icon-forward, .ui-icon-back,
+        .ui-icon-grid, .ui-icon-star, .ui-icon-alert, .ui-icon-info,
+        .ui-icon-home, .ui-icon-search, .ui-icon-searchfield:after,
+        .ui-icon-checkbox-off, .ui-icon-checkbox-on, .ui-icon-radio-off,
+        .ui-icon-radio-on {
+            background-image: url(img/icons-36-green.png);
+        }
+    }
+    @media print {} /* fake do not remove - we need to have even number of media tags ... */
+
+    /* prevents map's padding : */
+    .ui-content {
+        padding:0;
+    }
+    .ui-footer {
+        text-align:center;
+        padding:5px 0;
+    }
+    .ui-icon-check {
+        opacity:0.3;
+    }
+    .checked .ui-icon-check {
+        opacity:1;
+    }
+    div#mapping-page .ui-btn-icon-notext {
+        height:30px;
+        width:30px;
+    }
+    div#layers-page .ui-li-thumb {
+        padding-top:7px;
+    }
+    .ui-icon-search {
+        background: url(/geoportail/api/js/2.0.3/theme/black/img/picto_geonamessearch_on.png) no-repeat scroll 50% 50% rgba(0, 0, 0, 0.4);
+        height:30px;
+        width:30px;
+        margin-top:-3px;
+        margin-left:-3px;
+    }
+    .ui-icon-locate {
+        background:url(/geoportail/api/js/2.0.3/theme/black/img/picto_moveFeature_on.png) no-repeat scroll 50% 50% rgba(0, 0, 0, 0.4);
+        height:30px;
+        width:30px;
+        margin-top:-3px;
+        margin-left:-3px;
+    }
+    .ui-icon-layers {
+        background:url(/geoportail/api/js/2.0.3/theme/black/img/picto_addatt_on.png) no-repeat scroll 50% 50% rgba(0, 0, 0, 0.4);
+        height:30px;
+        width:30px;
+        margin-top:-3px;
+        margin-left:-3px;
+    }
+    .ui-icon-explain {
+        background:url(/geoportail/api/js/2.0.3/theme/black/img/picto_getfeatureinfo_on.png) no-repeat scroll 50% 50% rgba(0, 0, 0, 0.4);
+        height:30px;
+        width:30px;
+        margin-top:-3px;
+        margin-left:-3px;
+    }
+    .ui-content .ui-listview-inset, #xsl-results {
+        margin:1em;
+    }
+    .ui-content .ui-listview {
+        margin:0px;
+    }
+    .portrait, .portrait #mapping-page {
+        min-height:0;
+    }
+    /*.portrait, .portrait .ui-page{*/
+    /*  min-height:0;*/
+    /*}*/
+    #mapping-page, #mapping-page .ui-content {
+        width:100%;
+        height:100%;
+    }   
+    #mapping-page .ui-controlgroup {
+        margin:0.5em 0;
+        width:34%;
+    }
+    #zoom-panel-plus {
+        display:block;
+        padding:7px 6px 7px 8px;
+        margin-bottom:0px;
+    }
+    #zoom-panel-minus {
+        display:block;
+        padding:7px 6px 7px 8px;
+        margin-top:0px;
+    }
+    #title, #tags, #shortdesc {
+        display:none;
+    }
+    #details-list li {
+        padding:15px 10px;
+    }
+    /*]]>*/--></style>
+
+    <!-- include JavaScripts : -->
+    <!-- Because the mobileinit event is triggered immediately, you'll need to -->
+    <!-- bind your event handler before jQuery Mobile is loaded. Link to your  -->
+    <!-- JavaScript files in the following order :                             -->
+    
+    <script type="text/javascript" charset="utf-8" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <!--script type="text/javascript" charset="utf-8" src="http://api.ign.fr/geoportail/api/js/2.0.3/GeoportalMobile.js"></script-->
+    <!-- replace the below line, by the above line when copying this page -->
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/GeoportalMobile.js"><!-- --></script>
+    <script type="text/javascript" charset="utf-8" src="js/utils.js"></script>     
+    <script type="text/javascript" charset="utf-8" src="js/i18n/geoportalMap_mobile2.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/geoportalMap_mobile2.js"></script>
+    <!-- last position ! -->
+    <script type="text/javascript" charset="utf-8" src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+  </head>
+  <body>
+
+    <!-- map page : -->
+    <div data-role="page" id="mapping-page">
+        <div data-role="content">
+            <div id="viewerDiv"></div>
+        </div>
+        <div data-role="footer" class="ui-grid-c">
+            <div class="ui-block-a">
+                <a href="#searching-page" data-icon="search"  data-role="button" id="searchButton"  data-iconpos="notext">Search</a>
+            </div>
+            <div class="ui-block-b">
+                <a href="#"               data-icon="locate"  data-role="button" id="locateButton"  data-iconpos="notext">Track</a>
+            </div>
+            <div class="ui-block-c">
+                <a href="#layers-page"    data-icon="layers"  data-role="button" id="layersButton"  data-iconpos="notext">Layers</a>
+            </div>
+            <div class="ui-block-d">
+                <a href="#explain-page"   data-icon="explain" data-role="button" id="explainButton" data-iconpos="notext">About</a>
+            </div>
+        </div>
+        <div id="zoom-panel" data-role="controlgroup" data-type="vertical">
+            <a href="#" data-role="button" data-icon="plus"  id="zoom-panel-plus" data-iconpos="notext" data-theme="a">Zoom in</a>
+            <a href="#" data-role="button" data-icon="minus" id="zoom-panel-minus" data-iconpos="notext" data-theme="a">Zoom out</a>
+        </div>
+    </div>
+
+    <!-- search page : -->
+    <div data-role="page" id="searching-page" data-add-back-btn="true">
+        <div data-role="header">
+            <h1 id="searchTitle"></h1>
+        </div>
+        <div id="xls-search" data-role="fieldcontain">
+            <form id="search-form" name="search-form" action="javascript:void(0)">
+                <input type="search" name="xls-query" id="xls-query" value="" placeholder="" autocomplete="off"/>
+            </form>
+        </div>
+        <ul data-role="listview" data-inset="true" id="xls-results"></ul>
+    </div>
+
+    <!-- catalogue page : -->
+    <div data-role="page" id="layers-page" data-add-back-btn="true">
+        <div data-role="header">
+            <h1 id="layersTitle"></h1>
+        </div>
+        <div data-role="content">
+            <ul data-role="listview" data-inset="true" data-theme="d" data-dividertheme="c" id="layerslist"></ul>
+        </div>
+    </div>
+
+    <!-- explanation page : -->
+    <div data-role="page" id="explain-page" data-add-back-btn="true">
+        <div data-role="header">
+            <h1 id="explainTitle"></h1>
+        </div>
+        <div data-role="content">
+            <div id="example_explain"></div>
+        </div>
+        <div data-role="footer" class="ui-grid-a">
+            <div class="ui-block-a"></div>
+            <div id="footer" class="ui-block-b">
+                <a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" target="_blank" data-icon="info" data-role="button" id="legal" data-iconpos="notext"></a>
+                 &copy;IGN 2008-2013
+            </div>
+        </div>
+    </div>
+
+    <!-- popup content page : -->
+    <div id="popup" data-role="dialog">
+        <div data-position="inline" data-theme="d" data-role="header">
+            <h1 id="dialogTitle"></h1>
+        </div>
+        <div data-theme="c" data-role="content">
+            <ul id="details-list" data-role="listview"></ul>
+        </div>
+    </div>
+  </body>
+</html>

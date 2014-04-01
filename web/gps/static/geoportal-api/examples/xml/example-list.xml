@@ -1,0 +1,782 @@
+<?xml version="1.0" encoding="utf-8"?>
+<geoportail>
+<entry className="apimin">
+    <title><![CDATA[OpenLayers et l'API Géoportail (minimum)<br/>OpenLayers and Géoportail's API (minimum)]]></title>
+    <link href="geoportalMinimum.html" />
+    <summary><![CDATA[
+        L'API minimum avec OpenLayers.<br/>
+        API minimum and OpenLayers.
+    ]]></summary>
+</entry>
+<entry className="apimin">
+    <title>Yahoo User Interface</title>
+    <link href="geoportalYUI.html" />
+    <summary><![CDATA[
+        YUI avec l'API minimum.<br/>
+        API minimum and YUI.
+    ]]></summary>
+</entry>
+<entry className="apimin">
+    <title><![CDATA[Environnement GeoExt<br/>GeoExt framework]]></title>
+    <link href="geoportalGeoExt.html" />
+    <summary><![CDATA[
+        GeoExt avec l'API minimum.<br/>
+        API minimum and GeoExt.
+    ]]></summary>
+</entry>
+<entry className="apiahnstd">
+    <title><![CDATA[Carte simple (1)<br/>Simple map (1)]]></title>
+    <link href="geoportalMap_simple1.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à une localisation géographique donnée<br/>
+        A simple way to get a Geoportal's map at a given geographical location.
+    ]]></summary>
+</entry>
+<entry className="apiahnstd">
+    <title><![CDATA[Carte simple (1.0)<br/>Simple map (1.0)]]></title>
+    <link href="geoportalMap_simple1.0.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à une localisation géographique donnée sans la puce dessinée<br/>
+        A simple way to get a Geoportal's map at a given geographical location without the default displaying of the marker.
+    ]]></summary>
+</entry>
+<entry className="apiahnstd">
+    <title><![CDATA[Carte simple (1.1)<br/>Simple map (1.1)]]></title>
+    <link href="geoportalMap_simple1.1.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à une localisation géographique donnée en changeant de visualiseur<br/>
+        A simple way to get a Geoportal's map at a given geographical location using a different viewer.
+    ]]></summary>
+</entry>
+<entry className="apiahnstd">
+    <title><![CDATA[Carte simple (1.2)<br/>Simple map (1.2)]]></title>
+    <link href="geoportalMap_simple1.2.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à une localisation géographique donnée en changeant de thème<br/>
+        A simple way to get a Geoportal's map at a given geographical location using a different theme.
+    ]]></summary>
+</entry>
+<entry className="apiahnstd">
+    <title><![CDATA[Carte simple (1.3)<br/>Simple map (1.3)]]></title>
+    <link href="geoportalMap_simple1.3.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement en utilisant la fonction de rappel 'onView'<br/>
+        A simple way to get a Geoportal's map using the 'onView' callback.
+    ]]></summary>
+</entry>
+<entry className="apiahnstd">
+    <title><![CDATA[Carte simple (1.4)<br/>Simple map (1.4)]]></title>
+    <link href="geoportalMap_simple1.4.html?c=2.4250180416666667,48.84444173055555&amp;z=17&amp;l=GEOGRAPHICALGRIDSYSTEMS.MAPS(100)&amp;labl=SMNE%20Saint-Mand%C3%A9%20-%20IGN&amp;desc=Voir%20la%20fiche%20de%20la%20station%20du%20r%C3%A9seau%20GNSS%20permanent%20%3Ca%20href%3D%22http%3A%2F%2Frgp.ign.fr%2FSTATIONS%2Ffiche.php%3Ftype%3Dstation%26ident%3DSMNE%22%20target%3D%22_blank%22%20title%3D%22SMNE%22%3ESMNE%3C%2Fa%3E&amp;" />
+    <summary><![CDATA[
+        Afficher une carte simplement en utilisant les paramètres de l'Url<br/>
+        A simple way to get a Geoportal's map using the Url parameters.
+    ]]></summary>
+</entry>
+<entry className="apiahnstd">
+    <title><![CDATA[Carte simple (1.5)<br/>Simple map (1.5)]]></title>
+    <link href="geoportalMap_simple1.5.html" />
+    <summary><![CDATA[
+        Afficher des cartes simplement en utilisant des appels multiples à 'Geoportal.load'<br/>
+        A simple way to get a Geoportal's maps using multiple cascaded calls to 'Geoportal.load'.
+    ]]></summary>
+</entry>
+<entry className="apiahnstd">
+    <title><![CDATA[Carte simple (2)<br/>Simple map (2)]]></title>
+    <link href="geoportalMap_simple2.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à une localisation géographique, une échelle données et personnalisation de l'information<br/>
+        A simple way to get a Geoportal's map at some given geographical location and zoom and popup's content customization.
+    ]]></summary>
+</entry>
+<entry className="apiahnstd">
+    <title><![CDATA[Carte simple (3)<br/>Simple map (3)]]></title>
+    <link href="geoportalMap_simple3.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à un lieu donné<br/>
+        A simple way to get a Geoportal's map at some given place's name.
+    ]]></summary>
+</entry>
+<entry className="apiahnstd">
+    <title><![CDATA[Carte simple (4)<br/>Simple map (4)]]></title>
+    <link href="geoportalMap_simple4.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à une adresse donnée<br/>
+        A simple way to get a Geoportal's map at some given address.
+    ]]></summary>
+</entry>
+<entry className="apiahnstd">
+    <title><![CDATA[Carte simple (5)<br/>Simple map (5)]]></title>
+    <link href="geoportalMap_simple5.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à une adresse IP donnée<br/>
+        A simple way to get a Geoportal's map at some given IP address.
+    ]]></summary>
+</entry>
+<entry className="apiahnstd">
+    <title><![CDATA[Carte simple (6)<br/>Simple map (6)]]></title>
+    <link href="geoportalMap_simple6.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement comportant un KML<br/>
+        A simple way to get a Geoportal's map displaying a KML.
+    ]]></summary>
+</entry>
+<entry className="apiahnstd">
+    <title><![CDATA[Carte simple (6.1)<br/>Simple map (6.1)]]></title>
+    <link href="geoportalMap_simple6.1.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement comportant un GPX<br/>
+        A simple way to get a Geoportal's map displaying a GPX.
+    ]]></summary>
+</entry>
+<entry className="apiahnstd">
+    <title><![CDATA[Carte simple (6.2)<br/>Simple map (6.2)]]></title>
+    <link href="geoportalMap_simple6.2.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement comportant un service WMS<br/>
+        A simple way to get a Geoportal's map displaying a WMS service.
+    ]]></summary>
+</entry>
+<entry className="apiahnstd">
+    <title><![CDATA[Carte simple (7)<br/>Simple map (7)]]></title>
+    <link href="geoportalMap_simple7.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement comportant un contrôleur externe<br/>
+        A simple way to get a Geoportal's map with an external control.
+    ]]></summary>
+</entry>
+<entry className="apiahnstd">
+    <title><![CDATA[Interface Viewer]]></title>
+    <link href="geoportalMap_interfaceViewer.html" />
+    <summary><![CDATA[
+    Cet exemple montre comment interagir avec une carte avec l'API Haut Niveau.<br/>
+    This exemple shows how to interact with a map with the High Level Interface.
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Photographies aériennes et Cartes<br/>Orthoimagery and Maps]]></title>
+    <link href="geoportalMap_basic.html" />
+    <summary><![CDATA[
+        La carte standard basée sur l'API avec deux couches<br/>
+        The API's standard map with two layers.
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Photographies aériennes et Cartes (thème geoportal3)<br/>Orthoimagery and Maps (geoportal3 theme)]]></title>
+    <link href="geoportalMap_basic_geoportal3.html" />
+    <summary><![CDATA[
+        La carte standard basée sur l'API avec le thème geoportal3.<br/>
+        The API's standard map with the geoportal3 theme.
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Photographies aériennes et Cartes (thème noir)<br/>Orthoimagery and Maps (black theme)]]></title>
+    <link href="geoportalMap_basic_black.html" />
+    <summary><![CDATA[
+        La carte standard basée sur l'API avec le thème noir<br/>
+        The API's standard map with the black theme.
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Mini carte<br/>Mini map]]></title>
+    <link href="geoportalMap_mini.html" />
+    <summary><![CDATA[
+        La carte minimale basée sur l'API<br/>
+        The API's mini map.
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Mauvaise clef de licence<br/>Wrong license key example]]></title>
+    <link href="geoportalMap_bad_key.html" />
+    <summary><![CDATA[
+        Aucune carte ne devrait être affichée<br/>
+        No map should appear.
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Changements de l'affichage<br/>Changing the layout]]></title>
+    <link href="geoportalMap_config.html" />
+    <summary><![CDATA[
+        La carte standard basée sur l'API reconfigurée<br/>
+        The API's reconfigured map.
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Vue d'ensemble<br/>Overview Map]]></title>
+    <link href="geoportalMap_overview.html" />
+    <summary><![CDATA[
+        La carte standard basée sur l'API avec deux couches et une carte de contexte<br/>
+        The API's standard map with two layers and an overview map.
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Géo-localisation<br/>Geo-localisation]]></title>
+    <link href="geoportalMap_localise.html" />
+    <summary><![CDATA[
+        La carte minimale basée sur l'API (Google Gears, W3C Geolocation, ...)<br/>
+        The API's mini map (Google Gears, W3C Geolocation).
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Utilisation de KML<br/>KML use]]></title>
+    <link href="geoportalMap_kml.html" />
+    <summary><![CDATA[
+        Montre comment insérer et afficher des fichiers KML avec l'API<br/>
+        Demonstrate how to import and display KML files with the API.
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Utilisation de GPX<br/>GPX use]]></title>
+    <link href="geoportalMap_gpx.html" />
+    <summary><![CDATA[
+        Montre comment insérer et afficher des fichiers GPX avec l'API<br/>
+        Demonstrate how to import and display GPX files with the API.
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Utilisation d'OSM<br/>OSM use]]></title>
+    <link href="geoportalMap_osm.html" />
+    <summary><![CDATA[
+        Montre comment insérer et afficher des fichiers OSM avec l'API<br/>
+        Demonstrate how to import and display OSM files with the API.
+     ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Utilisation de WMS<br/>WMS use]]></title>
+    <link href="geoportalMap_wms.html" />
+    <summary><![CDATA[
+        Une carte standard avec deux services WMS<br/>
+        Standard configuration with two WMS services<br/>
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Utilisation de WMS tuilés<br/>Tiled WMS use]]></title>
+    <link href="geoportalMap_wmsc.html" />
+    <summary><![CDATA[
+        Une carte standard avec deux services WMS tuilés<br/>
+        Standard configuration with two tiled WMS services
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Utilisation de WMTS<br/>WMTS use]]></title>
+    <link href="geoportalMap_wmts.html" />
+    <summary><![CDATA[
+        Une carte standard avec un service WMTS<br/>
+        Standard configuration with one WMTS service
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Symboles pré-définis<br/>Well-known symbols]]></title>
+    <link href="geoportalMap_graphicName.html" />
+    <summary><![CDATA[
+        Affichage des symboles prédéfinis dans OpenLayers.Renderer.symbol.<br/>
+        Displaying well-known symbols defined in OpenLayers.Renderer.symbol.
+]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Déclinaisons de popups<br/>Variations of popups]]></title>
+    <link href="geoportalMap_popups.html" />
+    <summary><![CDATA[
+        Affichage de popups avec Geoportal.Popup.Anchored.<br/>
+        Displaying various popups based on Geoportal.Popup.Anchored.
+]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Deux cartes sur une page<br/>Two maps on a page]]></title>
+    <link href="geoportalMap_multi.html" />
+    <summary><![CDATA[
+        Montre comment publier deux cartes sur une même page<br/>
+        Demonstrate how to display two different maps on one single page.<br/>
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Moteur de recherche par lieux (1)<br/>Geonames search (1)]]></title>
+    <link href="geoportalMap_gazetteer.html" />
+    <summary><![CDATA[
+        Montre comment ajouter le moteur de recherche par lieux<br/>
+        Demonstrate how to add the geonames' search engine.
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Moteur de recherche par lieux (2)<br/>Geonames search (2)]]></title>
+    <link href="geoportalMap_gazetteer2.html" />
+    <summary><![CDATA[
+        Montre comment ajouter le moteur de recherche par lieux, hors de la carte<br/>
+        Demonstrate how to add the geonames' search engine outside the viewport.
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Moteur de recherche par adresses (3)<br/>Address search (3)]]></title>
+    <link href="geoportalMap_gazetteer3.html" />
+    <summary><![CDATA[
+        Montre comment ajouter le moteur de recherche par adresses<br/>
+        Demonstrate how to add the address' search engine.
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Moteur de recherche par adresses (4)<br/>Address search (4)]]></title>
+    <link href="geoportalMap_gazetteer4.html" />
+    <summary><![CDATA[
+        Montre comment ajouter le moteur de recherche par adresses, hors de la carte<br/>
+        Demonstrate how to add the address' search engine outside the viewport.
+    ]]></summary>
+</entry>
+<!--entry className="apistd">
+    <title><![CDATA[Moteur de recherche par parcelles cadastrales (5)<br/>Cadastral parcel search (5)]]></title>
+    <link href="geoportalMap_gazetteer5.html" />
+    <summary><![CDATA[
+        Montre comment ajouter le moteur de recherche par parcelles cadastrales<br/>
+        Demonstrate how to add the cadastral parcel's search engine.
+    ]]></summary>
+</entry-->
+<!--entrye className="apistd">
+    <title><![CDATA[Moteur de recherche par parcelles cadastrales (6)<br/>Cadastral parcel search (6)]]></title>
+    <link href="geoportalMap_gazetteer6.html" />
+    <summary><![CDATA[
+        Montre comment ajouter le moteur de recherche par parcelles cadastrales, hors de la carte<br/>
+        Demonstrate how to add the cadastral parcels' search engine outside the viewport.
+    ]]></summary>
+</entry-->
+<!--entry className="apistd">
+    <title><![CDATA[Moteur de recherche par sites géodésiques (7)<br/>Geodetic fixed point search (7)]]></title>
+    <link href="geoportalMap_gazetteer7.html" />
+    <summary><![CDATA[
+        Montre comment ajouter le moteur de recherche par sites géodésiques<br/>
+        Demonstrate how to add the geodetic fixed points' search engine.
+    ]]></summary>
+</entry-->
+<!--entry className="apistd">
+    <title><![CDATA[Moteur de recherche par sites géodésiques (8)<br/>Geodetic fixed point search (8)]]></title>
+    <link href="geoportalMap_gazetteer8.html" />
+    <summary><![CDATA[
+        Montre comment ajouter le moteur de recherche par sites géodésiques, hors de la carte<br/>
+        Demonstrate how to add the geodetic fixed points' search engine outside the viewport.
+    ]]></summary>
+</entry-->
+<entry className="apistd">
+    <title><![CDATA[SelectFeature sur plusieurs couches<br/>SelectFeature on multiple layers]]></title>
+    <link href="geoportalMap_selectMultiLayers.html" />
+    <summary><![CDATA[
+        Un contrôleur pour plusieurs couches vectorielles<br/>
+        A unique control for several vector layers
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Territoires couverts<br/>Available territories]]></title>
+    <link href="geoportalMap_all.html?t=FXX" />
+    <summary><![CDATA[
+        Les territoires de l'API<br/>
+        The API's territories.
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Formulaire et API<br/>Form and API]]></title>
+    <link href="geoportalXYForm.html" />
+    <summary><![CDATA[
+        Liaison entre un formulaire de saisie de coordonnées et l'API<br/>
+        Interaction between a coordinate form and the API.<br/>
+        <!--ol>
+            <li>Opera 10 : see <a href="http://openlayers.org/pipermail/dev/2009-December/005561.html" target="_blank">OpenLayers question</a></li>
+        </ol-->
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Évènement onload<br/>onload Event]]></title>
+    <link href="geoportalMap_onload.html" />
+    <summary><![CDATA[
+        Plusieurs fonctions de rappel sur l'évènement onload<br/>
+        Several callbacks for the onload event.
+    ]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Superposition de couches en projection cylindrique<br/>Cylindrical based layers overlying]]></title>
+    <link href="geoportalMap_webmercator.html" />
+    <summary><![CDATA[
+        Des cartes qui montrent la superposition de flux Géoportail avec des données OpenStreetMap en web mercator.<br/>
+        Some maps showing the overlay of Geoportal's streams with a web mercator stream (OpenStreetMap).
+]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Référentiel à grande échelle (RGE®)<br/>Large scale repository (RGE®)]]></title>
+    <link href="geoportalMap_ignRGE.html" />
+    <summary><![CDATA[
+        Utilisation de Geoportal.Layer.Aggregate pour reproduire le RGE®.<br/>
+        Use of Geoportal.Layer.Aggregate to reproduce the RGE®.
+]]></summary>
+</entry>
+<entry className="apistd">
+    <title><![CDATA[Utilisation de KML tuilé<br/>Tiled KML use]]></title>
+    <link href="geoportalMap_tiledVector.html" />
+    <summary><![CDATA[
+        Montre comment insérer et afficher des fichiers KML tuilés avec l'API<br/>
+        Demonstrate how to import and display tiled KML files with the API.
+    ]]></summary>
+</entry>
+<entry className="apiahnext">
+    <title><![CDATA[Carte simple (8)<br/>Simple map (8)]]></title>
+    <link href="geoportalMap_simple8.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement comportant un service WFS<br/>
+        A simple way to get a Geoportal's map displaying a WFS service.
+    ]]></summary>
+</entry>
+<entry className="apiahnext">
+    <title><![CDATA[Carte simple (9)<br/>Simple map (9)]]></title>
+    <link href="geoportalMap_simple9.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement comportant des services WMS et WFS (Mapserver)<br/>
+        A simple way to get a Geoportal's map displaying WMS and WFS services (Mapserver).
+    ]]></summary>
+</entry>
+<entry className="apiext">
+    <title><![CDATA[Plan d'accès (1)<br/>Access Plan (1)]]></title>
+    <link href="geoportalMap_accessplan.html" />
+    <summary><![CDATA[
+        Montre comment créer un simple plan d'accès avec l'API<br/>
+        Demonstrate how to create a simple access plan with the API.
+    ]]></summary>
+</entry>
+<entry className="apiext">
+    <title><![CDATA[Plan d'accès (2)<br/>Access Plan (2)]]></title>
+    <link href="geoportalMap_accessplan2.html" />
+    <summary><![CDATA[
+        Montre comment créer un plan d'accès plus complexe avec l'API<br/>
+        Demonstrate how to create a more complex access plan with the API.
+    ]]></summary>
+</entry>
+<entry className="apiext">
+    <title><![CDATA[Plan d'accès (3)<br/>Access Plan (3)]]></title>
+    <link href="geoportalMap_accessplan3.html" />
+    <summary><![CDATA[
+        Montre comment mimiquer une visualisation bien connue avec l'API<br/>
+        Demonstrate how to mimic a well-known visualisation with the API.
+    ]]></summary>
+</entry>
+<entry className="apiext">
+    <title><![CDATA[Utilisation de GeoRSS<br/>GeoRSS use]]></title>
+    <link href="geoportalMap_georss.html" />
+    <summary><![CDATA[
+        Montre comment insérer et afficher des fils GeoRSS avec l'API<br/>
+        Demonstrate how to import and display GeoRSS feeds with the API.
+    ]]></summary>
+</entry>
+<entry className="apiext">
+    <title><![CDATA[Utilisation de WFS<br/>WFS use]]></title>
+    <link href="geoportalMap_wfs.html" />
+    <summary><![CDATA[
+        Une carte standard avec un service WFS<br/>
+        Standard configuration with a WFS service
+    ]]></summary>
+</entry>
+<entry className="apiext">
+    <title><![CDATA[Formulaire et Géocodage<br/>Form and Geocoding]]></title>
+    <link href="geoportalAddressForm.html" />
+    <summary><![CDATA[
+        Une carte reliée à un formulaire pour localiser une adresse<br/>
+        A map linked with a form for geocoding addresses.
+    ]]></summary>
+</entry>
+<entry className="apiext">
+    <title><![CDATA[Formulaire et Géocodage (2)<br/>Form and Geocoding (2)]]></title>
+    <link href="geoportalGeocoder.html" />
+    <summary><![CDATA[
+        Une carte reliée à un formulaire pour localiser une liste d'adresses (format CSV).
+        A map linked with a form for geocoding a list of adresses (CSV format).
+    ]]></summary>
+</entry>
+<entry className="apiext">
+    <title><![CDATA[Saisie de points d'intérêt<br/>Drawing/Selecting points of interest]]></title>
+    <link href="geoportalPoi.html" />
+    <summary><![CDATA[
+        Un environnement permettant de saisir des points d'intérêt sur la carte en utilisant des pictos differents<br/>
+        A framework for acquiring points of interest on the map, using different pictograms.
+    ]]></summary>
+</entry>
+<entry className="apiext">
+    <title><![CDATA[Çà bouge!<br/>It moves!]]></title>
+    <link href="geoportalMap_movingObjects.html" />
+    <summary><![CDATA[
+        Deux véhicules se déplaçant tout seuls<br/>
+        Two cars moving around by themselves
+    ]]></summary>
+</entry>
+<entry className="apiext">
+    <title><![CDATA[Affichage type Géoportail<br/>Geoportal like display]]></title>
+    <link href="geoportalLike.html" />
+    <summary><![CDATA[
+        Données WMS, KML, WFS dans une page type Géoportail.<br/>
+        WMS, KML, WFS datasets in a Geoportal alike page.<br/>
+    ]]></summary>
+</entry>
+<entry className="apiext">
+    <title><![CDATA[Saisie et API<br/>Drawing/Selecting and API]]></title>
+    <link href="geoportalAlert.html" />
+    <summary><![CDATA[
+        Un environnement de saisie d'information basé sur l'API<br/>
+        A simple framework for acquiring vector data based on the API.
+    ]]></summary>
+</entry>
+<entry className="apiext">
+    <title><![CDATA[Multi-fournisseurs<br/>Multi-providers]]></title>
+    <link href="geoportalMap_providers.html" />
+    <summary><![CDATA[
+        Une carte avec des fournisseurs de données qui ont des projections différentes (équidistant cylindrique pour le Géoportail et mercator sphérique pour OpenStreetMap et consorts).<br/>
+        A map with different datasets providers for which the base projections are not the same (equidistant cylindrical for Geoportail and spherical mercator for OpenStreetMap and al).
+]]></summary>
+</entry>
+<entry className="apiext">
+    <title><![CDATA[Comparaison d'orthophotographies<br/>Ortho-imagery comparison]]></title>
+    <link href="geoportalMap_comparator.html" />
+    <summary><![CDATA[
+        Affichage de deux vues avec des orthophotographies 2000-2005 et actuelle.<br/>
+        Two views with 2000-2005 and today's ortho-imagery.
+]]></summary>
+</entry>
+<entry className="apiext">
+    <title><![CDATA[Extensions de composants<br/>Extending components]]></title>
+    <link href="geoportalMap_basicViewer.html" />
+    <summary><![CDATA[
+        OpenLayers et l'API Géoportail permettent de définir de nouveaux composants javascript.<br/>
+        OpenLayers and Geoportail's APIs allow developers to add new Javascript components.
+]]></summary>
+</entry>
+<entry className="apiext">
+    <title><![CDATA[DrawingToolbar]]></title>
+    <link href="geoportalMap_drawingToolbar.html" />
+    <summary><![CDATA[
+        Montre comment insérer et afficher les outils de croquis dans une carte<br/>
+        Demonstrate how to import and display the drawing toolbar control in the map.
+    ]]></summary>
+</entry>
+<entry className="apiext">
+    <title><![CDATA[DrawingToolbar (2)]]></title>
+    <link href="geoportalMap_drawingToolbar2.html" />
+    <summary><![CDATA[
+        Montre comment étendre les outils de croquis dans une carte<br/>
+        Demonstrate how to extend the drawing toolbar control in the map.
+    ]]></summary>
+</entry>
+<entry className="apiext">
+    <title><![CDATA[Recherche métadonnées<br/>Search metadata]]></title>
+    <link href="geoportalMap_csw.html" />
+    <summary><![CDATA[
+        Recherche métadonnées<br/>
+        Search metadata
+    ]]></summary>
+</entry>
+<entry className="apiahnflex">
+    <title><![CDATA[Carte simple en flex (1)<br/>Flex simple map (1)]]></title>
+    <link href="geoportalFxMap_simple1.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à une localisation géographique donnée<br/>
+        A simple way to get a Geoportal's map at a given geographical location.
+    ]]></summary>
+</entry>
+<entry className="apiahnflex">
+    <title><![CDATA[Carte simple en flex (1.1)<br/>Flex simple map (1.1)]]></title>
+    <link href="geoportalFxMap_simple1-1.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement en utilisant la fonction de rappel 'onView'<br/>
+        A simple way to get a Geoportal's map using the 'onView' callback.
+    ]]></summary>
+</entry>
+<entry className="apiahnflex">
+    <title><![CDATA[Carte simple en flex (2)<br/>Flex simple map (2)]]></title>
+    <link href="geoportalFxMap_simple2.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à une localisation géographique, une échelle données et personnalisation de l'information (KML)<br/>
+        A simple way to get a Geoportal's map at some given geographical location and content customization (KML).
+    ]]></summary>
+</entry>
+<entry className="apiahnflex">
+    <title><![CDATA[Carte simple en flex (2.1)<br/>Flex simple map (2.1)]]></title>
+    <link href="geoportalFxMap_simple2-1.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à une localisation géographique, une échelle données et personnalisation de l'information (GPX)<br/>
+        A simple way to get a Geoportal's map at some given geographical location and content customization (GPX).
+    ]]></summary>
+</entry>
+<entry className="apiahnflex">
+    <title><![CDATA[Carte simple en flex (2.2)<br/>Flex simple map (2.2)]]></title>
+    <link href="geoportalFxMap_simple2-2.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à une localisation géographique, une échelle données et personnalisation de l'information (WMS)<br/>
+        A simple way to get a Geoportal's map at some given geographical location and content customization (WMS).
+    ]]></summary>
+</entry>
+<entry className="apiahnflex">
+    <title><![CDATA[Carte simple en flex (3)<br/>Flex simple map (3)]]></title>
+    <link href="geoportalFxMap_simple3.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à un lieu donné<br/>
+        A simple way to get a Geoportal's map at some given place's name.
+    ]]></summary>
+</entry>
+<entry className="apiahnflex">
+    <title><![CDATA[Carte simple en flex (4)<br/>Flex simple map (4)]]></title>
+    <link href="geoportalFxMap_simple4.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à une adresse donnée<br/>
+        A simple way to get a Geoportal's map at some given address.
+    ]]></summary>
+</entry>
+<entry className="apiahnflex">
+    <title><![CDATA[Carte simple en flex (5)<br/>Flex simple map (5)]]></title>
+    <link href="geoportalFxMap_simple5.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement et personnalisation des composants<br/>
+        A simple way to get a Geoportal's map and components customization.
+    ]]></summary>
+</entry>
+<entry className="apiahnflex">
+    <title><![CDATA[Carte simple en flex (5.1)<br/>Flex simple map (5.1)]]></title>
+    <link href="geoportalFxMap_simple5-1.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement et personnalisation des composants (gestion des couches)<br/>
+        A simple way to get a Geoportal's map and components customization (layers management).
+    ]]></summary>
+</entry>
+<entry className="apiahnflex">
+    <title><![CDATA[Carte simple en flex (5.2)<br/>Flex simple map (5.2)]]></title>
+    <link href="geoportalFxMap_simple5-2.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement et personnalisation des composants (composants d'information)<br/>
+        A simple way to get a Geoportal's map and components customization (information components).
+    ]]></summary>
+</entry>
+<entry className="apiahn3d">
+    <title><![CDATA[Carte simple avec l'API 3D (1)<br/>3D API simple map (1)]]></title>
+    <link href="geoportal3dMap_simple1.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à une localisation géographique donnée<br/>
+        A simple way to get a Geoportal's map at a given geographical location.
+    ]]></summary>
+</entry>
+<entry className="apiahn3d">
+    <title><![CDATA[Carte simple avec l'API 3D (1.1)<br/>3D API simple map (1.1)]]></title>
+    <link href="geoportal3dMap_simple1-1.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement en utilisant la fonction de rappel 'onView'<br/>
+        A simple way to get a Geoportal's map using the 'onView' callback.
+    ]]></summary>
+</entry>
+<entry className="apiahn3d">
+    <title><![CDATA[Carte simple avec l'API 3D (2)<br/>3D API simple map (2)]]></title>
+    <link href="geoportal3dMap_simple2.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à une localisation géographique, une échelle données et personnalisation de l'information (KML)<br/>
+        A simple way to get a Geoportal's map at some given geographical location and content customization (KML).
+    ]]></summary>
+</entry>
+<entry className="apiahn3d">
+    <title><![CDATA[Carte simple avec l'API 3D (2.1)<br/>3D API simple map (2.1)]]></title>
+    <link href="geoportal3dMap_simple2-1.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à une localisation géographique, une échelle données et personnalisation de l'information (GPX)<br/>
+        A simple way to get a Geoportal's map at some given geographical location and content customization (GPX).
+    ]]></summary>
+</entry>
+<entry className="apiahn3d">
+    <title><![CDATA[Carte simple avec l'API 3D (2.2)<br/>3D API simple map (2.2)]]></title>
+    <link href="geoportal3dMap_simple2-2.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à une localisation géographique, une échelle données et personnalisation de l'information (WMS)<br/>
+        A simple way to get a Geoportal's map at some given geographical location and content customization (WMS).
+    ]]></summary>
+</entry>
+<entry className="apiahn3d">
+    <title><![CDATA[Carte simple avec l'API 3D (3)<br/>3D API simple map (3)]]></title>
+    <link href="geoportal3dMap_simple3.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à un lieu donné<br/>
+        A simple way to get a Geoportal's map at some given place's name.
+    ]]></summary>
+</entry>
+<entry className="apiahn3d">
+    <title><![CDATA[Carte simple avec l'API 3D (4)<br/>3D API simple map (4)]]></title>
+    <link href="geoportal3dMap_simple4.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement à une adresse donnée<br/>
+        A simple way to get a Geoportal's map at some given address.
+    ]]></summary>
+</entry>
+<entry className="apiahn3d">
+    <title><![CDATA[Carte simple avec l'API 3D (5)<br/>3D API simple map (5)]]></title>
+    <link href="geoportal3dMap_simple5.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement et personnalisation des composants<br/>
+        A simple way to get a Geoportal's map and components customization.
+    ]]></summary>
+</entry>
+<entry className="apiahn3d">
+    <title><![CDATA[Carte simple avec l'API 3D (5.1)<br/>3D API simple map (5.1)]]></title>
+    <link href="geoportal3dMap_simple5-1.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement et personnalisation des composants (gestion des couches)<br/>
+        A simple way to get a Geoportal's map and components customization (layers management).
+    ]]></summary>
+</entry>
+<entry className="apiahn3d">
+    <title><![CDATA[Carte simple avec l'API 3D (5.2)<br/>3D API simple map (5.2)]]></title>
+    <link href="geoportal3dMap_simple5-2.html" />
+    <summary><![CDATA[
+        Afficher une carte simplement et personnalisation des composants (composants d'information)<br/>
+        A simple way to get a Geoportal's map and components customization (information components).
+    ]]></summary>
+</entry>
+<entry className="apimobile">
+    <title><![CDATA[Carte simple pour mobile (1)<br/>Mobile simple map (1)]]></title>
+    <link href="geoportalMap_mobile1.html" />
+    <summary><![CDATA[
+        Afficher une carte dans une application web pour téléphone<br/>
+        A simple way to get a Geoportal's map displayed on a mobile web browser.
+    ]]></summary>
+</entry>
+<entry className="apimobile">
+    <title><![CDATA[Carte simple pour mobile (2)<br/>Mobile simple map (2)]]></title>
+    <link href="geoportalMap_mobile2.html" />
+    <summary><![CDATA[
+        Afficher une carte dans une application web pour téléphone (JQuery Mobile)<br/>
+        A simple way to get a Geoportal's map displayed on a mobile web browser (JQuery Mobile).
+    ]]></summary>
+</entry>
+<entry className="console">
+    <title><![CDATA[Modèle utilisateur (déprécié)<br/>User Template (deprecated)]]></title>
+    <link href="loadtxt.html?txt=./standardV1_template.txt&amp;" />
+    <summary><![CDATA[
+        Exemple d'une page simple<br/>
+        Example of a simple web page.
+    ]]></summary>
+</entry>
+<entry className="console">
+    <title><![CDATA[Modèle utilisateur (simple)<br/>User Template (simple)]]></title>
+    <link href="loadtxt.html?txt=./standardV2.1_template.txt&amp;" />
+    <summary><![CDATA[
+        Exemple d'une page simple<br/>
+        Example of a simple web page.
+    ]]></summary>
+</entry>
+<entry className="console">
+    <title><![CDATA[Modèle utilisateur<br/>User Template]]></title>
+    <link href="loadtxt.html?txt=./standardV2.2_template.txt&amp;" />
+    <summary><![CDATA[
+        Exemple d'une page simple<br/>
+        Example of a simple web page.
+    ]]></summary>
+</entry>
+<entry className="console">
+    <title><![CDATA[Modèle développeur<br/>Developer Template]]></title>
+    <link href="loadtxt.html?txt=./uncompressed_local.txt&amp;" />
+    <summary><![CDATA[
+        Exemple d'une page pour un développement en local<br/>
+        Example of a web page for local developping and testing.
+    ]]></summary>
+</entry>
+<entry className="console">
+    <title><![CDATA[Modèle intégrateur<br/>Integrator Template]]></title>
+    <link href="loadtxt.html?txt=./advanced_integration.txt&amp;" />
+    <summary><![CDATA[
+        Exemple d'une page pour un développement avancé<br/>
+        Example of a web page for avanced developping and API integration.
+    ]]></summary>
+</entry>
+</geoportail>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>geoportalMap_mobile1.html</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <!-- include CSS for easying overwriting of styles : -->
+    <!-- OpenLayers styles : -->
+    <link id="__OpenLayersCss__" rel="stylesheet" type="text/css" href="/geoportail/api/js/2.0.3/theme/default/style.css"/>
+    <!-- if OpenLayer.Layer.Google is used : -->
+    <!--
+    <link id="__GoogleOpenLayersCss__" rel="stylesheet" type="text/css" href="/geoportail/api/js/2.0.3/theme/default/google.css"/>
+      -->
+    <!-- if OpenLayers.Popup.FramedCloud is used : -->
+    <!--
+    <link id="__FramedCloudOpenLayersCss__" rel="stylesheet" type="text/css" href="/geoportail/api/js/2.0.3/theme/default/framedCloud.css"/>
+      -->
+    <link id="__GeoportalCss__" rel="stylesheet" type="text/css" href="/geoportail/api/js/2.0.3/theme/geoportal/style.css"/>
+    <link id="__GeoportalMobileCss__" rel="stylesheet" type="text/css" href="/geoportail/api/js/2.0.3/theme/mobile/style.css"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    /* example specific : */
+    h1 {
+        text-align:center;
+        font-size:0.75em;
+        font-style:italic;
+        display:none;
+        width:100%;
+    }
+    div#example_explain {
+        margin:0px 0px 10px 0px;
+        border:thin solid #595E61;
+        width:100%;
+        text-align:justify;
+        font-size:0.75em;
+        font-style:italic;
+        color:#595E61;
+        bottom:0px;
+        padding:1em;
+        display:none;
+    }
+    /*form#gpLangChange {
+        border:0px;
+        margin:0px;
+        padding:0px;
+        top:2%;
+        right:1%;
+        position:absolute;
+        font-size:2em;
+        z-index:5000;
+    }
+    form#gpLangChange select {
+        font-size:0.75em;
+    }*/
+    div#viewerDiv {
+        width:100%;
+        height:100%;
+        position:relative;
+        background-color:white;
+        background-image:url(/geoportail/api/js/2.0.3/theme/geoportal/img/loading.gif);
+        background-position:center center;
+        background-repeat:no-repeat;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        position:absolute;
+        bottom:0px;
+        left:50%;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited {
+        text-decoration:none;
+        color:black;
+    }
+    div#footer a:hover {
+        text-decoration:none;
+        color:black;
+        font-weight:bold;
+    }
+    div#code a, div#code a:link, div#code a:visited, div#code a:hover {
+        text-decoration:none;
+        color:#595E61;
+    }
+    div#code {
+        margin:0px 0px 10px 0px;
+        width:100%;
+        position:relative;
+        left:0px;
+        top:0px;
+        text-align:justify;
+        font-size:0.75em;
+        font-style:italic;
+        display:none;
+    }
+    /* mobile specific : */
+    @media only screen and (orientation: landscape) and (max-width: 600px) {
+        div#example_explain {
+            font-size:12px;
+        }
+    }
+    @media only screen and (max-width: 600px) {
+        html, body {
+            height: 117%;
+        }
+    }
+    /*]]>*/--></style>
+    
+    <!--script type="text/javascript" charset="utf-8" src="http://api.ign.fr/geoportail/api/js/2.0.3/GeoportalMobile.js"></script-->
+    <!-- replace the below line, by the above line when copying this page -->
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/GeoportalMobile.js"><!-- --></script>
+    <script type="text/javascript" src="js/utils.js"></script>     
+    <script type="text/javascript" src="js/i18n/geoportalMap_mobile1.js"></script>
+    <script type="text/javascript" src="js/geoportalMap_mobile1.js"></script>
+  </head>
+  <body>
+    <h1 id="example_title"></h1>
+    <!--form id="gpLangChange" name="gpLangChange" action="#">
+      <select id="gpChooseLang" name="gpChooseLang" size="1">
+        <option value="de">Deutsch</option>
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="it">Italiano</option>
+      </select>
+    </form-->
+    <div id="viewerDiv"></div>
+    <div id="example_explain"></div>
+    <div id='code'><a href="./js/geoportalMap_mobile1.js" alt="geoportalMap_mobile1" id="example_jscode" target="_blank"></a></div>
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank"></a> - &copy;IGN 2008-2013</div>
+  </body>
+</html>

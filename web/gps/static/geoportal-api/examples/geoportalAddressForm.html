@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>geoportalAddressForm.html</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <!-- import OpenLayers/Geoportal CSS to ease overloading their styles : -->
+    <!-- OpenLayers :-->
+    <link id="__OpenLayersCss__" href="/geoportail/api/js/2.0.3/theme/default/style.css" type="text/css" rel="stylesheet"/>
+    <!--[if lte IE 6]>
+    <link id="__IE6OpenLayersCss__" href="/geoportail/api/js/2.0.3/theme/default/ie6-style.css" type="text/css" rel="stylesheet"/>
+    <![endif]-->
+    <!-- Geoportal :-->
+    <link id="__GeoportalCss__" href="/geoportail/api/js/2.0.3/theme/geoportal/style.css" type="text/css" rel="stylesheet"/>
+    <!--[if lte IE 6]>
+    <link id="__IE6GeoportalCss__" href="/geoportail/api/js/2.0.3/theme/geoportal/ie6-style.css" type="text/css" rel="stylesheet"/>
+    <![endif]-->
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    html {
+       height:100%;
+    }
+    body {
+       background:#F2F2F6 url("img/geoportail-logo-background-image.gif") no-repeat 96% 96%;
+       height:100%
+    }
+    h1 {
+       font-family: "Arial Black", Verdana, Tahoma, sans-serif;
+       color:gray;
+    }
+    #GeoAddressForm {
+        width:100%;
+        padding:5px;
+    }
+    #GeoAddressFormToggle {
+        height:20px;
+        vertical-align:middle;
+    }
+    #page {
+        width:700px;
+        margin:auto;
+        border:solid gray;
+        border-width:1px 2px 2px 1px;
+        background-color:white;
+        padding:1em 2em;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .GeoAddressButton {
+        margin:0px;
+        padding:1px;
+        border:3px outset lightgray;
+    }
+    .mandatoryField {
+        font-weight: bold;
+    }
+    .addressField {
+        width:32em;
+    }
+    .number {
+        text-align:right;
+        width:14em;
+    }
+    div#messages {
+        color: red;
+        font-size: 0.8em;
+        font-style: italic;
+        margin-top: 5px;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    #viewerDiv {
+        float:left;
+        position:relative;
+        border:0px;
+        margin:0px;
+        padding:0px;
+        top:0px;
+        left:0px;
+        width:700px;
+        height:500px;
+        background-color:white;
+    }
+    .gpControlMousePosition {
+        left:10%;
+    }
+    div#code a, div#code a:link, div#code a:visited, div#code a:hover {
+        text-decoration:none;
+        color: #000000;
+    }
+    div#code {
+        margin:0px 0px 10px 0px;
+        width:800px;
+        position:relative;
+        left:0px;
+        top:0px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+    }
+    /*]]>*/--></style>
+</head>
+<body>
+    <div id="page">
+        <h1 id="title"><span style="letter-spacing:-4px;"><span style="color:#43a3d7;font-size:0.5em;font-weight:bold;z-index:1;">g</span><span style="color:#97bf0f;font-size:1.0em;z-index:0;">é</span><span style="color:#f19406;font-size:1.6em;font-weight:bold;z-index:1;"><sub>O</sub></span></span><span style="color:#000000;font-style:italic;font-weight:normal;"><sup>(&lambda;,&phi;)</sup></span>Adresses</h1>
+        <div style="font-size:small;">
+            <p>Utilisation d'une carte Géoportail couplée avec des champs de recherche d'adresses.</p>
+            <ul>
+                <li>Remplir le formulaire via <b>Adresse</b>. La syntaxe d'une adresse est de la forme <span>rue, code postal, ville</span> (par exemple : 73 avenue de Paris, 94165, Saint-Mandé Cedex) ;</li>
+                <li>Lancer la recherche sur le Géoportail en cliquant sur le bouton <img src="img/geoportail-button.gif" class="GeoXYButton" style="vertical-align:middle;" height="15px"> ;</li>
+                <li>Sur la liste de résultats :
+                    <ul>
+                        <li>un Ctrl-Alt-clic (touches 'Ctrl', 'Alt', clic gauche de la souris) permet de relancer une recherche en utilisant la ville et le code postal sélectionné. Cela permet de préciser l'adresse finale ;</li>
+                        <li>un Ctrl-clic (touche 'Ctrl', clic gauche de la souris) permet de visualiser l'adresse sans fermer la liste. Cela permet de choisir l'adresse finale ;</li>
+                        <li>un clic sur une adresse met à jour le formulaire et ferme la liste des résultats. La localisation de l'adresse, ainsi que le code postal est alors fournie dans le formulaire.</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id='code'><a href="./js/geoportalAddressForm.js" alt="geoportalAddressForm" id="example_jscode" target="_blank">Voir le code JavaScript de l'exemple</a></div>
+        <form>
+            <fieldset id="GeoAddressForm">
+                <legend>Formulaire HTML :&nbsp;</legend>
+                <table>
+                <tr>
+                    <td class="mandatoryField">Adresse :</td>
+                    <td colspan="3"><input type="text" id="addressAddress" name="addressAddress" class="addressField" value=""/></td>
+                </tr>
+                <tr>
+                    <td>Localisation :</td>
+                    <td><input type="text" id="addressLongitude" name="addressLongitude" class="number" value="" disabled="disabled"/></td>
+                    <td><input type="text" id="addressLatitude" name="addressLatitude" class="number" value="" disabled="disabled"/></td>
+                    <td><input type="image" id="GeoAddressFormToggle" name="GeoAddressFormToggle" class="GeoAddressButton" src="img/geoportail-button.gif" alt="Voir" title="Positionner l'adresse"/></td>
+                </tr>
+                </table>
+                <hr/>
+                <div id="results"></div>
+                <div id="messages"></div>
+                <div id="gppanel" style="position:absolute;top:-9999px;left:-9999px;visibility:hidden;">
+                    <hr/>
+                    <div id="viewerDiv"></div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank">Mentions Légales</a> - &copy;IGN 2008-2013</div>
+    
+    <!--script type="text/javascript" charset="utf-8" src="http://api.ign.fr/geoportail/api/js/2.0.3/GeoportalExtended.js"></script-->
+    <!-- replace the below line, by the above line when copying this page -->
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/GeoportalExtended.js"><!-- --></script>
+    <script type="text/javascript" src="js/utils.js"></script>     
+    <script type="text/javascript" src="js/geoportalAddressForm.js"></script>
+  </body>
+</html>

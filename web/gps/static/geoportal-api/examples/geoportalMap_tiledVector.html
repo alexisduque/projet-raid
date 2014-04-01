@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>geoportalMap_tiledVector.html</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    h1 {
+        text-align:center;
+        font-size:0.75em;
+        font-style: italic;
+        width:800px;
+    }
+    div#example_explain {
+        margin:0px 0px 10px 0px;
+        border: thin solid #595E61;
+        width:800px;
+        position:relative;
+        left:0px;
+        top:0px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+        color: #595E61;
+    }
+    form#gpLangChange {
+        border:0px;
+        margin:0px;
+        padding:0px;
+    }
+    div#viewerDiv {
+        width:800px;
+        height:600px;
+        background-color:white;
+        background-image:url(img/loading.gif);
+        background-position:center center;
+        background-repeat:no-repeat;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:800px;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    /*]]>*/--></style>
+  </head>
+  <body>
+    <h1 id="example_title"></h1>
+    <div id="viewerDiv"></div>
+    <div id="example_explain">Cette carte montre comment insérer très rapidement les données du Géoportail dans une page web&nbsp;: ajout de couche KML tuilée.</div>
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank">Mentions Légales</a> - &copy;IGN 2008-2013</div>
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+    var iv= null;
+
+    function viewerloaded(){
+        var osm= new OpenLayers.Layer.OSM(
+                "OpenStreetMap (Tiles"+"&#064;"+"Home)",
+                "http://a.tile.openstreetmap.org/${z}/${x}/${y}.png",
+                {
+                    projection: new OpenLayers.Projection("EPSG:900913"),
+                    units: "m",
+                    numZoomLevels: 18,
+                    maxResolution: 156543.0339,
+                    maxExtent: new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508),
+                    visibility: false,
+                    originators:[{
+                        logo:'osm',
+                        pictureUrl:'http://wiki.openstreetmap.org/Wiki.png',
+                        url:'http://wiki.openstreetmap.org/wiki/WikiProject_France'
+                    }],
+                    isBaseLayer: false,
+                    opacity: 1
+                }
+            );
+        iv.getViewer().getMap().addLayer(osm);
+
+        var adminLayer = new Geoportal.Layer.Vector.Tiled("Unités administratives",{
+            url:"http://gpp3-wxs.ign.fr/nhf8wztv3m9wglcda6n6cbuf/vecteurtuile3d/ADMINISTRATIVEUNITS/fxx",
+            layer:"doc",
+            opacity: 0.8,
+            visibility: true
+        });
+        iv.getViewer().getMap().addLayer(adminLayer);
+
+        var selectOpts = {
+            onSelect: function(feature){
+                Geoportal.Popup.Anchored.createPopUpForKMLFeature(feature);
+                Geoportal.Control.selectFeature(feature);
+            },
+            onUnselect: Geoportal.Control.unselectFeature,
+            autoActivate: true
+        };
+        var select= new OpenLayers.Control.SelectFeature([adminLayer], selectOpts);
+        select.handlers.feature.stopDown=false;
+        iv.getViewer().getMap().addControl(select);
+        
+    }
+
+    window.onload= function() {
+        iv= Geoportal.load(
+            // div's ID:
+            'viewerDiv',
+            // API's keys:
+            ['nhf8wztv3m9wglcda6n6cbuf'],
+            {// map's center :
+                // longitude in degrees:
+                lon:2.5457005,
+                // latitude in degrees:
+                lat:46.2366904
+            },
+            5,//map's zoom
+            {
+                // only use ortho :
+                layers:['ORTHOIMAGERY.ORTHOPHOTOS'],
+                language:'fr',
+                geormUrl:'',
+                viewerClass: Geoportal.Viewer.Default,
+                onView:viewerloaded
+            }
+        );
+    };
+    //--><!]]></script>
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/Geoportal.js"><!-- --></script>
+  </body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>geoportalMap_starting (3)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="refresh" content="60;url=./geoportalMap_starting3_result.html"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    h1 {
+        text-align:center;
+        font-size:0.75em;
+        font-style: italic;
+        width:1000px;
+    }
+    div#example_explain {
+        margin:0px 0px 10px 0px;
+        border: thin solid #595E61;
+        width:1000px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+        color: #595E61;
+    }
+    form#gpLangChange {
+        border:0px;
+        margin:0px;
+        padding:0px;
+    }
+    div#viewerDiv {
+        width:1000px;
+        height:700px;
+        background-color:white;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:1000px;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    /*]]>*/--></style>
+  </head>
+  <body>
+    <h1 id="example_title">Ajouter ses données</h1>
+    <div id="viewerDiv"></div>
+    <div id="example_explain">Montre comment rajouter sa propre couche avec l'API. Pour faire fonctionner cet exemple, il suffit de copier/coller le code sur votre serveur Web.</div>
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank">Mentions Légales</a> - &copy;IGN 2008-2013</div>
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+    if (window.__Geoportal$timer===undefined) {
+        var __Geoportal$timer= null;
+    }
+
+    /**
+     * Function: initMap
+     * Load the application. Called when all information have been loaded by
+     * <loadAPI>().
+     */
+    function initMap() {
+
+        //The api is loaded at this step
+        //L'api est chargée à cette étape
+
+        // ensure french
+        OpenLayers.Lang.setCode('fr');
+
+        //options for creating viewer:
+        var options= {
+            // default value
+            // valeur par défaut
+            //mode:'normal',
+            // default value
+            // valeur par défaut
+            //territory:'FXX',
+            // default value
+            // valeur par défaut
+            //displayProjection:'IGNF:RGF93G'
+            // only usefull when loading external resources
+            // utile uniquement pour charger des resources externes
+            //proxy:'/geoportail/api/xmlproxy'+'?url='
+        };
+
+        // viewer creation of type <Geoportal.Viewer>
+        // création du visualiseur du type <Geoportal.Viewer>
+        //                                       HTML div id, options
+        var viewer= new Geoportal.Viewer.Default('viewerDiv',OpenLayers.Util.extend(
+            options,
+            // API keys configuration variable set by <Geoportal.GeoRMHandler.getConfig>
+            // variable contenant la configuration des clefs API remplie par <Geoportal.GeoRMHandler.getConfig>
+            window.gGEOPORTALRIGHTSMANAGEMENT===undefined? {'apiKey':key} : gGEOPORTALRIGHTSMANAGEMENT)
+        );
+        if (!viewer) {
+            // problem ...
+            OpenLayers.Console.error('Création de la carte échouée');
+            return;
+        }
+
+        // display reference datasetsD, full opacity
+        // affiche les données de référence en pleine opacité
+        // add photos and maps, full opacity
+        // ajout des photos et cartes en pleine opacité
+        viewer.addGeoportalLayers([
+            'ORTHOIMAGERY.ORTHOPHOTOS',
+            'GEOGRAPHICALGRIDSYSTEMS.MAPS'
+        ], {
+            'ORTHOIMAGERY.ORTHOPHOTOS':{
+                opacity:1.0,        // default= 1.0
+                visibility:true     // default= true
+            },
+            'GEOGRAPHICALGRIDSYSTEMS.MAPS':{
+                opacity:1.0,        // default= 0.3
+                visibility:true     // default= true
+            }
+        });
+
+        // set center at default location and zoom
+        // centrage en utilisant la position et la résolution par défaut
+        viewer.getMap().setCenter(viewer.viewerOptions.defaultCenter,viewer.viewerOptions.defaultZoom);
+
+    }
+
+    /**
+     * Function: loadAPI
+     * Load the configuration related with the API keys.
+     * Called on "onload" event.
+     * Call <initMap>() function to load the interface.
+     */
+    function loadAPI() {
+        // wait for all classes to be loaded
+        // on attend que les classes soient chargées
+        if (__Geoportal$timer!=null) {
+            window.clearTimeout(__Geoportal$timer);
+            __Geoportal$timer= null;
+        }
+        if (typeof(OpenLayers)=='undefined'              ||
+            typeof(Geoportal)=='undefined'               ||
+            typeof(Geoportal.Viewer)=='undefined'        ||
+            typeof(Geoportal.Viewer.Default)=='undefined') {
+            __Geoportal$timer= window.setTimeout('loadAPI();', 300);
+            return;
+        }
+
+
+        // load API keys configuration, then load the interface
+        // on charge la configuration de la clef API, puis on charge l'application
+        Geoportal.GeoRMHandler.getConfig(['nhf8wztv3m9wglcda6n6cbuf'], null,null, {
+            onContractsComplete: initMap
+        });
+    }
+
+    window.onload= loadAPI;
+    //--><!]]></script>
+    
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/Geoportal.js"><!-- --></script>
+  </body>
+</html>

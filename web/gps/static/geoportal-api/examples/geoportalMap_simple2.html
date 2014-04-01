@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>geoportalMap_simple.html (2)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    h1 {
+        text-align:center;
+        font-size:0.75em;
+        font-style: italic;
+        width:800px;
+    }
+    div#example_explain {
+        margin:0px 0px 10px 0px;
+        border: thin solid #595E61;
+        width:800px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+        color: #595E61;
+    }
+    form#gpLangChange {
+        border:0px;
+        margin:0px;
+        padding:0px;
+    }
+    div#viewerDiv {
+        width:800px;
+        height:600px;
+        background-color:white;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:800px;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    /*]]>*/--></style>
+  </head>
+  <body>
+    <h1 id="example_title">Carte simple (2)</h1>
+    <div id="viewerDiv"></div>
+    <div id="example_explain">Cette carte montre comment insérer très rapidement les données du Géoportail dans une page web&nbsp;: centrage sur des coordonnées en degrés sexagécimaux, à un zoom et personnalisation du marqueur et de la popup</div>
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank">Mentions Légales</a> - &copy;IGN 2008-2013</div>
+    
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+    var iv= null;
+    window.onload= function() {
+        iv= Geoportal.load(
+            // div's ID:
+            'viewerDiv',
+            // API's keys:
+            ['nhf8wztv3m9wglcda6n6cbuf'],
+            {// map's center :
+                // longitude in DMS:
+                lon:'02° 25\' 30.06495" E',
+                // latitude in DMS:
+                lat:'48° 50\' 39.99023" N',
+            },
+            15,
+            {
+                label:'SMNE Saint-Mandé - IGN',
+                description:'Voir la fiche de la station du réseau GNSS permanent <a href="http://rgp.ign.fr/STATIONS/fiche.php?type=station&ident=SMNE" target="_blank" title="SMNE">SMNE</a>',
+                marker: {
+                    externalGraphic:'http://maps.gstatic.com/intl/fr_fr/mapfiles/ms/icons/blue-dot.png',
+                    graphicWidth:32,
+                    graphicHeight:32,
+                    graphicYOffset:-32
+                    // other available options :
+                    // graphicXOffset
+                    // graphicOpacity
+                    // graphicZIndex
+                    // graphicTitle
+                }
+                ,language:'fr'
+            }
+        );
+    };
+    //--><!]]></script>
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/Geoportal.js"><!-- --></script>
+  </body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>geoportalXYForm.html</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    html {
+        height:100%;
+    }
+    body {
+        background:#F2F2F6 url("img/geoportail-logo-background-image.gif") no-repeat 96% 96%;
+        height:100%
+    }
+    h1 {
+        font-family: "Arial Black", Verdana, Tahoma, sans-serif;
+        color:gray;
+    }
+    #GeoXYForm {
+        padding: 5px;
+    }
+    #GeoXYFormToggle {
+        height:20px;
+        vertical-align:middle;
+    }
+    #page {
+        width:700px;
+        margin:auto;
+        border:solid gray;
+        border-width:1px 2px 2px 1px;
+        background-color:white;
+        padding:1em 2em;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .GeoXYButton {
+        margin:0px;
+        padding:1px;
+        border:3px outset lightgray;
+    }
+    .number {
+        text-align:right;
+        width:8em;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    div#code a, div#code a:link, div#code a:visited, div#code a:hover {
+        text-decoration:none;
+        color: #000000;
+    }
+    div#code {
+        margin:0px 0px 10px 0px;
+        width:800px;
+        position:relative;
+        left:0px;
+        top:0px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+    }
+    /*]]>*/--></style>
+</head>
+<body>
+    <div id="page">
+        <h1 id="title"><span style="letter-spacing:-4px;"><span style="color:#43a3d7;font-size:0.5em;font-weight:bold;z-index:1;">g</span><span style="color:#97bf0f;font-size:1.0em;z-index:0;">é</span><span style="color:#f19406;font-size:1.6em;font-weight:bold;z-index:1;"><sub>O</sub></span></span><span style="color:#000000;font-style:italic;font-weight:normal;"><sup>(&lambda;,&phi;)</sup></span>Formulaire</h1>
+        <div style="font-size:small;">
+            <p>Utilisation d'une carte Géoportail couplée avec des champs de saisie de coordonnées.</p>
+            <p>Cet exemple permet d'associer des champs d'un formulaire HTML classique à une carte Géoportail&nbsp;: la valeur des champs est modifiée lorsqu'on déplace le point au centre de la carte, et inversement.</p>
+            <ul>
+                <li>Déplacement : placez-vous sur le point et faites-le glisser</li>
+                <li>Saisie d'un nouveau point : Ctrl+clic (supprime l'ancienne position, si elle existait)</li>
+                <li>Afficher/Masquer la carte en cliquant sur le bouton <img src="img/geoportail-button.gif" class="GeoXYButton" style="vertical-align:middle;" height="15px"></li>
+            </ul>
+        </div>
+        <div id='code'><a href="./js/geoportalXYFormView.js" alt="geoportalXYFormView" id="example_jscode" target="_blank">Voir le code JavaScript de l'exemple</a></div>
+        <form>
+            <fieldset id="GeoXYForm" style="width:600px;">
+                <legend>Formulaire HTML (extrait utile) :&nbsp;</legend>
+                X : <input type="text" id="GeoXYFormLon" name="GeoXYFormLon" class="number" value=""/><br/>
+                Y : <input type="text" id="GeoXYFormLat" name="GeoXYFormLat" class="number" value=""/>
+                <input type="image" id="GeoXYFormToggle" name="GeoXYFormToggle" class="GeoXYButton" src="img/geoportail-button.gif" alt="Voir" title="positionner sur le Geoportail"  onclick="javascript:return afficheGeoportail(this);"/>
+                <hr/>
+            </fieldset>
+        </form>
+    </div>
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank">Mentions Légales</a> - &copy;IGN 2008-2013</div>
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+    /**
+     * Function: afficheGeoportail
+     * Fabrique/Active/Masque la visualisation Géoportail lors
+     *      du clic sur le bouton.
+     */
+    function afficheGeoportail(imgObj)
+    {
+        var wimg= 'img/geoportail-waiting.gif';
+        var mimg= 'img/geoportail-xy-pointer.gif';
+        // Informations sur le formulaire :
+        var formInfo= {
+            containerId:'GeoXYForm',            // obligatoire
+            lonId:'GeoXYFormLon',               // obligatoire
+            latId:'GeoXYFormLat',               // obligatoire
+            waitImage:wimg,                     // facultatif.
+            projection:'IGNF:RGF93G',           // facultatif. Defaut : 'IGNF:RGF93G'
+            precision:100000,                   // facultatif. Defaut: 1000000
+            marker:mimg,                        // facultatif
+            scale:14                            // facultatif (5 a 20). Defaut: 14
+        };
+        // Paramétres de la visualisation Géoportail :
+        var geoportal= {
+            viewportId:'VisuGeoportail',                // obligatoire
+            viewportPage:'geoportalXYFormView.html',    // obligatoire
+            viewportWidth:'100%',                       // obligatoire
+            viewportHeight:'500px',                     // obligatoire
+            viewportStyle:'padding-top:1em;'            // facultatif
+        };
+        var c= document.getElementById(formInfo.containerId);
+        if (c) {
+            var iframe= document.getElementById(geoportal.viewportId);
+            if (!iframe) {
+                var img= imgObj.src;
+                if (formInfo.waitImage!=undefined && formInfo.waitImage.length>0) {
+                    imgObj.src= formInfo.waitImage;
+                }
+                iframe= document.createElement('iframe');
+                iframe.id= geoportal.viewportId;
+                var pathname= window.location.pathname.substr(0,window.location.pathname.lastIndexOf('/'));
+                var src= pathname+'/'+geoportal.viewportPage+'?';
+                var qString= 'buttonId=' + imgObj.id + '&';
+                qString+= 'imgButton=' + img + '&';
+                var formOptions= [ 'containerId', 'lonId', 'latId', 'vectorProjection', 'precision', 'marker', 'scale' ];
+                for (var i= 0; i<formOptions.length; i++) {
+                    var o= formOptions[i];
+                    var v= formInfo[o];
+                    if (v!=undefined &&
+                        ((typeof(v)=='string' && v.length>0) || typeof(v)!='string')) {
+                        qString+= o + '=' + v + '&';
+                    }
+                }
+                iframe.src= src+escape(qString);
+                iframe.width= iframe.style.width= geoportal.viewportWidth;
+                iframe.height= iframe.style.height= geoportal.viewportHeight;
+                if (geoportal.viewportStyle && geoportal.viewportStyle.length>0) {
+                    iframe.style.cssText += geoportal.viewportStyle;
+                }
+                iframe.setAttribute('scrolling','no');
+                iframe.setAttribute('frameborder','no');
+                iframe.style.display= '';
+                c.appendChild(iframe);
+            } else {
+                if (iframe.style.display=='') {
+                    iframe.style.display= 'none';
+                } else {
+                    iframe.style.display= '';
+                }
+            }
+        }
+        if (document.all) {
+            if (iframe.style.display=='') {
+                imgObj.setAttribute('alt', 'Masquer');//IE
+            } else {
+                imgObj.setAttribute('alt', 'Voir');//IE
+            }
+        }
+        imgObj.blur();
+        return false;
+    }
+    //--><!]]></script>
+</body>
+</html>

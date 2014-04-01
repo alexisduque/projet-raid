@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>geoportalGeocoder.html</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <!-- import OpenLayers/Geoportal CSS to ease overloading their styles : -->
+    <!-- OpenLayers :-->
+    <link href="/geoportail/api/js/2.0.3/theme/default/style.css" type="text/css" rel="stylesheet"/>
+    <!--[if lte IE 6]>
+    <link href="/geoportail/api/js/2.0.3/theme/default/ie6-style.css" type="text/css" rel="stylesheet"/>
+    <![endif]-->
+    <!-- Geoportal :-->
+    <link href="/geoportail/api/js/2.0.3/theme/geoportal/style.css" type="text/css" rel="stylesheet"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    html {
+        height:100%;
+    }
+    body {
+        background:#F2F2F6 url("img/geoportail-logo-background-image.gif") no-repeat 96% 96%;
+        height:100%
+    }
+    h1 {
+        font-family: "Arial Black", Verdana, Tahoma, sans-serif;
+        color:gray;
+    }
+    #GeoAddressForm {
+        padding: 5px;
+    }
+    #GeoAddressFormToggle {
+        height:20px;
+        vertical-align:middle;
+    }
+    #page {
+        width:700px;
+        margin:auto;
+        border:solid gray;
+        border-width:1px 2px 2px 1px;
+        background-color:white;
+        padding:1em 2em;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .GeoAddressButton {
+        margin:0px;
+        padding:1px;
+        border:3px outset lightgray;
+    }
+    .number {
+        text-align:right;
+        width:14em;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    #viewerDiv {
+        width:100%;
+        height:500px;
+        border:0px;
+        background-color:white;
+        background-image:url(/geoportail/api/js/2.0.3/theme/geoportal/img/loading.gif);
+        background-position:center center;
+        background-repeat:no-repeat;
+    }
+    .gpControlMousePosition {
+        left:10%;
+    }
+    textarea
+    {
+        width:640px;
+    }
+    div#code a, div#code a:link, div#code a:visited, div#code a:hover {
+        text-decoration:none;
+        color: #000000;
+    }     
+    div#code {
+        margin:0px 0px 10px 0px;
+        width:800px;
+        position:relative;
+        left:0px;
+        top:0px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+    }
+    /*]]>*/--></style>
+</head>
+<body>
+    <div id="page">
+        <h1 id="title"><span style="letter-spacing:-4px;"><span style="color:#43a3d7;font-size:0.5em;font-weight:bold;z-index:1;">g</span><span style="color:#97bf0f;font-size:1.0em;z-index:0;">é</span><span style="color:#f19406;font-size:1.6em;font-weight:bold;z-index:1;"><sub>O</sub></span></span><span style="color:#000000;font-style:italic;font-weight:normal;"><sup>(&lambda;,&phi;)</sup></span>Geocoder une liste d'adresses</h1>
+        <div style="font-size:small;">
+            <p>Utilisation d'une carte Géoportail couplée avec des champs de recherche d'une liste d'adresses.</p>
+            <ul>
+                <li>Choisir le séparateur des champs : <b>";"</b> ou <b>"tab"</b>. <br/> Puis, saisir les données au format compatible par import de données Excel ou par saisie directe.<br/> La première ligne contient les noms des champs (sauf si c'est la seule ligne). Il y a au moins 3 champs (rue, code postal et ville). Deux champs supplémentaires (nom et description) peuvent être utilisés pour les marqueurs d'adresses:<br/><br/>
+                    rue;code_postal;ville;nom;description<br/>
+                    73 avenue de Paris;94165;Saint-Mandé;IGN;Institut National de l'Information Géographique et Forestière
+                </li><br/>
+                <li>Cliquer sur le bouton <b>Valider</b> pour vérifier que les données sont bien formatées;</li>
+                <li>Spécifier si besoin le nom de la colonne Excel correspondant à chacun des champs d'adressage. <br> Puis cliquer sur <img src="img/geoportail-button.gif" class="GeoXYButton" style="vertical-align:middle;" height="15px">;</li>
+                <li>Sur la liste de résultats :
+                    <ul>
+                        <li>un clic sur une adresse recentre la carte sur celle-ci</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id='code'><a href="./js/geoportalGeocoder.js" alt="geoportalGeocoder" id="example_jscode" target="_blank">Voir le code JavaScript de l'exemple</a></div>
+        <br/>
+        <form>
+            <fieldset id="GeoAddressForm" style="width:653px;" >
+                <legend>1- Récupérer les données au format compatible&nbsp;</legend>
+                <table style="text-align:center;font-size:small;">
+                    <tr>
+                        <td>Tabulation [ tab ]<input id="format_tab" type="radio" name="format" value="tab" checked="checked" onclick="OpenLayers.Util.getElement('separatorCharacter').value='\t';"/></td>
+                        <td>Point-virgule [ ; ]<input id="format_bar" type="radio" name="format" value="bar" onclick="OpenLayers.Util.getElement('separatorCharacter').value=';';"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="textwrapper"><textarea id="input_data" rows="10" wrap="OFF"></textarea></div>
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden" id="separatorCharacter" name="separatorCharacter" value='\t'/>
+            </fieldset>
+            <fieldset id="GeoAddressForm" style="width:653px;">
+                <legend>2- Valider les données</legend>
+                <table>
+                    <tr style="text-align:center">
+                        <td><input type="button" id="validationButton" title="Valider les données" value="Valider" onclick="validateData()"/></td>
+                    </tr>
+                    <tr align="center">
+                        <td><div id="validationStatus"></div></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="font-size:small;">En cas d'erreurs, veuillez vérifier attentivement votre jeu de données : cohérence du nombre de colonnes par ligne, ...</td>
+                    </tr>
+                </table>
+            </fieldset>
+            <div id="capanel" style="position:absolute;top:-9999px;left:-9999px;visibility:hidden;">
+                <fieldset id="GeoAddressForm" style="width:653px">
+                    <legend>3- Choisir les champs d'adressage</legend>
+                    <div align="center">
+                        <table>
+                          <tr style="text-align: center">
+                            <td>Adressage</td>
+                            <td>Cartographie</td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <table>
+                                <tr>
+                                    <td>Adresse</td>
+                                    <td><select id="field_adresse"></select></td>
+                                </tr>
+                                <tr>
+                                    <td>Code postal</td>
+                                    <td><select id="field_cp"></select></td>
+                                </tr>
+                                <tr>
+                                    <td>Ville</td>
+                                    <td><select id="field_ville"></select></td>
+                                </tr>
+                             </table>
+                           </td>
+                           <td>
+                             <table>
+                                <tr>
+                                    <td>Nom</td>
+                                    <td><select id="field_mrkname"></select></td></tr>
+                                <tr>
+                                    <td>Description</td>
+                                    <td><select id="field_mrkdesc"></select></td>
+                                </tr>
+                             </table>
+                           </td>
+                        </tr>
+                        </table>
+                        <hr/>
+                        <input type="image" id="GeoAddressFormToggle" name="GeoAddressFormToggle" class="GeoAddressButton" src="img/geoportail-button.gif" alt="Voir" title="Positionner l'adresse" onclick="return sendAddress();"/>
+                    </div>
+                </fieldset>
+            </div>
+            <div id="gppanel" style="position:absolute;top:-9999px;left:-9999px;visibility:hidden;">
+                <fieldset id="GeoAddressForm" style="width:653px;">
+                    <legend>4- Carte&nbsp;</legend>
+                    <table style="text-align:center;font-size:small;">
+                        <tr>
+                            <td colspan='2'><textarea id="results_data" rows="10" cols='90' wrap="OFF"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td><input id="formatOrigin" type="radio" name="formatOutput" checked="true" onclick='afficheFmtOrigin()' disabled="disabled">Format d'origine</input></td>
+                            <td style="text-align:left;"><input id="formatKML" type="radio" name="formatOutput" onclick='afficheFmtKML()' disabled="disabled">KML</input></td>
+                        </tr>
+                    </table>
+                    <hr/>
+                    <div id="viewerDiv"></div>
+                </fieldset>
+            </div>
+        </form>
+    </div>
+    <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank">Mentions Légales</a> - &copy;IGN 2008-2013</div>
+    
+    <!--script type="text/javascript" charset="utf-8" src="http://api.ign.fr/geoportail/api/js/2.0.3/GeoportalExtended.js"></script-->
+    <!-- replace the below line, by the above line when copying this page -->
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/GeoportalExtended.js"><!-- --></script>    
+    <script type="text/javascript" src="js/utils.js"></script>     
+    <script type="text/javascript" src="js/geoportalGeocoder.js"></script>
+  </body>
+</html>

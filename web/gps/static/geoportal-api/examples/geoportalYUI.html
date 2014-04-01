@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>geoportalYUI.html</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.2/build/reset-fonts-grids/reset-fonts-grids.css"/>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.2/build/menu/assets/skins/sam/menu.css"/>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.2/build/resize/assets/skins/sam/resize.css"/>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.2/build/layout/assets/skins/sam/layout.css"/>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.2/build/menu/assets/skins/sam/menu.css"/>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.2/build/button/assets/skins/sam/button.css"/>
+    <link rel="stylesheet" type="text/css" href="http://dev.openlayers.org/releases/OpenLayers-2.11/theme/default/style.css"/>
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="http://dev.openlayers.org/releases/OpenLayers-2.11/theme/default/ie6-style.css"/>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="http://dev.openlayers.org/releases/OpenLayers-2.11/theme/default/framedCloud.css"/>
+    <link id="__GeoportalCss__" href="/geoportail/api/js/2.0.3/theme/geoportal/style.css" type="text/css" rel="stylesheet"/>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    h1 {
+        text-align:center;
+        font-size:0.75em;
+        font-style: italic;
+    }
+    .olControlScaleLine {
+        bottom:2%;
+        left:45%;
+        color: #CCCCCC;
+    }
+    .olControlScaleLine {
+        bottom:2%;
+        left:45%;
+        color:#F3F3F3;
+    }
+    .olControlScaleLineBottom {
+        border-color:#F3F3F3;
+    }
+    .olControlScaleLineTop {
+        border-color:#F3F3F3;
+    }
+    .olControlMousePosition {
+        color:#F3F3F3;
+        right:1%;
+    }
+    .olControlAttribution {
+        color:#F3F3F3;
+        bottom:1.5em;
+    }
+    .yui-button#pushbutton1_active button {
+        background: url(/geoportail/api/js/2.0.3/theme/geoportal/img/picto_drag_on.gif) 10% 50% no-repeat;
+    }
+    .yui-button#pushbutton1_deactive button {
+        background: url(/geoportail/api/js/2.0.3/theme/geoportal/img/picto_drag_off.gif) 10% 50% no-repeat;
+    }
+    .yui-button#pushbutton2_active button {
+        background: url(/geoportail/api/js/2.0.3/theme/geoportal/img/picto_zoomSel_on.gif) 10% 50% no-repeat;
+    }
+    .yui-button#pushbutton2_deactive button {
+        background: url(/geoportail/api/js/2.0.3/theme/geoportal/img/picto_zoomSel_off.gif) 10% 50% no-repeat;
+    }
+    #viewerDiv {
+        width:100%;
+        height:100%;
+        background-color:white;
+        background-image:url(/geoportail/api/js/2.0.3/theme/geoportal/img/loading.gif);
+        background-position:center center;
+        background-repeat:no-repeat;
+    }
+    div#example_explain {
+        margin:0px 0px 10px 0px;
+        border: thin solid #595E61;
+        width:100%;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+        color: #595E61;
+    }
+    form#gpLangChange {
+        border:0px;
+        margin:0px;
+        padding:0px;
+    }
+    div#footer {
+        font-size:x-small;
+        text-align:center;
+        width:100%;
+    }
+    div#footer a, div#footer a:link, div#footer a:visited, div#footer a:hover {
+        text-decoration:none;
+        color:black;
+    }
+    div#code a, div#code a:link, div#code a:visited, div#code a:hover {
+        text-decoration:none;
+        color: #595E61;
+        position:absolute;        
+    }
+    div#code {
+        margin:0px 0px 10px 0px;
+        width:800px;
+        position:absolute;
+        left:0px;
+        top:30px;
+        text-align:justify;
+        font-size: 0.75em;
+        font-style: italic;
+    }
+    /*]]>*/--></style>
+  </head>
+  <body class="yui-skin-sam">
+    <div id="top">
+        <h1 id="example_title"></h1>
+        <form id="gpLangChange" name="gpLangChange" action="#" style="padding-bottom: 10px">
+            <select style="font-size:0.75em;" id="gpChooseLang" name="gpChooseLang" size="1">
+                <option value="de">Deutsch</option>
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+                <option value="it">Italiano</option>
+            </select>
+        </form>
+    </div>
+    <div id="right" style="margin:10px"></div>
+    <div id="left" style="margin-top:6px;margin-left:6px">
+        <div style="padding-top:5px"><input type="button" id="pushbutton1_active" name="button1" value=""/></div>
+        <div style="padding-top:5px"><input type="button" id="pushbutton2_deactive" name="button2" value=""/></div>
+    </div>
+    <div id="viewerDiv"></div>
+    <div id="bottom">
+        <div id="example_explain" style="margin-top:10px"></div>
+        <div id='code'><a href="./js/geoportalYUI.js" alt="geoportalYUI" id="example_jscode" target="_blank"></a></div>
+        <div id="footer"><a href="https://api.ign.fr/geoportail/document.do?doc=legal_mentions" id="legal" target="_blank"></a> - &copy;IGN 2008-2013</div>
+    </div>
+    
+    <script type="text/javascript" src="http://dev.openlayers.org/releases/OpenLayers-2.11/OpenLayers.js">
+    <!--//--><![CDATA[//><!--
+    //--><!]]>
+    </script>
+    <script type="text/javascript" src="http://dev.openlayers.org/releases/OpenLayers-2.11/lib/OpenLayers/Lang/de.js"></script>
+    <script type="text/javascript" src="http://dev.openlayers.org/releases/OpenLayers-2.11/lib/OpenLayers/Lang/es.js"></script>
+    <script type="text/javascript" src="http://dev.openlayers.org/releases/OpenLayers-2.11/lib/OpenLayers/Lang/fr.js"></script>
+    <script type="text/javascript" src="http://dev.openlayers.org/releases/OpenLayers-2.11/lib/OpenLayers/Lang/it.js"></script>
+    <script type="text/javascript" src="http://yui.yahooapis.com/2.8.2/build/utilities/utilities.js"><!--//--><![CDATA[//><!--//--><!]]></script>
+    <script type="text/javascript" src="http://yui.yahooapis.com/2.8.2/build/container/container.js"><!--//--><![CDATA[//><!--//--><!]]></script>
+    <script type="text/javascript" src="http://yui.yahooapis.com/2.8.2/build/resize/resize-min.js"><!--//--><![CDATA[//><!--//--><!]]></script>
+    <script type="text/javascript" src="http://yui.yahooapis.com/2.8.2/build/layout/layout-min.js"><!--//--><![CDATA[//><!--//--><!]]></script>
+    <script type="text/javascript" src="http://yui.yahooapis.com/2.8.2/build/button/button-min.js"><!--//--><![CDATA[//><!--//--><!]]></script>
+    <script type="text/javascript" src="http://yui.yahooapis.com/2.8.2/build/yahoo-dom-event/yahoo-dom-event.js"><!--//--><![CDATA[//><!--//--><!]]></script>
+    <script type="text/javascript" src="http://yui.yahooapis.com/2.8.2/build/menu/menu.js"><!--//--><![CDATA[//><!--//--><!]]></script>
+    <!--script type="text/javascript" charset="utf-8" src="http://api.ign.fr/geoportail/api/js/2.0.3/GeoportalMin.js"></script-->
+    <!-- replace the below line, by the above line when copying this page -->
+    <script type="text/javascript" charset="utf-8" src="/geoportail/api/js/2.0.3/GeoportalMin.js"><!-- --></script>
+    <script type="text/javascript" src="js/utils.js"></script>     
+    <script type="text/javascript" src="js/i18n/geoportalYUI.js"></script>
+    <script type="text/javascript" src="js/geoportalYUI.js"></script>
+  </body>
+</html>

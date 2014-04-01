@@ -1,0 +1,244 @@
+.gpPopupCss,
+.gpPopupCssClassic,
+.gpPopupCssShadow,
+.gpPopupCssBubble,
+.gpPopupCssTip,
+.gpPopupCssThink,
+.gpPopupCssBlack {
+  overflow:visible!important;
+}
+.gpPopupCss        .gpPopupCloseBox,
+.gpPopupCssBubble  .gpPopupCloseBox,
+.gpPopupCssShadow  .gpPopupCloseBox,
+.gpPopupCssThink   .gpPopupCloseBox {
+  overflow:hidden;
+  z-index:1;
+}
+.gpPopupCssClassic .gpPopupCloseBox,
+.gpPopupCssTip     .gpPopupCloseBox,
+.gpPopupCssBlack   .gpPopupCloseBox {
+  background:transparent url("../img/close.png") no-repeat scroll 0 0;
+  overflow:hidden;
+  z-index:1;
+}
+.gpPopupCss        .gpPopupCloseBox:hover,
+.gpPopupCssBubble  .gpPopupCloseBox:hover,
+.gpPopupCssShadow  .gpPopupCloseBox:hover,
+.gpPopupCssThink   .gpPopupCloseBox:hover {
+}
+.gpPopupCssClassic .gpPopupCloseBox:hover,
+.gpPopupCssTip     .gpPopupCloseBox:hover,
+.gpPopupCssBlack   .gpPopupCloseBox:hover {
+  background:transparent url("../img/close.png") no-repeat scroll 0 -17px;
+}
+.gpPopupCssGroup,
+.gpPopupCssClassicGroup,
+.gpPopupCssShadowGroup,
+.gpPopupCssBubbleGroup,
+.gpPopupCssTipGroup,
+.gpPopupCssThinkGroup,
+.gpPopupCssBlackGroup {
+  overflow:visible!important;
+}
+.gpPopupCssBack {
+  background-image:url("../img/popup-back.png");
+}
+.gpPopupCsstl,
+.gpPopupCssClassictl,
+.gpPopupCssShadowtl,
+.gpPopupCssBubbletl,
+.gpPopupCssTiptl,
+.gpPopupCssThinktl,
+.gpPopupCssBlacktl {
+  background-position: left top;
+  background-repeat: no-repeat;
+}
+.gpPopupCsstr,
+.gpPopupCssClassictr,
+.gpPopupCssShadowtr,
+.gpPopupCssBubbletr,
+.gpPopupCssTiptr,
+.gpPopupCssThinktr,
+.gpPopupCssBlacktr {
+  background-position: right top;
+  background-repeat: no-repeat;
+}
+.gpPopupCssbl,
+.gpPopupCssClassicbl,
+.gpPopupCssShadowbl,
+.gpPopupCssBubblebl,
+.gpPopupCssTipbl,
+.gpPopupCssThinkbl,
+.gpPopupCssBlackbl {
+  background-position: left bottom;
+  background-repeat: no-repeat;
+}
+.gpPopupCssbr,
+.gpPopupCssClassicbr,
+.gpPopupCssShadowbr,
+.gpPopupCssBubblebr,
+.gpPopupCssTipbr,
+.gpPopupCssThinkbr,
+.gpPopupCssBlackbr {
+  background-position: right bottom;
+  background-repeat: no-repeat;
+}
+.gpPopupCssc {
+  height:5px;
+  width:0;
+}
+.gpPopupCss        .gpPopupContent,
+.gpPopupCssClassic .gpPopupContent,
+.gpPopupCssShadow  .gpPopupContent,
+.gpPopupCssBubble  .gpPopupContent,
+.gpPopupCssTip     .gpPopupContent,
+.gpPopupCssThink   .gpPopupContent,
+.gpPopupCssBlack   .gpPopupContent {
+  padding:10px;
+  z-index:1;
+}
+.gpPopupCss p.titre {
+  margin-bottom:5px;
+}
+.gpPopupCss        .gpPopupCloseBox,
+.gpPopupCssClassic .gpPopupCloseBox,
+.gpPopupCssShadow  .gpPopupCloseBox,
+.gpPopupCssBubble  .gpPopupCloseBox,
+.gpPopupCssTip     .gpPopupCloseBox,
+.gpPopupCssThink   .gpPopupCloseBox,
+.gpPopupCssBlack   .gpPopupCloseBox {
+  top: 0px!important;
+  right: 0px!important;
+  margin: 9px 8px 0 0;
+}
+/** Classic */
+.gpPopupCssClassicBack {
+  background-image:url("../img/popup-back-classic.png");
+}
+.gpPopupCssClassic .gpPopupContent {
+}
+.gpPopupCssClassicc {
+  height:32px;
+  width:30px;
+}
+.gpPopupCssClassiccbr, .gpPopupCssClassiccbl {
+  background:url("../img/popup-bot-classic.png") no-repeat center;
+}
+.gpPopupCssClassicctl, .gpPopupCssClassicctr {
+  background:url("../img/popup-top-classic.png") no-repeat center;
+}
+/** Shadow */
+.gpPopupCssShadowBack {
+  background-image:url("../img/popup-back-shadow.png");
+}
+.gpPopupCssShadow .gpPopupContent {
+}
+.gpPopupCssShadowc {
+  height:35px;
+  width:42px;
+}
+.gpPopupCssShadowcbr, .gpPopupCssShadowcbl {
+  background:url("../img/popup-bot-shadow.png") no-repeat;
+}
+.gpPopupCssShadowctl, .gpPopupCssShadowctr {
+  background:url("../img/popup-top-shadow.png") no-repeat;
+}
+.gpPopupCssShadow .gpPopupCloseBox {
+  margin: 10px 18px 0 0;
+}
+/* Bubble */
+.gpPopupCssBubbleBack {
+  background-image:url("../img/popup-back-bubble.png");
+}
+.gpPopupCssBubble .gpPopupContent {
+  padding:10px 5px 10px 10px;
+}
+.gpPopupCssBubblec {
+  height:11px;
+  width:13px;
+}
+.gpPopupCssBubblecbr, .gpPopupCssBubblecbl {
+  background:url("../img/popup-bot-bubble.png") no-repeat;
+}
+.gpPopupCssBubblectl, .gpPopupCssBubblectr {
+  background:url("../img/popup-top-bubble.png") no-repeat;
+}
+.gpPopupCssBubblectl .gpPopupCloseBox {
+  margin: 10px 18px 0 0;
+}
+/* Tip */
+.gpPopupCssTipBack {
+  background-image:url("../img/popup-back-tip.png");
+}
+.gpPopupCssTip .gpPopupContent {
+  padding:10px 5px 10px 10px;
+}
+.gpPopupCssTipc {
+  height:30px;
+  width:36px;
+}
+.gpPopupCssTipcbr {
+  background:url("../img/popup-br-tip.png") no-repeat;
+}
+.gpPopupCssTipcbl {
+  background:url("../img/popup-bl-tip.png") no-repeat;
+}
+.gpPopupCssTipctl {
+  background:url("../img/popup-tl-tip.png") no-repeat;
+}
+.gpPopupCssTipctr {
+  background:url("../img/popup-tr-tip.png") no-repeat;
+}
+.gpPopupCssTip .gpPopupCloseBox {
+  background:transparent url("../img/close-tip.png") no-repeat scroll 0 0;
+}
+.gpPopupCssTip .gpPopupCloseBox:hover {
+  background:transparent url("../img/close-tip.png") no-repeat scroll 0 -17px;
+}
+/* Think */
+.gpPopupCssThinkBack {
+  background-image:url("../img/popup-back-think.png");
+}
+.gpPopupCssThinkc {
+  height:42px;
+  width:40px;
+}
+.gpPopupCssThinkcbr, .gpPopupCssThinkcbl {
+  background:url("../img/popup-bot-think.png") no-repeat;
+}
+.gpPopupCssThinkctl, .gpPopupCssThinkctr {
+  background:url("../img/popup-top-think.png") no-repeat;
+}
+.gpPopupCssThink .gpPopupContent {
+  padding:17px 5px 10px 17px;
+}
+.gpPopupCssThink .gpPopupCloseBox {
+  margin: 16px 14px 0 0;
+}
+/* Black */
+.gpPopupCssBlackBack {
+  background-image:url("../img/popup-back-black.png");
+}
+.gpPopupCssBlack .gpPopupContent {
+  color:#eee;
+  padding:10px 5px 10px 10px;
+}
+.gpPopupCssBlack a {
+  color:#ddd;
+}
+.gpPopupCssBlack .gpPopupCloseBox {
+  background:transparent url("../img/close-black.png") no-repeat scroll 0 0;
+}
+.gpPopupCssBlack .gpPopupCloseBox:hover {
+  background:transparent url("../img/close-black.png") no-repeat scroll 0 -17px;
+}
+.gpPopupCssBlackc {
+  height:20px;
+  width:28px;
+}
+.gpPopupCssBlackcbr, .gpPopupCssBlackcbl {
+  background:url("../img/popup-bot-black.png") no-repeat;
+}
+.gpPopupCssBlackctl, .gpPopupCssBlackctr {
+  background:url("../img/popup-top-black.png") no-repeat;
+}

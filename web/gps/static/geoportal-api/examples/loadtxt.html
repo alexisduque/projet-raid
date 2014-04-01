@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>loadtxt.html</title>
+    <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    body {
+        background-color:#EEE;
+    }
+
+    /*]]>*/--></style>
+</head>
+<body onload="displayTxt();">
+    <div id="txt"></div>
+    <script type="text/javascript"><!--//--><![CDATA[//><!--
+    /**
+     * Function: getParameter
+     * Parse a parameter from a URL.
+     *
+     * Parameters:
+     * name - {String} Parameter's name whose value is to be returned.
+     * url - {String} URL to parse.
+     *      Defaults to *window.location.href*.
+     *
+     * Returns:
+     * {String} parameter's value.
+     */
+    function getParameter(name, url) {
+        url= url || window.location.href;
+        var r= new RegExp('(\\?|&|^)'+name+'=(.*?)(&|$)');
+        var m= url.match(r);
+        return m[2] != undefined ?
+            decodeURIComponent(m[2]).replace(/\+/g,' ') : '';
+    }
+
+    /**
+     * Function: loadText
+     * Load a URL.
+     *
+     * Parameters:
+     * fileName - {String} the URL of the file to load.
+     */
+    function loadText(fileName) {
+        var xhr= null;
+        if (window.XMLHttpRequest) {
+            xhr= new XMLHttpRequest();
+        } else {
+            xhr= new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xhr.abort();
+        xhr.open("GET", fileName, true);
+        xhr.onreadystatechange= function() {
+            if (xhr.readyState != 4) { return; }
+            document.getElementById('txt').innerHTML= "<pre>"+xhr.responseText.replace(/</g,'&lt;')+"</pre>";
+        };
+        xhr.send(null);
+    }
+
+    /**
+     * Function: displayTxt
+     * Get txt parameter from URL and load it.
+     */
+    function displayTxt() {
+        var txt= getParameter('txt');
+        if (txt.length>0) {
+            loadText(txt);
+        }
+    }
+    //--><!]]></script>
+</body>
+</html>

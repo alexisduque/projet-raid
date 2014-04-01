@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+	<Document>
+		<Style id="style_velib">
+		    <IconStyle>
+		      <Icon>
+		        <href>../data/marker.png</href>
+		      </Icon>
+		    </IconStyle>
+		  </Style>
+		<Folder>
+			<name>deplacements</name>
+			<Placemark>
+				<name>Paris</name>
+				<description>
+					<![CDATA[Ile-de-France]]>
+				</description>
+				<styleUrl>#style_velib</styleUrl>
+				<ExtendedData>
+					<Data name="Code Postal">
+						<value>
+							<![CDATA[75000]]>
+						</value>
+					</Data>
+				</ExtendedData>
+				<Point>
+					<coordinates>
+						2.316925,48.870726500000004,0
+					</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>Bourges</name>
+				<description>
+					<![CDATA[Centre]]>
+				</description>
+				<styleUrl>#style_velib</styleUrl>
+				<ExtendedData>
+					<Data name="Code Postal">
+						<value>
+							<![CDATA[18000]]>
+						</value>
+					</Data>					
+				</ExtendedData>
+				<Point>
+					<coordinates>2.4343483,47.0835978,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>Bletterans</name>
+				<description>
+					<![CDATA[Franche-Comté]]>
+				</description>
+				<styleUrl>#style_velib</styleUrl>
+				<ExtendedData>
+					<Data name="Code Postal">
+						<value>
+							<![CDATA[39140]]>
+						</value>
+					</Data>
+				</ExtendedData>
+				<Point>
+					<coordinates>
+						5.4511584,46.745465099999997,0
+					</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark>
+				<name>Strasbourg</name>
+				<description>
+					<![CDATA[Alsace]]>
+				</description>
+				<styleUrl>#style_velib</styleUrl>
+				<ExtendedData>
+					<Data name="Code Postal">
+						<value>
+							<![CDATA[67000]]>
+						</value>
+					</Data>
+				</ExtendedData>
+				<Point>
+					<coordinates>7.748516,48.576788,0</coordinates>
+				</Point>
+			</Placemark>
+		</Folder>
+	</Document>
+</kml>
