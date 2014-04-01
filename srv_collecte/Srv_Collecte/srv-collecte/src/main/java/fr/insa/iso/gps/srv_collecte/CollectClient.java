@@ -311,6 +311,14 @@ class CollectClient extends Thread {
             e.printStackTrace();
         }
     }
+    
+    public int getNumClient() {
+        return this._numClient;
+    }
+    
+    public void setNumClient(int numClient) {
+        this._numClient = numClient;
+    }
 
     public static String byteArrayToHexString(byte[] bArray, int nSize) {
         StringBuilder sb = new StringBuilder(nSize * 2);
