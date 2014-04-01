@@ -16,7 +16,10 @@
 <script src="js/FeatureGroup.Label.js"></script>
 </head>
 <body>
-<div id="messages"></div>
+<div>
+
+</div>
+
 <div id="map"></div>
 <script type="text/javascript">
 //Your IGN Géoportail Api Key
@@ -80,8 +83,7 @@ function pointToLayer (feature, latlng) {
     };
 
     function onMessage(event) {
-        document.getElementById('messages').innerHTML 
-        = event.data;
+
         var geoJsonMessage = eval('(' + event.data + ')');
       L.geoJson(geoJsonMessage,{
     		onEachFeature: onEachFeature,
@@ -90,9 +92,8 @@ function pointToLayer (feature, latlng) {
     }
 
     function onOpen(event) {
-      document.getElementById('messages').innerHTML 
-        = 'Connection established';
-      webSocket.send('hello');
+
+      webSocket.send("2014-03-29 10:23:19,2014-03-29 12:23:19");
     }
 
     function onError(event) {
