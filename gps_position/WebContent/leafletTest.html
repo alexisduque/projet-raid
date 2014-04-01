@@ -14,94 +14,20 @@
 <script src="js/Path.Label.js"></script>
 <script src="js/Map.Label.js"></script>
 <script src="js/FeatureGroup.Label.js"></script>
+
 </head>
 <body>
 <div>
-
+<label>Start time</label>
+<input type="date" id="startdate" value="2014-03-29">
+<input type="time" id="starttime" value="10:00:00">
+<label>End time</label>
+<input type="date" id="enddate" value="2014-03-29">
+<input type="time" id="endtime" value="12:30:00">
+<button id="Submit" onclick="updateDate()">Submit</button>
 </div>
 
 <div id="map"></div>
-<script type="text/javascript">
-//Your IGN Géoportail Api Key
-var ignApiKey = "039dzrv50i1j8f7ad3wg1b2y"; //039dzrv50i1j8f7ad3wg1b2y ou 1n0k1kdcpneae443vb3n9y2z
-
-//set up the map
-map = new L.Map('map');
-
-// Openstreet Map Layer
-var osmUrl="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-var osmAttrib='Map data © OpenStreetMap contributors';
-var osm = new L.TileLayer(osmUrl, {minZoom: 3, maxZoom: 18, attribution: osmAttrib});	
-
-//IGN Topo Scan Express Standard
-var scanWmtsUrl	= "http://gpp3-wxs.ign.fr/"+ignApiKey + "/wmts?LAYER=GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN-EXPRESS.STANDARD&EXCEPTIONS=text/xml&FORMAT=image/jpeg&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&STYLE=normal&TILEMATRIXSET=PM&&TILEMATRIX={z}&TILECOL={x}&TILEROW={y}" ;
-var SCAN25= new L.tileLayer(scanWmtsUrl, {attribution: '&copy; <a href="http://www.ign.fr/">IGN</a>'});
-
-map.setView([45.761430,4.849951], 6);
-map.addLayer(osm);
-
-function onEachFeature(feature, layer) {
-    // does this feature have a property named popupContent?
-    if (feature.properties && feature.properties.name) {
-        layer.bindLabel(feature.properties.name,{ noHide: true });
-    }
-}
-function pointToLayer (feature, latlng) {
-	if (feature.geometry.type=="Point"){
-		return L.circleMarker(latlng, {
-			radius: 5,
-			fillColor: "#00008A",
-			color: "#000",
-			weight: 1,
-			opacity: 1,
-			fillOpacity: 0.8
-		});	
-	}
-
-}
-
-//L.geoJson(trace,{
-//	onEachFeature: onEachFeature,
-//	pointToLayer: pointToLayer
-//}).addTo(map);
-
-</script>
-  <script type="text/javascript">
-    var webSocket = 
-      new WebSocket('ws://localhost:8080/GPSPositions/websocketgpsbis');
-
-    webSocket.onerror = function(event) {
-      onError(event)
-    };
-
-    webSocket.onopen = function(event) {
-      onOpen(event)
-    };
-
-    webSocket.onmessage = function(event) {
-      onMessage(event)
-    };
-
-    function onMessage(event) {
-
-        var geoJsonMessage = eval('(' + event.data + ')');
-      L.geoJson(geoJsonMessage,{
-    		onEachFeature: onEachFeature,
-    		pointToLayer: pointToLayer
-    	}).addTo(map);
-    }
-
-    function onOpen(event) {
-
-      webSocket.send("2014-03-29 10:23:19,2014-03-29 12:23:19");
-    }
-
-    function onError(event) {
-      alert(event.data);
-    }
-
-
-
-  </script>
+<script src="js/Leaflettest.js"></script>
 </body>
 </html>
