@@ -147,9 +147,13 @@ public class CollectServer
 				}
                                 
 			}
-		} catch (Exception e){
+		} catch (Exception e) {
 			logger.log(Level.WARNING,"client " + i + " déjà supprimé");
 		}
+                if (_nbClients == 0) {
+                    _tabClients.clear();
+                   _sockClients.clear();
+                }
 	}
 	synchronized public void updateClient(int indice, int type, String sid)
 	{
@@ -186,7 +190,9 @@ public class CollectServer
 			logger.log(Level.WARNING,"client " +i+ " supprimé");
 		}
 		_nbClients = 0;
-	}
+                _tabClients.clear();
+                _sockClients.clear();
+        }
         
 	//** Methode : ajoute un nouveau client dans la liste **
 	synchronized public int addClient(PrintWriter out, Socket s)
