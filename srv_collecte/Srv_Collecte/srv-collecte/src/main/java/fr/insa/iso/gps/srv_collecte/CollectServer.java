@@ -87,7 +87,7 @@ public class CollectServer
 		for (int i = 0; i < _tabClients.size(); i++) // parcours de la table des connectes
 		{
 			out =  _tabClients.elementAt(i); // extraction de l'element courant (type PrintWriter)
-			if (out != null) // securite, l'element ne doit pas etre vide
+			if (out != null && _sockClients.elementAt(i).getType() == 0) // securite, l'element ne doit pas etre vide
 			{
 				logger.log(Level.INFO,"envoi au tracker " +_sockClients.elementAt(i).getId()+" : "+message);
 				// ecriture du texte passe en parametre (et concatenation d'ue string de fin de chaine si besoin)
@@ -163,8 +163,10 @@ public class CollectServer
 			if (_sockClients.elementAt(i).getSocket() != null) { 
 				if (_sockClients.elementAt(i).getType() == 0)
 					output.println("rg:"+i+", id:"+_sockClients.elementAt(i).getId()+", type:nomadic") ;
-				else
+                                else if (_sockClients.elementAt(i).getType() == 1)
 					output.println("rg:"+i+", id:"+_sockClients.elementAt(i).getId()+", type:teltonika") ;
+                                else
+					output.println("rg:"+i+", id:"+_sockClients.elementAt(i).getId()+", type:tk-102") ;
 			}
 			// on affiche les infos du client sur la console
 		}
