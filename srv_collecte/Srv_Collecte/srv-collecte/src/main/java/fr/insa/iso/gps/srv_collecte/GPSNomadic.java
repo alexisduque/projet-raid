@@ -30,7 +30,7 @@ public class GPSNomadic extends GPSDevice {
 
 	public static Logger logger;
 	public static int _numClient;
-
+        private static Vector<String> _vector;
 	// cette classe se charge de faire un parsing de la trame et de renvoyer un boolean
         // true alors la classe CollectClient pourra utiliser les methodes pour extraire les
 	// proprietes de la geolocalisation  
@@ -40,6 +40,14 @@ public class GPSNomadic extends GPSDevice {
 		logger = Logger.getLogger(CollectServer.class.getName());
 	}
 	
+        public Vector getVector() {
+                return _vector;
+        }
+        
+        public static void setVector(Vector vector) {
+                _vector = vector;
+        }
+        
 	public static String parseFrame(byte[] bufferData, int nlus) {
 
 		String sId = null;
@@ -51,31 +59,18 @@ public class GPSNomadic extends GPSDevice {
 		logger.log(Level.INFO,""+_numClient+" transforme ");
 		Vector<String> mVector = byteArrayToStrings(bufferData,nlus);
 		logger.log(Level.INFO,""+_numClient+" retour transforme ");
-		if (mVector.size() > 0) {
+		if (mVector.size() > 1) {
 			logger.log(Level.INFO,""+_numClient+" taille du vector :"+mVector.size());
-			// pour chaque item du vector on va inserer le message 
-			for (int i = 0; i < mVector.size(); i++) {
-				// on va invoquer la methode pour inserer la position 
-				// le parsing du message est fait dans cette methode 
-				String st = new String(mVector.elementAt(i));
-				// on va extraire l ID de la trame sur 10 caracteres	
-				sId =  byteArrayToString(bufferData,0,10);
-				logger.log(Level.INFO,""+_numClient+" (hexa) :"+st.length()+":"+sId.getBytes());
-				logger.log(Level.WARNING,""+_numClient+" ID :"+st.length()+":"+sId.getBytes());
-				logger.log(Level.INFO,""+_numClient+" insere :"+st);
-				setMessage(st);
-				/*
-				int res = n_Service.insertPosition(st);
-				if (res == 0) { 
-					logger.log(Level.INFO,"insert pour le client "+_numClient+" OK");
-				} else {
-					logger.log(Level.INFO,"insert pour le client "+_numClient+" NOK");
-				}
-				*/
-			}
+                        setMessage(mVector.elementAt(0));
+			setVector(mVector);
+                } else if (mVector.size() == 1) {
+                        logger.log(Level.INFO,""+_numClient+" taille du vector :"+mVector.size());
+                        setMessage(mVector.elementAt(0));
+                        setVector(mVector);
 		}  else {
 			logger.log(Level.INFO,""+_numClient+" vector null ");
 		}
+                sId =  byteArrayToString(bufferData,0,10);
 		return sId;
 	}
 }
