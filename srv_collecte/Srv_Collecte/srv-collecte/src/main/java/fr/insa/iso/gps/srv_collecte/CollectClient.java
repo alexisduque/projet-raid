@@ -8,6 +8,10 @@
  */
 package fr.insa.iso.gps.srv_collecte;
 
+import static fr.insa.iso.gps.srv_collecte.GPSDevice.byteArrayToString;
+import static fr.insa.iso.gps.srv_collecte.GPSDevice.setMessage;
+import static fr.insa.iso.gps.srv_collecte.GPSNomadic._numClient;
+import static fr.insa.iso.gps.srv_collecte.GPSNomadic.logger;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.text.DateFormat;
@@ -190,14 +194,17 @@ class CollectClient extends Thread {
                         logger.log(Level.INFO, "envoi de: " + nClient.getMessage() + " au client CLI");
                         // TODO : envoyé la réponse du trcker au client CLI
                     } else {
-                        // on ajoute le type du device et son id
-                        // a la table des clients du serveur
-                        _socketServ.updateClient(_numClient, deviceType, _id_Device);
-                        n_Service.insertPosition(nClient.getMessage());
+                        Vector<String> mVector = nClient.getVector();    
+                        for (int i = 0; i < mVector.size(); i++) {
+                            String st = new String(mVector.elementAt(i));	
+                            logger.log(Level.INFO,""+_numClient+" insere :"+st);
+                            _socketServ.updateClient(_numClient, deviceType, _id_Device);
+                            n_Service.insertPosition(st);
+                        }
                     }
                     continue;
                 }
-				// traitement specifique pour les devices teltonika
+		// traitement specifique pour les devices teltonika
                 // entete du IMEI doit etre 0x0F deux bytes et total 17 bytes
                 if ((nlus == 17) && (data[0] == 0x00) && (data[1] == 0x0F)) {
                     // longueur IMEI 15 bytes
