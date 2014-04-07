@@ -4,6 +4,16 @@ from django.db import models
 from django.db import models
 
 class Tracker(models.Model):
-	nom = models.CharField(maxlength=50)
-	date = models.DateField()
+	model = models.CharField(max_length=50)
+	id = models.IntegerField(primary_key=True)
 
+class Person(models.Model):
+	id = models.IntegerField(primary_key=True)
+	firstname = models.CharField(max_length=32)
+	lastname = models.CharField(max_length=32)
+
+class Location(models.Model):
+	tracker = models.ForeignKey(Tracker)
+	latitude = models.FloatField()
+	longitude = models.FloatField()
+	time = models.DateField()

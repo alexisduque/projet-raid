@@ -5,9 +5,9 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'Geoloc.views.home', name='home'),
-     url(r'^gps/', include('gps.foo.urls')),
+    # Urls de base de Geoloc
+     url(r'^$', include('Geoloc.urls')),
+     url(r'^geoloc/', include('Geoloc.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
      #url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
