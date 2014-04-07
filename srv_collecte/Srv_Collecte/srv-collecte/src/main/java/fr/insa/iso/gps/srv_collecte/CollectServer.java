@@ -87,7 +87,7 @@ public class CollectServer
 		for (int i = 0; i < _tabClients.size(); i++) // parcours de la table des connectes
 		{
 			out =  _tabClients.elementAt(i); // extraction de l'element courant (type PrintWriter)
-			if (out != null) // securite, l'element ne doit pas etre vide
+			if (out != null && _sockClients.elementAt(i).getType() == 0) // securite, l'element ne doit pas etre vide
 			{
 				logger.log(Level.INFO,"envoi au tracker " +_sockClients.elementAt(i).getId()+" : "+message);
 				// ecriture du texte passe en parametre (et concatenation d'ue string de fin de chaine si besoin)
@@ -128,25 +128,32 @@ public class CollectServer
 			 // un client en moins ! snif
 			if (_tabClients.elementAt(i) != null) // l'element existe ...
 			{
-				_tabClients.removeElementAt(i); // ... on le supprime
+				_tabClients.setElementAt(null,i); // ... on le supprime
+				logger.log(Level.WARNING,"suppresion client [" + i + "]"); 
 				
-				try {
+				try {                                   
 					if (_sockClients.elementAt(i).getSocket() != null) { 
 						Socket sl = _sockClients.elementAt(i).getSocket();
 						if (sl != null)
 							sl.close(); // on ferme la socket client
-						_sockClients.removeElementAt(i); // on supprime le client
+						_sockClients.setElementAt(null,i); // on supprime le client
 						_nbClients--;
 						logger.log(Level.WARNING,"socket client " + i + " fermee");
 					}
 				} catch (Exception e) {
 	      				logger.log(Level.WARNING,"erreur fermeture de socket");
+                                        _sockClients.setElementAt(null,i);
 				//	System.out.println("erreur fermeture socket");	
 				}
+                                
 			}
-		} catch (Exception e){
+		} catch (Exception e) {
 			logger.log(Level.WARNING,"client " + i + " déjà supprimé");
 		}
+                if (_nbClients == 0) {
+                    _tabClients.clear();
+                   _sockClients.clear();
+                }
 	}
 	synchronized public void updateClient(int indice, int type, String sid)
 	{
@@ -159,26 +166,34 @@ public class CollectServer
 	synchronized public void listAllClients(PrintWriter output)
 	{
 		
-		for (int i = 0;i < _nbClients;i++) {
+		for (int i = 0;i < _sockClients.size();i++) {
+                    try {
 			if (_sockClients.elementAt(i).getSocket() != null) { 
 				if (_sockClients.elementAt(i).getType() == 0)
 					output.println("rg:"+i+", id:"+_sockClients.elementAt(i).getId()+", type:nomadic") ;
-				else
+                                else if (_sockClients.elementAt(i).getType() == 1)
 					output.println("rg:"+i+", id:"+_sockClients.elementAt(i).getId()+", type:teltonika") ;
+                                else
+					output.println("rg:"+i+", id:"+_sockClients.elementAt(i).getId()+", type:tk-102") ;
 			}
 			// on affiche les infos du client sur la console
+		
+                } catch (Exception e){
 		}
-	}
+            }
+        }
 	synchronized public void delAllClients()
 	{
-		int n = _nbClients;
-		for (int i = n - 1 ;i >=0 ;i--) {
+		int n = _tabClients.size();
+		for (int i = n ;i >=0 ;i--) {
 			delClient(i);
 			logger.log(Level.WARNING,"client " +i+ " supprimé");
 		}
 		_nbClients = 0;
-	}
-
+                _tabClients.clear();
+                _sockClients.clear();
+        }
+        
 	//** Methode : ajoute un nouveau client dans la liste **
 	synchronized public int addClient(PrintWriter out, Socket s)
 	{
