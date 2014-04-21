@@ -377,8 +377,8 @@ public class GeoTrackerService {
 
         Locale locale = Locale.getDefault();
 
-        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.FULL, locale);
-        DateFormat dateFormatO = new SimpleDateFormat("dd/MM/yyyy:hh:mm:ss");
+        //DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.FULL, locale);
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy:HH:mm:ss");
         logger.log(Level.INFO,
                 "traitement insertionPosition:" + message);
 
@@ -435,16 +435,24 @@ public class GeoTrackerService {
 
         // Altitude
         gpsAltitude = 0.0;
-
-        // Date : on doit la convertir en 'DD/MM/YYYY:HH24:MI:SS'
-        gpsDateD = new String (day + "/" + month
-                            + "/" + year + ":"
-                            + hour + ":"
-                            + minute + ":"
-                            + sec);
         
-            //System.out.println(">>"+gDateD);
+        //Date : on doit la convertir en 'DD/MM/YYYY:HH24:MI:SS'
+        Calendar time = Calendar.getInstance(TimeZone.getTimeZone("GMT-1"));
+        time.clear();
+        time.set(Calendar.HOUR_OF_DAY, hour);
+        time.set(Calendar.MINUTE, minute);
+        time.set(Calendar.SECOND, sec);
+        time.set(Calendar.DAY_OF_MONTH, day);
+        time.set(Calendar.MONTH, month - 1);
+        time.set(Calendar.YEAR, year);
+        gpsDateD = dateFormat.format(time.getTime());
 
+//        gpsDateD = new String (day + "/" + month
+//                            + "/" + year + ":"
+//                            + hour + ":"
+//                            + minute + ":"
+//                            + sec);
+        
         // autres parametres
         //gpsHeading = Integer.parseInt(params[5]);
         gpsHeading = 0;
