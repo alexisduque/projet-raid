@@ -437,7 +437,7 @@ public class GeoTrackerService {
         gpsAltitude = 0.0;
         
         //Date : on doit la convertir en 'DD/MM/YYYY:HH24:MI:SS'
-        Calendar time = Calendar.getInstance(TimeZone.getTimeZone("GMT-1"));
+        Calendar time = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         time.clear();
         time.set(Calendar.HOUR_OF_DAY, hour);
         time.set(Calendar.MINUTE, minute);
