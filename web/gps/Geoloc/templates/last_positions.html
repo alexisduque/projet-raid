@@ -1,6 +1,7 @@
 
-<ul>
+<table border="1" style="border-spacing:5px;">
+	<tr><th>Time</th><th>Latitude</th><th>Longitude</th></tr>
 	{% for pos in positions %}
-	<li>Time : {{ pos.time_stp }}, Latitude : {{ pos.latitude }}, Longitude : {{ pos.longitude }}</li>
+	<tr><td>   {{ pos.time_stp }}   </td><td>{{ pos.latitude }}</td><td>{{ pos.longitude }}</td></tr>
 	{% endfor %}
-</ul> 
+</table> 
