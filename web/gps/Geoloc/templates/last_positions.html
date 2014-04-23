@@ -1,6 +1,6 @@
 
 <ul>
-	{% for tracker in liste_trackers %}
-	<li>{{ tracker.id}}</li>
+	{% for pos in positions %}
+	<li>Time : {{ pos.time_stp }}, Latitude : {{ pos.latitude }}, Longitude : {{ pos.longitude }}</li>
 	{% endfor %}
 </ul> 

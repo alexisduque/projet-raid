@@ -3,7 +3,7 @@
 # Create your views here.
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
-from models import Tracker
+from models import GpsPositions
 
 
 def home(request):
@@ -11,6 +11,7 @@ def home(request):
 
 
 def last_positions(request):
-    liste_trackers = Tracker.objects.order_by('created_date')[10]
-    return render_to_response('last_positions.html', {'liste_trackers': liste_trackers})
+    gpsPositions = GpsPositions.objects.all()
+    return render_to_response('last_positions.html', {'positions': gpsPositions})
+
 

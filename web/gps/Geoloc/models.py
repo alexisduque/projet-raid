@@ -12,7 +12,7 @@ from django.db import models
 
 
 class GpsPositions(models.Model):
-    id = models.CharField(max_length=30)
+    id = models.CharField(max_length=30,primary_key=True)
     time_stp = models.DateTimeField()
     longitude = models.DecimalField(max_digits=22, decimal_places=6)
     latitude = models.DecimalField(max_digits=22, decimal_places=6)
