@@ -1,0 +1,132 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Itin&eacute;raire des positions GPS</title>
+<link rel="StyleSheet" type="text/css" href="style.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<!-- Optional theme -->
+<link rel="stylesheet"
+	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<script
+	src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script type="text/javascript"
+	src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
+	
+<script type="text/javascript">
+
+	var image = [];
+	image[0] = 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/green-dot.png';
+	image[1] = 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/yellow-dot.png';
+	image[2] = 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png';
+	
+	function load() {
+		// on passe en parametre a l'url une string contenant une liste des points Latitude et Longitude
+		// on utilise le . decimal pour les valeurs et la virgule pour separer la longitude de la latitude
+		// le | pour separer les points
+		var url = document.URL.split('=');
+		var param = url[1];
+		//alert(url);
+		var couples = param.split('|');
+		//
+		var centreCarte = new google.maps.LatLng(44.786406, 4.880495);
+		var optionsCarte = {
+			zoom : 12,
+			center : centreCarte,
+			mapTypeId : google.maps.MapTypeId.ROADMAP
+		}
+
+		//map = new GMap2(document.getElementById("map_canvas"));
+		map = new google.maps.Map(document.getElementById("map_canvas"),
+				optionsCarte);
+
+		var tabLatLong = new Array(couples.length);
+		var tabIdTracker = new Array(couples.length);
+		var tabSpeedTracker = new Array(couples.length);
+		var tabTimeTracker = new Array(couples.length);
+		//alert("point : "+couples.length);
+		// Create a base icon for all of our markers that specifies the
+		// shadow, icon dimensions, etc.
+
+		//alert("2");
+		var m1, m2, m3;
+		//alert("3");
+		// Creation of all last position of tracker passed within URL, all points are separated by '|' and lat long by ','
+		for (var i = 0; i < couples.length; i++) {
+			// creation des points
+			LatLong = couples[i].split(',');
+			tabLatLong[i] = new google.maps.LatLng(LatLong[0], LatLong[1]);
+			//alert(LatLong[2]+" "+LatLong[0]+"/"+LatLong[1]);
+			tabIdTracker[i] = LatLong[2];
+			tabSpeedTracker[i] = LatLong[3];
+			tabTimeTracker[i] = LatLong[4];
+			m3 = new google.maps.Marker({
+				position : tabLatLong[i],
+				map : map,
+				animation: google.maps.Animation.DROP,
+				title : tabIdTracker[i],
+				icon : getMarker(i)
+			});
+			attachMessage(m3, "<div class='site-bubble'><h4>Team TC "+(i+1)+"</h4>Id: <b>" + tabIdTracker[i]
+					+ "</b><br/>Speed :<b>" + tabSpeedTracker[i]
+					+ " kh/h<b/><br/>Time: <b>" + tabTimeTracker[i].replace('%20', ' ') + "</b></div>");
+
+		}
+		map.setCenter(tabLatLong[0]);
+
+	}
+
+	function getMarker(i) {
+		if (i < 3) {
+			return image[i];
+		}
+		return image[0];
+	}
+
+	function attachMessage(marker, message) {
+		var infowindow = new google.maps.InfoWindow({
+			content : message,
+			size : new google.maps.Size(150, 50)
+		});
+		google.maps.event.addListener(marker, 'click', function() {
+			infowindow.open(map, marker);
+		});
+
+	}
+</script>
+</head>
+
+<!-- Lancement automatique du script javascript aprs le chargement de la page -->
+<body onload="load();">
+	<div class="container-fluid" style="text-align: center; width: 95%">
+	
+		<img src="images/tcchappe.png" alt="INSA LYON TC" width="800"
+			height="120" /> <br>
+		<h3>Vue globale des derni&egrave;res positions des Trackers</h3>
+		<br>
+		<ul class="nav nav-pills nav-justified">
+			<li><a href="index.html">Accueil</a></li>
+			<li class="active"><a href="plast">Global Map</a></li>
+			<li><a href="live.html">Lice Tracking</a></li>
+			<li><a href="FindPositions.jsp">Tracker</a></li>
+			<li><a href="AllPositions.jsp">List</a></li>
+		</ul>
+		<div class="row" id="main">
+			<div class="span12">
+				<hr>
+				<div id="main">
+					  
+  <div id="map_canvas" style="width:100%; height:100%"></div>
+				</div>
+			</div>
+		</div>
+		<div id="footer">
+			<hr>
+			<img src="images/insaLyon.png" width="128" />
+		</div>
+	</div>
+</body>
+</html>

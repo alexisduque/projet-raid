@@ -1,0 +1,148 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Itin&eacute;raire des positions GPS</title>
+<link rel="StyleSheet" type="text/css" href="style.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<!-- Optional theme -->
+<link rel="stylesheet"
+	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<script
+	src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script type="text/javascript"
+	src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
+		<script type="text/javascript">
+         
+		function load()
+		
+		{
+		    // on passe en parametre a l'url une string contenant une liste des points Latitude et Longitude
+		    // on utilise le . decimal pour les valeurs et la virgule pour separer la longitude de la latitude
+		    // le | pour separer les points
+			var url=document.URL.split('=');
+			var param=url[1];
+			var couples=param.split('|');
+			//
+			var centreCarte = new google.maps.LatLng( 44.786406, 4.880495 );
+			var optionsCarte = {
+					zoom: 12,
+					center: centreCarte,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				}
+			//alert("0");
+			//map = new GMap2(document.getElementById("map_canvas"));
+			map = new google.maps.Map( document.getElementById( "map_canvas" ), optionsCarte );
+
+			
+       		//map.addControl(new GLargeMapControl());
+			//map.addControl(new GMapTypeControl());
+			//map.setCenter(new GLatLng(44.786406, 4.880495), 13);
+			// create a local search control and add it to your map
+			//var lsc = new google.maps.LocalSearch(); 
+			//map.addControl(new google.maps.LocalSearch());
+
+			var tabLatLong=new Array(couples.length);
+			//alert("point : "+couples.length);
+			// Create a base icon for all of our markers that specifies the
+			// shadow, icon dimensions, etc.
+			var imageD = 'images/green_MarkerD.png';
+			var imageA = 'images/red_MarkerA.png';
+			var imageC = 'images/paleblue_MarkerC.png';
+			//alert("2");
+			//var beachMarker = new google.maps.Marker({
+      		//	position: myLatLng,
+      		//	map: map,
+      		//	icon: image
+  			//});
+			var m1, m2, m3;
+			//alert("3");
+			// Creation of all points passed within URL, all points are separated by '|' and lat long by ','
+			for (var i=0;i<couples.length;i++)
+			{
+				// creation des points
+				LatLong=couples[i].split(',');
+				tabLatLong[i] =  new google.maps.LatLng(LatLong[0],LatLong[1]);
+			}
+			//alert("4");
+			if (couples.length > 1) {	
+				//alert("4.1");
+				m1 = new google.maps.Marker({	
+					position: tabLatLong[0],
+		      		map: map,
+		      		icon: imageD
+		  		});
+				//alert("4.2");
+				m2 = new google.maps.Marker({	
+					position: tabLatLong[(couples.length)-2],
+		      		map: map,
+		      		icon: imageA
+		  		});
+				//alert("4.3");
+			} else {
+				m3 = new google.maps.Marker({	
+					position: tabLatLong[0],
+		      		map: map,
+		      		icon: imageC
+		  		});			
+			}
+			//alert("5");
+
+			var maPolyline = new google.maps.Polyline({ 
+				map: map,
+					path: tabLatLong,
+				//geodesic: true,
+				    strokeColor: '#FF0000',
+				    strokeOpacity: 1.0,
+				    strokeWeight: 3
+			});
+			
+			maPolyline.setMap(map);
+			//alert("6");
+			//var mabounds = new google.maps.LatLngBounds(tabLatLong[0],tabLatLong[(couples.length)-1]);	
+			//alert("7");
+			//map.fitBounds(mabounds);
+		
+			map.setCenter(tabLatLong[(couples.length)-2]);
+			//map.setZoom(map.getBoundsZoomLevel(bounds));
+			//alert("8");
+        }  
+            
+      
+      </script>
+   </head>
+   
+<!-- Lancement automatique du script javascript aprs le chargement de la page -->
+<body onload="load();">
+	<div class="container-fluid" style="text-align: center; width: 95%">
+	
+		<img src="images/tcchappe.png" alt="INSA LYON TC" width="800"
+			height="120" /> <br>
+		<h3>Vue globale des derni&egrave;res positions des Trackers</h3>
+		<br>
+		<ul class="nav nav-pills nav-justified">
+			<li><a href="index.html">Accueil</a></li>
+			<li><a href="plast">Global Map</a></li>
+			<li class="active"><a href="live.html">Live Tracking</a></li>
+			<li class="active"><a href="FindPositions.jsp">Tracker</a></li>
+			<li><a href="AllPositions.jsp">List</a></li>
+		</ul>
+		<div class="row" id="main">
+			<div class="span12">
+				<hr>
+				<div id="main">
+					  
+  <div id="map_canvas" style="width:100%; height:100%"></div>
+				</div>
+			</div>
+		</div>
+		<div id="footer">
+			<hr>
+			<img src="images/insaLyon.png" width="128" />
+		</div>
+	</div>
+</body>
+</html>

@@ -18,13 +18,13 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class PositionsList
  */
-public class PositionsList extends HttpServlet {
+public class LastPositions extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PositionsList() {
+    public LastPositions() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -48,18 +48,7 @@ public class PositionsList extends HttpServlet {
     	String m_UserName;
     	String m_Password;
     	String m_Url;
-	  	String m_id = request.getParameter("IdVehicule");
-	  	String m_max = request.getParameter("MaxPositions");
-	  	String m_datedebut = request.getParameter("DateDebut");
-	  	String m_datefin = request.getParameter("DateFin");
-	  	int m_count = 0;
 
-	  	if (m_id != null)
-	  		gidf = true;
-	  	if (m_max != null) {
-	  		gmaxf = true;
-	  		m_count = Integer.parseInt(m_max);
-	  	} 
 
         PrintWriter out = response.getWriter();
         response.setContentType("text/html");
@@ -82,18 +71,17 @@ public class PositionsList extends HttpServlet {
         out.println("<img src=\"images/tcchappe.png\" alt=\"INSA LYON TC\" width=\"800\"height=\"120\" />");
         out.println("			<br><h2>Bienvenue sur notre projet RaidLoc / LiveTrckr</h2><br><ul class=\"nav nav-pills nav-justified\">");
         		out.println("<li><a href=\"index.html\">Accueil</a></li>");
-        				out.println("<li><a href=\"plast\">Global Map</a></li><li><a href=\"live.html\">Live Tracking</a></li>");
-        						out.println("<li class=\"active\"><a href=\"FindPositions.jsp\">Tracker</a></li>");
+        				out.println("<li class=\"active\"><a href=\"plast\">Global Map</a></li><li><a href=\"live.html\">Live Tracking</a></li>");
+        						out.println("<li><a href=\"FindPositions.jsp\">Tracker</a></li>");
         								out.println("<li><a href=\"AllPositions.jsp\">List</a></li>");
         										out.println("</ul><div class=\"row\" id=\"main\"><div class=\"span12\"><hr>");
-
 
         /*Creation de la connexion BD*/
 		m_Url =  "jdbc:postgresql://gps-iso.insa-lyon.fr:5432/geoloc";
 		m_Driver = "org.postgresql.Driver";
 		m_UserName = "geoloc";
 		m_Password = "raid$2014";
-		//m_id = "1000000002";
+
 		m_Connection = null;
         //Connection con = null;
         try {
@@ -112,54 +100,47 @@ public class PositionsList extends HttpServlet {
             String url = new String("=");
             /* defaut message */
             gMessage = ":KO(invalid parameters)";
-            if (gidf == true)
+        
             	sql =
-            	new String("select ID, HEADING, SPEED, LONGITUDE, LATITUDE , ALTITUDE, NBSAT, TIME_STP from GPS_POSITIONS "+ 
-            "where id = '" +m_id+"' "+ "and TIME_STP > '"+m_datedebut+"' and TIME_STP < '" +m_datefin+ "'" + "order by TIME_STP DESC" );
+            	new String("select distinct on (id) id , time_stp, latitude, longitude, heading, speed from gps_positions order by id, time_stp desc" );
             
-            else
-            	sql =
-                new String("select ID, HEADING, SPEED, LONGITUDE, LATITUDE , ALTITUDE, NBSAT, TIME_STP from GPS_POSITIONS "+ 
-                       " order by ID, TIME_STP DESC" );
+
             if (gdebugf)
              out.println("<p>" + sql);
          	ResultSet rs = m_Statement.executeQuery(sql);
-         	out.println("<table class=\"table table-bordered table-striped\" align=\"center\" width = \"600\">");
+			out.println("<table class=\"table table-bordered table-striped\" align=\"center\" width = \"600\">");
 
 			ResultSetMetaData rsMeta = rs.getMetaData();
 			// Get the N of Cols in the ResultSet
 			int noCols = rsMeta.getColumnCount();
-
-			out.println("<tr>");
+			// metacolonnes
+			out.println("<tr align=\"center\">");
 			for (int c=1; c <= noCols; c++) {
 				String el = rsMeta.getColumnLabel(c);
-				out.println("<th><center> " + el + " </center></th>");
+				out.println("<th align=\"center\"> <center>" + el + " </center></th>");
 			}
 			out.println("</tr>");
+			// donnees de dernieres positions des trackers latitude, longitude, id, speed, time_stp
 			int i_count = 0;
 			while (rs.next()) {
+				url = url +  rs.getString(3) + ","+rs.getString(4) + ","+rs.getString(1) + ","+rs.getString(6)+ ","+rs.getString(2);
+				//out.println ( url + "<br/>" );
 				out.println("<tr align=\"center\">");
 				for (int c=1; c <= noCols; c++) {
 					String el = rs.getString(c);
-					// construction du parametre url pour cartographie
-					// colonne 4 longitude, colonne 5 latitude
-					url = url +  rs.getString(5) + ","+rs.getString(4);
 					out.println("<td align=\"center\"> " + el + " </td>");
-					if (c < noCols)
+					// separateur de points dans le parametre url
+					if (c == noCols)
 						url = url +"|";
-					
 				}
 				out.println("</tr>");
 				i_count++;
-				if (gmaxf && i_count >= m_count)
-					break;
 			}
 			out.println("</table>"+ "<br/>");
-			//out.println ( "Requete executee: " + sql + "<br/>" );
-			// url vers gmap_api.html avec les points dans url
-			url = "gmapapiv3.html?url"+url;
+			url = "maplastpos.html?url"+url;
 			//out.println ( url + "<br/>" );
 			out.println("<hr><a href=\""+url+"\" style=\"width:300px\" class=\"btn btn-success btn-lg\" role=\"button\">Acc&eacute;s carte GMAP</a>");
+
 			gMessage = "";
         } catch (Exception e) {
             gMessage = new String( e.getMessage());

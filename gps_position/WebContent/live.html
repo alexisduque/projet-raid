@@ -1,0 +1,172 @@
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Live Tracking GPS</title>
+        <link rel="StyleSheet" type="text/css" href="style.css">
+        <script
+        src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet"
+              href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <!-- Optional theme -->
+        <link rel="stylesheet"
+              href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+        <!-- Latest compiled and minified JavaScript -->
+        <script
+        src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript"
+        src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
+        <script type="text/javascript">
+            var positions = [];
+            var items = [];
+            var tabLatLong = [];
+            var markers = [];
+            var map;
+            var image = [];
+            image[0] = 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/green-dot.png';
+            image[1] = 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/yellow-dot.png';
+            image[2] = 'http://maps.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png';
+
+            function getJson() {
+                 $.getJSON("http://gps-iso.insa-lyon.fr:8080/GPSPositions/getlast", function(response) {
+                        if (response[0] !== markers[0]) {
+                            markers = response;
+                            //initialize();
+                            load1();
+                            deleteMarkers();
+                            addMarker();
+                            showMarkers();
+                        }
+                        
+                });
+            }
+            
+            function updateJson() {
+                 $.getJSON("http://gps-iso.insa-lyon.fr:8080/GPSPositions/getlast", function(response) {
+                        if (response[0] !== markers[0]) {
+                            markers = response;
+                            //initialize();
+                            deleteMarkers();
+                            addMarker();
+                            showMarkers();
+                        }
+                        
+                });
+            }
+            
+           function addMarker() {
+                var tabLatLong = new Array(markers.length);
+                var tabIdTracker = new Array(markers.length);
+                var tabSpeedTracker = new Array(markers.length);
+                var tabTimeTracker = new Array(markers.length);
+
+                var m1, m2, m3;
+                for (var i = 0; i < markers.length; i++) {
+                    var m;
+                    // creation des points
+                    tabLatLong[i] = new google.maps.LatLng(markers[i].lat, markers[i].long);
+                    //alert(LatLong[2]+" "+LatLong[0]+"/"+LatLong[1]);
+                    tabIdTracker[i] = markers[i].id;
+                    tabSpeedTracker[i] = markers[i].speed;
+                    tabTimeTracker[i] = markers[i].date;
+                    m = new google.maps.Marker({
+                        position : tabLatLong[i],
+                        //animation: google.maps.Animation.DROP,
+                        title : tabIdTracker[i],
+                        icon : getMarker(i)
+                    });
+                    attachMessage(m, "<div class='site-bubble'><h4>Team TC "+(i+1)+"</h4>Id: <b>" + tabIdTracker[i]
+                            + "</b><br/>Speed :<b>" + tabSpeedTracker[i]
+                            + " kh/h<b/><br/>Time: <b>" + tabTimeTracker[i].replace('%20', ' ') + "</b></div>");
+                    positions.push(m);
+                    }
+              }
+
+              // Sets the map on all markers in the array.
+              function setAllMap(map) {
+                for (var i = 0; i < positions.length; i++) {
+                  positions[i].setMap(map);
+                }
+              }
+
+              // Removes the markers from the map, but keeps them in the array.
+              function clearMarkers() {
+                setAllMap(null);
+              }
+
+              // Shows any markers currently in the array.
+              function showMarkers() {
+                setAllMap(map);
+              }
+
+              // Deletes all markers in the array by removing references to them.
+              function deleteMarkers() {
+                clearMarkers();
+                positions = [];
+              }
+            
+            function load1() {
+                setInterval("updateJson()", 10000);
+                var centreCarte = new google.maps.LatLng(markers[0].lat, markers[0].long);
+                var optionsCarte = {
+                    zoom : 12,
+                    center : centreCarte,
+                    mapTypeId : google.maps.MapTypeId.ROADMAP
+                }
+
+                //map = new GMap2(document.getElementById("map_canvas"));
+                map = new google.maps.Map(document.getElementById("map_canvas"),
+                        optionsCarte);
+            }
+
+            function getMarker(i) {
+                if (i < 3) {
+                    return image[i];
+                }
+                return image[0];
+            }
+
+            function attachMessage(marker, message) {
+                var infowindow = new google.maps.InfoWindow({
+                    content : message,
+                    size : new google.maps.Size(150, 50)
+                });
+                google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.open(map, marker);
+                });
+
+            }
+        </script>
+    </head>
+
+    <!-- Lancement automatique du script javascript aprs le chargement de la page -->
+    <body onload="getJson();">
+	<div class="container-fluid" style="text-align: center; width: 95%">
+	
+		<img src="images/tcchappe.png" alt="INSA LYON TC" width="800"
+			height="120" /> <br>
+		<h3>Suivi Live de la Team TC ! Allez les Gars :-)</h3>
+		<br>
+		<ul class="nav nav-pills nav-justified">
+			<li><a href="index.html">Accueil</a></li>
+			<li><a href="plast">Global Map</a></li>
+			<li class="active"><a href="live.html">Live Tracking</a></li>
+			<li><a href="FindPositions.jsp">Tracker</a></li>
+			<li><a href="AllPositions.jsp">List</a></li>
+		</ul>
+		<div class="row" id="main">
+			<div class="span12">
+				<hr>
+				<div id="main">
+					  
+  <div id="map_canvas" style="width:100%; height:100%"></div>
+				</div>
+			</div>
+		</div>
+		<div id="footer">
+			<hr>
+			<img src="images/insaLyon.png" width="128" />
+		</div>
+	</div>
+</body>
+</html>
